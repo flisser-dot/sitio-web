@@ -463,9 +463,9 @@ a {
 
     display: grid;
 
-    grid-template-columns: .7fr 1.3fr;
+    grid-template-columns: 1fr;
 
-    gap: 70px;
+    gap: 28px;
 
 }
 
