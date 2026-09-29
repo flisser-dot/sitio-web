@@ -1391,6 +1391,8 @@ footer p,
 
     grid-column: 1 / -1;
 
+    font-size: 14px;
+
 }
 
 
@@ -1506,5 +1508,29 @@ footer p,
         opacity: 1;
 
     }
+
+}
+
+
+.explore-map {
+
+    position: absolute;
+
+    inset: 52px 18px 18px;
+
+    width: calc(100% - 36px);
+
+    height: calc(100% - 70px);
+
+    object-fit: contain;
+
+    object-position: center;
+
+}
+
+
+#explora .content-visual {
+
+    background: var(--black);
 
 }
