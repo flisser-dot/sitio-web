@@ -474,7 +474,7 @@ a {
 
     font-family: "DM Mono";
 
-    font-size: 11px;
+    font-size: 14px;
 
     color: var(--purple-light);
 
@@ -698,13 +698,53 @@ a {
 }
 
 
+.compiti-pattern {
+
+    grid-template-columns: .55fr 1fr;
+    gap: 55px;
+    align-items: start;
+
+}
+
+
+.compiti-pattern .content-number {
+
+    grid-column: 1;
+    grid-row: 1;
+    font-size: 14px;
+
+}
+
+
+.compiti-pattern .content-visual {
+
+    grid-column: 1;
+    grid-row: 2;
+    margin-top: 0;
+    width: 100%;
+    max-width: 520px;
+    height: 320px;
+
+}
+
+
+.compiti-pattern .content-text {
+
+    grid-column: 2;
+    grid-row: 2;
+    align-self: start;
+    margin-top: -80px;
+
+}
+
+
 .content-number {
 
     align-self: start;
 
     font-family: "DM Mono";
 
-    font-size: 10px;
+    font-size: 14px;
 
     color: var(--purple-light);
 
@@ -763,6 +803,80 @@ a {
 }
 
 
+.competi-tags {
+
+    display: grid;
+    gap: 8px;
+    margin-top: 30px;
+
+}
+
+
+.competi-item {
+
+    padding: 14px 0;
+    border-top: 1px solid var(--dark-gray);
+    cursor: default;
+    transition: .25s;
+
+}
+
+
+.competi-item h3 {
+
+    margin: 0;
+    color: var(--off-white);
+    font-size: 17px;
+    line-height: 1.1;
+    font-weight: 500;
+
+}
+
+
+.competi-item p {
+
+    max-height: 0;
+    margin: 0;
+    overflow: hidden;
+    color: var(--black);
+    font-size: 12px;
+    line-height: 1.4;
+    opacity: 0;
+    transition: .25s;
+
+}
+
+
+.competi-item:hover,
+.competi-item:focus-visible {
+
+    background: var(--green);
+    color: var(--black);
+    padding-left: 14px;
+    padding-right: 14px;
+    outline: none;
+
+}
+
+
+.competi-item:hover h3,
+.competi-item:focus-visible h3 {
+
+    color: var(--black);
+
+}
+
+
+.competi-item:hover p,
+.competi-item:focus-visible p {
+
+    max-height: 110px;
+    margin-top: 10px;
+    opacity: 1;
+
+}
+
+
 .content-visual {
 
     height: 440px;
@@ -809,6 +923,19 @@ a {
     );
 
     color: #0b0b0c;
+
+}
+
+
+.trophy-visual {
+
+    background:
+        radial-gradient(circle at 30% 20%, rgba(120, 95, 175, 0.22), transparent 35%),
+        radial-gradient(circle at 70% 80%, rgba(146, 255, 181, 0.08), transparent 30%),
+        #09090a;
+    border: none;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+    color: var(--green);
 
 }
 
@@ -872,6 +999,28 @@ a {
     transform: translate(-50%, -50%);
 
     border: 25px solid currentColor;
+
+}
+
+
+.trophy-image {
+
+    position: absolute;
+
+    left: 50%;
+
+    top: 52%;
+
+    transform: translate(-50%, -50%);
+
+    width: 300px;
+
+    max-width: 82%;
+
+    z-index: 2;
+
+    object-fit: contain;
+    filter: drop-shadow(0 26px 38px rgba(0, 0, 0, 0.62)) saturate(1.08) contrast(1.04);
 
 }
 
