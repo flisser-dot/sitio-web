@@ -1009,13 +1009,13 @@ a {
 
     left: 50%;
 
-    top: 52%;
+    top: 44.5%;
 
     transform: translate(-50%, -50%);
 
-    width: 300px;
+    width: 460px;
 
-    max-width: 82%;
+    max-width: 92%;
 
     z-index: 2;
 
