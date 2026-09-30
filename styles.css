@@ -88,7 +88,11 @@ a {
 
     display: flex;
 
-    flex-direction: column;
+    flex-direction: row;
+
+    align-items: baseline;
+
+    gap: 8px;
 
 }
 
@@ -97,24 +101,18 @@ a {
 
     color: var(--purple-light);
 
-    align-self: flex-start;
-
 }
 
 
 .logo-sub {
 
-    margin-top: 5px;
+    margin: 0;
 
-    margin-left: 3px;
-
-    align-self: flex-start;
-
-    color: var(--green);
+    color: var(--purple-light);
 
     font-family: "DM Mono";
 
-    font-size: 16px;
+    font-size: 30px;
 
     letter-spacing: .02em;
 
