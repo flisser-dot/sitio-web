@@ -191,7 +191,7 @@ a {
 
     font-family: "DM Mono";
 
-    font-size: 11px;
+    font-size: 14px;
 
     color: var(--purple-light);
 
@@ -972,6 +972,8 @@ a {
 
     font-size: 10px;
 
+    color: var(--off-white);
+
 }
 
 
@@ -1317,7 +1319,7 @@ a {
 .faq-header h2 {
 
     margin: 0 0 12px;
-    color: #CAFF19;
+    color: var(--green);
     font-size: 82px;
     line-height: 1;
 
@@ -1357,6 +1359,8 @@ a {
 
     background: var(--black);
 
+    color: var(--off-white);
+
     text-decoration: none;
 
 }
@@ -1369,6 +1373,7 @@ a {
     padding: 24px;
     position: relative;
     background: var(--black);
+    color: var(--off-white);
     transition: background .2s;
 
 }
@@ -1580,6 +1585,14 @@ footer {
     grid-template-columns: 1fr 2fr 1fr;
 
     align-items: center;
+
+}
+
+
+footer .logo-main,
+footer .logo-sub {
+
+    color: var(--green);
 
 }
 
