@@ -699,7 +699,7 @@ a {
 .compiti-pattern {
 
     grid-template-columns: .75fr 1fr;
-    gap: 55px;
+    gap: 32px;
     align-items: start;
 
 }
@@ -718,10 +718,11 @@ a {
 
     grid-column: 1;
     grid-row: 2;
-    margin-top: 0;
+    align-self: center;
+    margin-top: -4px;
     width: 100%;
-    max-width: 660px;
-    height: 320px;
+    max-width: 620px;
+    height: 400px;
 
 }
 
@@ -731,7 +732,8 @@ a {
     grid-column: 2;
     grid-row: 2;
     align-self: start;
-    margin-top: -80px;
+    margin-top: 0;
+    margin-left: -64px;
 
 }
 
@@ -1003,7 +1005,7 @@ a {
     height: 100%;
     object-fit: contain;
     object-position: center;
-    transform: scale(1.5);
+    transform: scale(1.18);
 
 }
 
@@ -1122,7 +1124,7 @@ a {
 
     top: 44.5%;
 
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) scale(0.86);
 
     width: 820px;
 
