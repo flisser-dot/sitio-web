@@ -258,9 +258,11 @@ a {
 
     text-decoration: none;
 
-    font-family: "DM Mono";
+    font-family: "Space Grotesk", sans-serif;
 
-    font-size: 11px;
+    font-size: 14px;
+
+    font-weight: 600;
 
     transition: .25s;
 
@@ -773,6 +775,7 @@ a {
     grid-row: 2;
     align-self: start;
     margin-top: -80px;
+    margin-left: -32px;
 
 }
 
@@ -822,6 +825,13 @@ a {
     line-height: .88;
 
     letter-spacing: -.07em;
+
+}
+
+
+.trabaja-pattern .content-text h2 {
+
+    text-align: left;
 
 }
 
@@ -1696,6 +1706,7 @@ footer p {
         grid-column: 1;
         grid-row: auto;
         margin-top: 0;
+        margin-left: 0;
 
     }
 
