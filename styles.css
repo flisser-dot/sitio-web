@@ -35,17 +35,11 @@ html {
 }
 
 body {
-
     margin: 0;
-
     background: var(--black);
-
     color: var(--off-white);
-
     font-family: "Space Grotesk", sans-serif;
-
     -webkit-font-smoothing: antialiased;
-
 }
 
 a {
@@ -56,106 +50,66 @@ a {
 /* ---------- HEADER ---------- */
 
 .header {
-
     width: calc(100% - 100px);
-
     height: 88px;
-
     margin: auto;
-
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
-
     border-bottom: 1px solid var(--dark-gray);
-
 }
 
 
 .logo {
-
     text-decoration: none;
-
     font-size: 30px;
-
     font-weight: 700;
-
     letter-spacing: -0.07em;
-
     line-height: .85;
-
     display: flex;
-
     flex-direction: row;
-
     align-items: baseline;
-
     gap: 8px;
-
 }
 
 
 .logo-main {
-
     color: var(--purple-light);
-
 }
 
 
 .logo-sub {
-
     margin: 0;
-
     color: var(--purple-light);
-
     font-family: "DM Mono";
-
     font-size: 30px;
-
     letter-spacing: .02em;
-
 }
 
 
 .navigation {
-
     display: flex;
-
     gap: 55px;
-
 }
 
 
 .navigation a {
-
     text-decoration: none;
-
     font-family: "DM Mono";
-
     font-size: 18px;
-
     transition: color .2s;
-
 }
 
 
 .navigation a:hover {
-
     color: var(--green);
-
 }
 
 
 .header-code {
-
     font-family: "DM Mono";
-
     font-size: 10px;
-
     color: var(--gray);
-
 }
 
 
@@ -256,6 +210,8 @@ a {
 
     background: var(--purple);
 
+    color: var(--off-white);
+
     text-decoration: none;
 
     font-family: "Space Grotesk", sans-serif;
@@ -273,7 +229,7 @@ a {
 
     background: var(--green);
 
-    color: var(--black);
+    color: var(--off-white);
 
 }
 
@@ -362,7 +318,7 @@ a {
 
 .hero-info small {
 
-    color: var(--gray);
+    color: #aaa9a5;
 
     font-size: 8px;
 
@@ -562,7 +518,7 @@ a {
 
 .category:hover {
 
-    color: var(--black);
+    color: var(--off-white);
 
 }
 
@@ -577,6 +533,17 @@ a {
 .category.green:hover {
 
     background: var(--green);
+
+}
+
+
+.category.green:hover h3,
+.category.green:hover p,
+.category.green:hover .category-number,
+.category.green:hover .category-tags,
+.category.green:hover .category-arrow {
+
+    color: var(--off-white);
 
 }
 
@@ -611,7 +578,7 @@ a {
 
     max-width: 440px;
 
-    color: #aaa9a5;
+    color: var(--gray);
 
     font-size: 15px;
 
@@ -633,7 +600,7 @@ a {
 
     max-width: 500px;
 
-    color: #77767a;
+    color: var(--gray);
 
     font-family: "DM Mono";
 
@@ -910,7 +877,7 @@ a {
     max-height: 0;
     margin: 0;
     overflow: hidden;
-    color: var(--black);
+    color: var(--off-white);
     font-size: 12px;
     line-height: 1.4;
     opacity: 0;
@@ -923,7 +890,7 @@ a {
 .competi-item:focus-visible {
 
     background: var(--green);
-    color: var(--black);
+    color: #ffffff;
     padding-left: 14px;
     padding-right: 14px;
     outline: none;
@@ -934,7 +901,7 @@ a {
 .competi-item:hover h3,
 .competi-item:focus-visible h3 {
 
-    color: var(--black);
+    color: #ffffff;
 
 }
 
@@ -1231,7 +1198,7 @@ a {
 
 .event-date span {
 
-    color: var(--purple-light);
+    color: var(--purple);
 
     font-family: "DM Mono";
 
@@ -1415,7 +1382,7 @@ a {
 .faq-question p {
 
     margin: 18px 0 30px;
-    color: var(--gray);
+    color: #b8b4ab;
     font-size: 14px;
     line-height: 1.5;
 
@@ -1499,7 +1466,7 @@ a {
 .social-section h2 {
 
     margin: 0 0 28px;
-    color: var(--off-white);
+    color: #ffffff;
     font-size: clamp(28px, 4vw, 42px);
     line-height: 1.1;
 
@@ -1530,7 +1497,7 @@ a {
 
 .social-icon span {
 
-    color: var(--off-white);
+    color: #ffffff;
 
 }
 
@@ -2016,11 +1983,15 @@ footer p {
 
     object-position: center;
 
+    mix-blend-mode: screen;
+
 }
 
 
 #explora .content-visual {
 
-    background: var(--black);
+    background: transparent;
 
 }
+
+
