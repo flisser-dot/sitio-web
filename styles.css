@@ -47,6 +47,10 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
+body.guide-page {
+    background: var(--black);
+}
+
 a {
     color: inherit;
 }
@@ -655,7 +659,7 @@ a.category[href="#competi"]:focus-visible .category-tags {
     grid-row: 2;
     align-self: start;
     margin-top: 0;
-    margin-left: -64px;
+    margin-left: 0;
 
 }
 
@@ -957,10 +961,19 @@ a.category[href="#competi"]:focus-visible .category-tags {
     top: 50%;
     left: 50%;
     width: 100%;
-    height: 100%;
+    height: auto;
+    max-height: 100%;
     transform: translate(-50%, -50%);
     object-fit: contain;
     object-position: center;
+    -webkit-mask-image:
+        linear-gradient(90deg, transparent 0%, #000 24%, #000 76%, transparent 100%),
+        linear-gradient(0deg, transparent 0%, #000 22%, #000 78%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-image:
+        linear-gradient(90deg, transparent 0%, #000 24%, #000 76%, transparent 100%),
+        linear-gradient(0deg, transparent 0%, #000 22%, #000 78%, transparent 100%);
+    mask-composite: intersect;
 
 }
 
@@ -992,7 +1005,6 @@ a.category[href="#competi"]:focus-visible .category-tags {
     box-shadow: none;
 
 }
-
 
 .visual-shape {
 
@@ -1063,17 +1075,31 @@ a.category[href="#competi"]:focus-visible .category-tags {
 
     left: 50%;
 
-    top: 44.5%;
+    top: 50%;
 
-    transform: translate(-50%, -50%) scale(0.50);
+    transform: translate(-45%, -50%);
 
-    width: 820px;
+    width: 88%;
 
-    max-width: 100%;
+    max-width: none;
 
     z-index: 2;
 
     object-fit: contain;
+
+    height: auto;
+
+    -webkit-mask-image:
+        linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.08) 8%, rgba(0, 0, 0, 0.55) 20%, #000 32%, #000 54%, rgba(0, 0, 0, 0.55) 68%, rgba(0, 0, 0, 0.08) 80%, transparent 90%),
+        linear-gradient(180deg, transparent 0%, #000 14%, #000 58%, rgba(0, 0, 0, 0.55) 70%, rgba(0, 0, 0, 0.08) 82%, transparent 90%);
+
+    -webkit-mask-composite: source-in;
+
+    mask-image:
+        linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.08) 8%, rgba(0, 0, 0, 0.55) 20%, #000 32%, #000 54%, rgba(0, 0, 0, 0.55) 68%, rgba(0, 0, 0, 0.08) 80%, transparent 90%),
+        linear-gradient(180deg, transparent 0%, #000 14%, #000 58%, rgba(0, 0, 0, 0.55) 70%, rgba(0, 0, 0, 0.08) 82%, transparent 90%);
+
+    mask-composite: intersect;
 }
 
 
@@ -2038,6 +2064,74 @@ footer p {
 }
 
 
+.guide-cover {
+
+    position: relative;
+
+    isolation: isolate;
+
+    margin: 0 -24px 52px;
+
+    padding: 0 24px 48px;
+
+}
+
+.guide-cover::before {
+
+    content: "";
+
+    position: absolute;
+
+    inset: -42px -26px 0;
+
+    z-index: -1;
+
+    background-image:
+        linear-gradient(90deg, rgba(9, 9, 10, 0.9) 0%, rgba(9, 9, 10, 0.68) 42%, rgba(9, 9, 10, 0.24) 100%),
+        linear-gradient(180deg, rgba(9, 9, 10, 0.14) 0%, transparent 42%, rgba(9, 9, 10, 0.7) 100%);
+
+    background-position: center;
+
+    background-size: cover;
+
+    background-repeat: no-repeat;
+
+}
+
+
+.guide-cover-background {
+
+    position: absolute;
+
+    inset: -42px -26px 0;
+
+    z-index: -2;
+
+    width: calc(100% + 52px);
+
+    height: calc(100% + 42px);
+
+    object-fit: cover;
+
+    object-position: center;
+
+    filter: brightness(0.4) saturate(0.45);
+
+    -webkit-mask-image:
+        linear-gradient(90deg, transparent 0%, #000 30%, #000 70%, transparent 100%),
+        linear-gradient(180deg, transparent 0%, #000 40%, #000 60%, transparent 100%);
+
+    -webkit-mask-composite: source-in;
+
+    mask-image:
+        linear-gradient(90deg, transparent 0%, #000 30%, #000 70%, transparent 100%),
+        linear-gradient(180deg, transparent 0%, #000 40%, #000 60%, transparent 100%);
+
+    mask-composite: intersect;
+
+}
+
+
 .guide-main h1 {
 
     max-width: 900px;
@@ -2052,20 +2146,9 @@ footer p {
 .guide-hero-heading {
 
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(280px, 520px);
+    grid-template-columns: 1fr;
     align-items: center;
     gap: 28px;
-
-}
-
-
-.guide-level-image {
-
-    display: block;
-    width: 100%;
-    max-height: 230px;
-    transform: translateX(-100px) scale(1.35);
-    object-fit: contain;
 
 }
 
@@ -2423,11 +2506,34 @@ footer p {
 
     }
 
-    .guide-level-image {
+    .guide-cover {
 
-        width: min(100%, 420px);
-        justify-self: end;
-        transform: none;
+        margin: 0 -12px 40px;
+
+        padding: 0 12px 34px;
+
+    }
+
+    .guide-cover::before {
+
+        inset: -34px -8px 0;
+
+        background-image:
+            linear-gradient(180deg, rgba(9, 9, 10, 0.7) 0%, rgba(9, 9, 10, 0.36) 58%, rgba(9, 9, 10, 0.82) 100%);
+
+        background-size: cover;
+
+    }
+
+    .guide-cover-background {
+
+        inset: -34px -8px 0;
+
+        width: calc(100% + 16px);
+
+        height: calc(100% + 34px);
+
+        object-position: 70% center;
 
     }
 
