@@ -602,6 +602,26 @@ a {
 }
 
 
+a.category[href="#explora"]:hover p,
+a.category[href="#explora"]:hover .category-tags,
+a.category[href="#explora"]:focus-visible p,
+a.category[href="#explora"]:focus-visible .category-tags {
+
+    color: var(--off-white);
+
+}
+
+
+a.category[href="#competi"]:hover p,
+a.category[href="#competi"]:hover .category-tags,
+a.category[href="#competi"]:focus-visible p,
+a.category[href="#competi"]:focus-visible .category-tags {
+
+    color: var(--off-white);
+
+}
+
+
 .category-tags {
 
     margin-top: auto;
