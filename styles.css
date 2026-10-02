@@ -241,6 +241,14 @@ a {
 }
 
 
+.hero .main-button:hover,
+.hero .main-button:hover span {
+
+    color: var(--black);
+
+}
+
+
 /* ---------- HERO VISUAL ---------- */
 
 .hero-visual {
