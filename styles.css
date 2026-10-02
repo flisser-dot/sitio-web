@@ -1871,13 +1871,16 @@ footer p {
 
 .explore-option {
 
+    display: block;
     min-height: 64px;
 
     padding: 14px 0;
 
     border-top: 1px solid var(--dark-gray);
 
-    cursor: default;
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
 
     transition: .25s;
 
@@ -1991,6 +1994,415 @@ footer p {
 #explora .content-visual {
 
     background: transparent;
+
+}
+
+
+.guide-page {
+
+    min-height: 100vh;
+
+}
+
+
+.guide-header,
+.guide-main {
+
+    width: calc(100% - 100px);
+    max-width: 1440px;
+    margin: auto;
+
+}
+
+
+.guide-header {
+
+    min-height: 88px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--dark-gray);
+
+}
+
+
+.guide-back {
+
+    color: var(--off-white);
+    font-family: "DM Mono";
+    font-size: 14px;
+    text-decoration: none;
+
+}
+
+
+.guide-back:hover,
+.guide-back:focus-visible {
+
+    color: var(--green);
+
+}
+
+
+.guide-main {
+
+    padding: 100px 0 120px;
+
+}
+
+
+.guide-main h1 {
+
+    max-width: 900px;
+    margin: 25px 0;
+    font-size: clamp(48px, 7vw, 88px);
+    line-height: .9;
+    letter-spacing: -.07em;
+
+}
+
+
+.guide-main h1 span {
+
+    color: var(--green);
+
+}
+
+
+.guide-highlight {
+
+    color: var(--green);
+
+}
+
+
+.guide-purple {
+
+    color: var(--purple-light);
+
+}
+.guide-platform .guide-ideal {
+
+    margin-top: 18px;
+    padding-top: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+}
+
+
+.guide-ideal-label {
+
+    color: var(--off-white);
+    font-family: "DM Mono";
+    font-size: 14px;
+    font-weight: 500;
+
+}
+
+
+.guide-tags {
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+
+}
+
+
+.guide-tags span {
+
+    padding: 4px 7px;
+    border: 1px solid var(--green);
+    color: var(--off-white);
+    font-family: "DM Mono";
+    font-size: 13px;
+    line-height: 1.2;
+
+}
+
+
+.guide-intro {
+
+    max-width: 650px;
+    margin: 0;
+    color: var(--gray);
+    font-size: 20px;
+    line-height: 1.55;
+
+}
+
+
+.guide-step-number {
+
+    color: var(--purple-light);
+    font-family: "DM Mono";
+    font-size: 14px;
+
+}
+
+
+.guide-sections {
+
+    margin-top: 80px;
+
+}
+
+
+.guide-section {
+
+    display: grid;
+    grid-template-columns: minmax(240px, .75fr) minmax(0, 1.25fr);
+    gap: 48px;
+    padding: 32px 0 38px;
+    border-top: 1px solid var(--dark-gray);
+
+}
+
+
+.guide-section-heading h2 {
+
+    margin: 24px 0 8px;
+    max-width: 460px;
+    font-size: 36px;
+    line-height: 1;
+
+}
+
+
+.guide-section-heading p,
+.guide-section-content p,
+.guide-glossary dd {
+
+    color: var(--gray);
+    font-size: 17px;
+    line-height: 1.55;
+
+}
+
+
+.guide-section-heading p {
+
+    margin: 0;
+
+}
+
+
+.guide-section-content > p {
+
+    max-width: 700px;
+    margin: 0 0 14px;
+
+}
+
+
+.guide-platforms,
+.guide-recommendations {
+
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+
+}
+
+
+.guide-section-content article,
+.guide-platform {
+
+    padding-top: 14px;
+    border-top: 1px solid var(--dark-gray);
+
+}
+
+
+.guide-platform summary {
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    color: var(--off-white);
+    font-family: "DM Mono";
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+    list-style: none;
+
+}
+
+
+.guide-platform summary::-webkit-details-marker {
+
+    display: none;
+
+}
+
+
+.guide-platform summary::after {
+
+    content: "+";
+    color: var(--green);
+    font-size: 20px;
+
+}
+
+
+.guide-platform[open] summary::after {
+
+    content: "−";
+
+}
+
+
+.guide-platforms .guide-platform {
+
+    grid-column: 1 / -1;
+
+}
+
+
+.guide-console-links {
+
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+    margin-top: 14px;
+
+}
+
+
+.guide-console-links a {
+
+    min-height: 58px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--purple-light);
+    color: var(--off-white);
+    font-family: "DM Mono";
+    font-size: 14px;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color .2s, color .2s;
+
+}
+
+
+.guide-console-links a:hover,
+.guide-console-links a:focus-visible {
+
+    background: var(--purple);
+    color: var(--off-white);
+    outline: 2px solid var(--green);
+    outline-offset: 3px;
+
+}
+
+
+.guide-section-content h3,
+.guide-glossary dt {
+
+    margin: 0;
+    color: var(--off-white);
+    font-family: "DM Mono";
+    font-size: 14px;
+    font-weight: 500;
+
+}
+
+
+.guide-section-content article p,
+.guide-platform p {
+
+    margin: 12px 0 0;
+
+}
+
+
+.guide-glossary {
+
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 24px;
+    margin: 0;
+
+}
+
+
+.guide-glossary div {
+
+    padding: 14px 0;
+    border-top: 1px solid var(--dark-gray);
+
+}
+
+
+.guide-glossary dd {
+
+    margin: 8px 0 0;
+
+}
+
+
+.guide-catalog-note {
+
+    grid-column: 1 / -1;
+    margin: 0;
+
+}
+
+
+.guide-section-content .main-button {
+
+    width: fit-content;
+    max-width: 100%;
+    flex-wrap: wrap;
+    gap: 16px;
+
+}
+
+
+.guide-back-bottom {
+
+    display: inline-block;
+    margin-top: 75px;
+    padding: 14px 0;
+    border-top: 1px solid var(--dark-gray);
+
+}
+
+
+@media (max-width: 850px) {
+
+    .guide-header,
+    .guide-main {
+
+        width: calc(100% - 36px);
+
+    }
+
+    .guide-section {
+
+        grid-template-columns: 1fr;
+        gap: 24px;
+
+    }
+
+    .guide-platforms,
+    .guide-recommendations,
+    .guide-glossary {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .guide-console-links {
+
+        grid-template-columns: 1fr;
+
+    }
 
 }
 
