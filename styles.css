@@ -2090,6 +2090,27 @@ footer p {
 }
 
 
+.guide-hero-heading {
+
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 520px);
+    align-items: center;
+    gap: 28px;
+
+}
+
+
+.guide-level-image {
+
+    display: block;
+    width: 100%;
+    max-height: 230px;
+    transform: translateX(-100px) scale(1.35);
+    object-fit: contain;
+
+}
+
+
 .guide-main h1 span {
 
     color: var(--green);
@@ -2185,6 +2206,13 @@ footer p {
     gap: 48px;
     padding: 32px 0 38px;
     border-top: 1px solid var(--dark-gray);
+
+}
+
+
+.guide-section#recomendados {
+
+    grid-template-columns: 1fr;
 
 }
 
@@ -2384,10 +2412,21 @@ footer p {
 
 .guide-section-content .main-button {
 
-    width: fit-content;
-    max-width: 100%;
+    grid-column: 1 / -1;
+    width: 100%;
+    min-height: 44px;
+    padding: 8px 18px;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 16px;
+
+}
+
+
+.guide-section-content .main-button:hover,
+.guide-section-content .main-button:hover span {
+
+    color: var(--black);
 
 }
 
@@ -2415,6 +2454,21 @@ footer p {
 
         grid-template-columns: 1fr;
         gap: 24px;
+
+    }
+
+    .guide-hero-heading {
+
+        grid-template-columns: 1fr;
+        gap: 8px;
+
+    }
+
+    .guide-level-image {
+
+        width: min(100%, 420px);
+        justify-self: end;
+        transform: none;
 
     }
 
