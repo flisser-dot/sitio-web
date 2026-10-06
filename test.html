@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test: ¿qué juego es para vos? | Fem Respawn</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="guide-page">
+    <header class="guide-header">
+        <a href="index.html" class="logo" aria-label="Fem Respawn, volver al inicio">
+            <span class="logo-main">Fem</span>
+            <span class="logo-sub">Respawn</span>
+        </a>
+        <a class="guide-back" href="index.html#explora">← VOLVER A EXPLORÁ</a>
+    </header>
+
+    <main class="guide-main">
+        <section class="guide-cover quiz-cover">
+            <div class="section-label">// 01 / EXPLORÁ / TEST</div>
+            <div class="guide-hero-heading">
+                <h1>¿Qué juego es <span>para vos?</span></h1>
+            </div>
+            <p class="guide-intro">Respondé 6 preguntas y encontrá qué estilo de juego va con vos.</p>
+        </section>
+
+        <section class="quiz" id="quiz" aria-live="polite">
+            <div class="quiz-start" id="quiz-start">
+                <button type="button" class="main-button quiz-btn" id="quiz-begin">EMPEZAR EL TEST ⋆˙⟡</button>
+            </div>
+
+            <div class="quiz-question" id="quiz-question" hidden>
+                <div class="quiz-progress">
+                    <span id="quiz-step">01 / 06</span>
+                    <div class="quiz-bar"><div id="quiz-bar-fill"></div></div>
+                </div>
+                <h2 id="quiz-title"></h2>
+                <div class="quiz-options" id="quiz-options"></div>
+            </div>
+
+            <div class="quiz-result" id="quiz-result" hidden>
+                <span class="guide-step-number">TU RESULTADO</span>
+                <div class="quiz-card">
+                    <span class="quiz-card-star">✩</span>
+                    <h2 id="result-name"></h2>
+                    <p id="result-text"></p>
+                    <p class="card-tags" id="result-tags"></p>
+                    <div class="quiz-games" id="result-games"></div>
+                </div>
+                <div class="quiz-actions">
+                    <button type="button" class="main-button quiz-btn" id="quiz-retry">↻ REPETIR EL TEST</button>
+                    <a class="guide-back" href="guia.html#estilos-de-juego">VER TODOS LOS GÉNEROS →</a>
+                </div>
+            </div>
+        </section>
+
+        <a class="guide-back guide-back-bottom" href="index.html#explora">← VOLVER A EXPLORÁ</a>
+    </main>
+
+    <script>
+        var GENRES = {
+            accion: {
+                name: 'ACCIÓN / AVENTURA',
+                text: 'Te mueve explorar, pelear y avanzar: mundos para recorrer y desafíos que te mantienen en movimiento.',
+                tags: 'Exploración · acción · aventura',
+                games: ['Zelda: Breath of the Wild', 'God of War', 'Hollow Knight']
+            },
+            rpg: {
+                name: 'RPG',
+                text: 'Te gusta explorar, crear personajes y meterte de lleno en una historia donde tus decisiones importan.',
+                tags: 'Personajes · Decisiones · Exploración',
+                games: ['Skyrim', 'Dragon Age: Origins', 'Cyberpunk 2077']
+            },
+            shooters: {
+                name: 'SHOOTERS',
+                text: 'Puntería, reflejos y partidas intensas: lo tuyo es la acción rápida, sola o en equipo.',
+                tags: 'Reflejos · Precisión · Competición',
+                games: ['Call of Duty', 'Apex Legends', 'DOOM']
+            },
+            estrategia: {
+                name: 'ESTRATEGIA',
+                text: 'Disfrutás ganar por tu ingenio: Te gusta pensar tus próximos movimientos, armar un plan y ponerlo a prueba.',
+                tags: 'Planificación · Tácticas · Decisiones',
+                games: ['Civilization VI', 'Age of Empires IV', 'League of Legends']
+            },
+            simulacion: {
+                name: 'SIMULACIÓN',
+                text: 'Construir, cuidar y organizar tu propio mundo, probando distintas posibilidades, jugando atu ritmo y sin presión.',
+                tags: 'Creatividad · Personalización · Tranquilidad',
+                games: ['Animal Crossing', 'Dressmaker', 'Pokemon Pokopia']
+            },
+            narrativos: {
+                name: 'JUEGOS NARRATIVOS',
+                text: 'Te gusta descubrir historias, conocer personajes y que tus decisiones son parte de lo que pasa',
+                tags: 'Aventura · Decisiones · Emoción',
+                games: ['Red Dead Redemption 2', 'Detroit: Become Human', 'What Remains of Edith Finch']
+            },
+            puzzle: {
+                name: 'PUZZLE',
+                text: 'Te gusta encontrar pistas, conectar ideas y descubrir soluciones a los retos.',
+                tags: 'Ingenio · Lógica · Desafíos',
+                games: ['Unpacking', 'Blue Prince', 'A little to the Left']
+            },
+            roguelike: {
+                name: 'ROGUELIKE / ROGUELITE',
+                text: 'Cada partida es distinta y fallar es parte del juego: te encanta intentar de nuevo y mejorar.',
+                tags: 'Exploración · Acción · Progreso',
+                games: ['Hades', 'Slay the Spire', 'Cult of the Lamb']
+            }
+        };
+
+        var QUESTIONS = [
+            {
+                q: '¿Cómo te imaginás una tarde de juego ideal?',
+                a: [
+                    ['Recorriendo un nuevo mundo para descubrir todo lo que esconde', { aventura: 2, rpg: 1 }],
+                    ['Planificando  el siguiente movimiento para encontrar la mejor forma de ganar', { estrategia: 2 }],
+                    ['Creando y decorando un espacio o mundo', { simulacion: 2 }],
+                    ['Poniendo a prueba mi ingenio', { puzzle: 2 }],
+                    ['Compitiendo y tratando de superar mi propio récord', { shooters: 2 }],
+                    ['Siguiendo una historia que me atrape', { narrativos: 2 }],
+                    ['Intentando distintas formas de resolver desafíos', { roguelike: 2 }]
+                ]
+            },
+            {
+                q: '¿Qué es lo que más te engancha de un juego?',
+                a: [
+                    ['Sentir que estoy viviendo una buena historia', { narrativos: 2, rpg: 1, simulacion: 1 }],
+                    ['Ver cómo mi personaje crece y cambia', { rpg: 2, narrativos: 1 }],
+                    ['La puntería y los reflejos', { shooters: 2, accion: 1 }],
+                    ['Que me obligue a pensar fuera de mi zona de comfort.', { estrategia: 2, puzzle: 1 }],
+                    ['Crear algo y gestionarlo a mi manera', { simulacion: 2 }],
+                    ['Que cada partida sea distinta', { roguelike: 2 }],
+                    ['Explorar, enfrentarte a enemigos y superar obstáculos', { accion: 2, shooters: 1 }]
+                ]
+            },
+            {
+                q: '¿Cuánto tiempo tenés para jugar?',
+                a: [
+                    ['Partidas cortas, de a ratos', { roguelike: 1, puzzle: 1, shooters: 1 }],
+                    ['Una hora o dos, tranquila', { simulacion: 1, narrativos: 1, puzzle: 1 }],
+                    ['Tardes enteras para sumergirme', { rpg: 2, estrategia: 1 }],
+                    ['Depende del día', { accion: 1, shooters: 1, roguelike: 1, simulacion: 1 }]
+                ]
+            },
+            {
+                q: '¿Qué ambiente te gusta más?',
+                a: [
+                    ['Fantasía y magia', { rpg: 2, narrativos: 1 }],
+                    ['Un pueblo cálido y cotidiano', { simulacion: 2, narrativos: 1 }],
+                    ['Mundos misteriosos para investigar', { narrativos: 2, puzzle: 1, roguelike: 2 }],
+                    ['Escenarios intensos, llenos de acción', { accion: 2, shooters: 1, roguelike: 1 }],
+                    ['Ciencia ficción y futurista', { shooters: 1, estrategia: 1, accion: 1, rpg: 2}],
+                    ['Lugares oscuros que me den un poco de miedo', { roguelike: 1, accion: 1}]
+                    ['Naturaleza y lugares para explorar', { accion: 1, simulacion: 2, rpg: 1 }]
+                ]
+            },
+            {
+                q: 'Si algo sale mal en el juego, ¿qué hacés?',
+                a: [
+                    ['Lo vuelvo a intentar hasta lograrlo', { roguelike: 2, shooters: 1 }],
+                    ['Cambio de estrategia y pruebo otra forma', { estrategia: 2, puzzle: 1, roguelike: 1 }],
+                    ['Lo tomo como parte de la historia y sigo adelante', { narrativos: 2, rpg: 1 }],
+                    ['Dejo eso para después y sigo explorando', {  simulacion: 2, rpg: 1, narrativos: 1 }],
+                    ['Le pido una mano a alguien y sigo', { shooters: 2, estrategia: 1 }],
+                    ['Pelear, reaccionar rápido y sentir adrenalina', { accion: 2, shooters: 2}],
+                    ['Me adapto a la situación y pruebo diferentes enfoques', { estrategia: 1, roguelike: 1, puzzle: 1 }]
+                ]
+            },
+            {
+                q: '¿Cómo preferís jugar?',
+                a: [
+                    ['Sola y a mi ritmo', { narrativos: 2, simulacion: 2, rpg: 2 }],
+                    ['Online con amigxs', { shooters: 2, estrategia: 1}],
+                    ['En equipo, coordinando para lograr objetivos"', { estrategia: 1, shooters: 1, accion: 1 }],
+                    ['Compitiendo contra mí misma/o', { roguelike: 1, puzzle: 1 }],
+                    ['Me da igual, depende del juego', { narrativos: 1, simulacion: 1, accion: 1 }]
+                ]
+            }
+        ];
+        var scores, current;
+        var el = function (id) { return document.getElementById(id); };
+
+        function reset() {
+            scores = { accion: 0, rpg: 0, shooters: 0, estrategia: 0, simulacion: 0, narrativos: 0, puzzle: 0, roguelike: 0 };
+            current = 0;
+        }
+
+        function show(id) {
+            ['quiz-start', 'quiz-question', 'quiz-result'].forEach(function (s) {
+                el(s).hidden = s !== id;
+            });
+        }
+
+        function render() {
+            var item = QUESTIONS[current];
+            el('quiz-step').textContent = '0' + (current + 1) + ' / 0' + QUESTIONS.length;
+            el('quiz-bar-fill').style.width = ((current + 1) / QUESTIONS.length * 100) + '%';
+            el('quiz-title').textContent = item.q;
+            var box = el('quiz-options');
+            box.innerHTML = '';
+            item.a.forEach(function (opt) {
+                var b = document.createElement('button');
+                b.type = 'button';
+                b.className = 'quiz-option';
+                b.textContent = opt[0];
+                b.addEventListener('click', function () { answer(opt[1]); });
+                box.appendChild(b);
+            });
+        }
+
+        function answer(points) {
+            for (var k in points) { scores[k] += points[k]; }
+            current++;
+            if (current < QUESTIONS.length) { render(); } else { finish(); }
+        }
+
+        function finish() {
+            var best = Object.keys(scores).reduce(function (a, b) { return scores[b] > scores[a] ? b : a; });
+            var g = GENRES[best];
+            el('result-name').textContent = g.name;
+            el('result-text').textContent = g.text;
+            el('result-tags').textContent = g.tags;
+            el('result-games').innerHTML = '';
+            g.games.forEach(function (name) {
+                var s = document.createElement('span');
+                s.textContent = name;
+                el('result-games').appendChild(s);
+            });
+            show('quiz-result');
+        }
+
+        el('quiz-begin').addEventListener('click', function () { reset(); render(); show('quiz-question'); });
+        el('quiz-retry').addEventListener('click', function () { reset(); show('quiz-start'); });
+        reset();
+    </script>
+    <script src="sparkles.js"></script>
+</body>
+</html>
