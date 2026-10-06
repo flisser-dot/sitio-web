@@ -260,7 +260,7 @@
                         <button type="button" class="tama-btn tama-btn-mid" data-act="cat" aria-label="Siguiente categoría">●</button>
                         <button type="button" class="tama-btn" data-act="next" aria-label="Palabra siguiente">▶</button>
                     </div>
-                    <p class="tama-hint">◀ ● ▶ &nbsp;·&nbsp; el botón del medio salta de categoría</p>
+                    <p class="tama-hint"><span class="tama-hint-side">◀</span> <span class="tama-hint-center">●</span> <span class="tama-hint-side">▶</span> &nbsp;·&nbsp; el botón del medio salta de categoría</p>
                 </div>
             </section>
 
@@ -420,7 +420,7 @@
 
             // Shell: sphere with a five-pointed star outline in XY, flattened in Z
             const shellMat = new THREE.MeshPhysicalMaterial({
-                color: 0x7040ff, roughness: 0.22, metalness: 0, clearcoat: 1, clearcoatRoughness: 0.12
+                color: 0x512fd4, roughness: 0.22, metalness: 0, clearcoat: 1, clearcoatRoughness: 0.12
             });
             const shellGeo = new THREE.SphereGeometry(1, 160, 120);
             shellGeo.rotateX(Math.PI / 2);
@@ -484,9 +484,9 @@
                 device.add(m);
                 pressable.push(m);
             };
-            mkButton(-0.58, -0.86, 0.36, 0xcaff19, 'prev');
-            mkButton(0, -0.9, 0.27, 0xff3cac, 'cat');
-            mkButton(0.58, -0.86, 0.36, 0xcaff19, 'next');
+            mkButton(-0.58, -0.86, 0.36, 0xff3cac, 'prev');
+            mkButton(0, -0.9, 0.27, 0xcaff19, 'cat');
+            mkButton(0.58, -0.86, 0.36, 0xff3cac, 'next');
 
         }
 

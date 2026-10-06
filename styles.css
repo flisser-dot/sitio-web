@@ -3308,11 +3308,12 @@ footer p {
 .tama-buttons { display: flex; align-items: center; gap: 14px; }
 
 .tama-btn {
+    --tama-control-color: var(--pink);
     min-width: 64px;
     padding: 10px 18px;
-    border: 1px solid var(--purple-light);
+    border: 1px solid var(--tama-control-color);
     border-radius: 999px;
-    background: rgba(152, 120, 255, .12);
+    background: rgba(255, 60, 172, .12);
     color: var(--off-white);
     font-family: "Press Start 2P", "DM Mono", monospace;
     font-size: 12px;
@@ -3321,12 +3322,14 @@ footer p {
 }
 
 .tama-btn:hover,
-.tama-btn:focus-visible { background: var(--green); color: var(--black); border-color: var(--green); outline: none; }
+.tama-btn:focus-visible { background: var(--tama-control-color); color: var(--black); border-color: var(--tama-control-color); outline: none; }
 
 .tama-btn:active { transform: translateY(2px); }
 
-.tama-btn-mid { border-color: var(--pink); background: rgba(255, 60, 172, .15); }
+.tama-btn-mid { --tama-control-color: var(--green); background: rgba(202, 255, 25, .12); }
 
 .tama-hint { margin: 0; color: var(--gray); font-family: "DM Mono"; font-size: 13px; text-align: center; }
+.tama-hint-side { color: var(--pink); }
+.tama-hint-center { color: var(--green); }
 
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
