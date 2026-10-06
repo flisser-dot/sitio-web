@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glosario de supervivencia | Fem Respawn</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Todo entra en una pantalla, sin scroll */
+        .guide-main { padding: 0; }
+        .guide-sections { margin-top: 0; }
+        .guide-sections .guide-section { border-top: 0; padding: 16px 0 0; align-items: center; }
+        .tama { gap: 10px; padding: 0; }
+        .tama3d { height: clamp(340px, calc(100vh - 230px), 660px); }
+    </style>
+</head>
+<body class="guide-page">
+    <header class="guide-header">
+        <a href="index.html" class="logo" aria-label="Fem Respawn, volver al inicio">
+            <span class="logo-main">Fem</span>
+            <span class="logo-sub">Respawn</span>
+        </a>
+        <a class="guide-back" href="index.html#explora">← VOLVER A EXPLORÁ</a>
+    </header>
+
+    <main class="guide-main">
+        <div class="guide-sections">
+            <section class="guide-section" id="glosario">
+                <div class="guide-section-heading">
+                    <span class="guide-step-number">// EXPLORÁ / GLOSARIO</span>
+                    <h2>Glosario de supervivencia</h2>
+                    <p>Las palabras que vas a escuchar por todos lados.</p>
+                </div>
+                <div class="tama" id="tama">
+                    <div class="tama3d" id="tama3d">
+                        <canvas id="tama-canvas" aria-label="Tamagotchi 3D con el glosario"></canvas>
+                    </div>
+                    <p class="sr-only" id="tama-live" aria-live="polite"></p>
+                    <div class="tama-buttons">
+                        <button type="button" class="tama-btn" data-act="prev" aria-label="Palabra anterior">◀</button>
+                        <button type="button" class="tama-btn tama-btn-mid" data-act="cat" aria-label="Siguiente categoría">●</button>
+                        <button type="button" class="tama-btn" data-act="next" aria-label="Palabra siguiente">▶</button>
+                    </div>
+                    <p class="tama-hint"><span class="tama-hint-side">◀</span> <span class="tama-hint-center">●</span> <span class="tama-hint-side">▶</span> &nbsp;·&nbsp; el botón del medio salta de categoría</p>
+                </div>
+            </section>
+        </div>
+    </main>
+    <script type="module">
+        import * as THREE from 'three';
+        import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+        const DATA = [
+            ['BÁSICOS', '🧙', 'NPC', 'Personaje controlado por el juego.'],
+            ['BÁSICOS', '⭐', 'XP', 'Puntos de experiencia.'],
+            ['BÁSICOS', '❤️', 'HP', 'Puntos de vida.'],
+            ['BÁSICOS', '🔮', 'MP', 'Puntos de magia/energía.'],
+            ['BÁSICOS', '⏳', 'COOLDOWN', 'Tiempo que tenés que esperar para volver a usar una habilidad.'],
+            ['BÁSICOS', '🎁', 'LOOT', 'Objetos o recompensas que encontrás.'],
+            ['JUGABILIDAD', '🚩', 'CHECKPOINT', 'Punto desde donde podés continuar después de perder.'],
+            ['JUGABILIDAD', '🔄', 'RESPAWN', 'Volver a aparecer después de morir.'],
+            ['JUGABILIDAD', '👹', 'BOSS', 'Enemigo especialmente poderoso.'],
+            ['JUGABILIDAD', '⬆️', 'BUFF', 'Efecto que mejora temporalmente una habilidad o estadística.'],
+            ['JUGABILIDAD', '⬇️', 'NERF', 'Cambio que reduce el poder de algo.'],
+            ['JUGABILIDAD', '🛠️', 'BUILD', 'Combinación de habilidades, objetos o características de un personaje.'],
+            ['ONLINE', '🤝', 'GG', '"Good game", usado al terminar una partida.'],
+            ['ONLINE', '💤', 'AFK', 'Jugador que está temporalmente ausente.'],
+            ['ONLINE', '🐌', 'LAG', 'Retraso entre tu acción y lo que sucede en el juego.'],
+            ['ONLINE', '📡', 'PING', 'Tiempo que tarda la información en viajar entre tu dispositivo y el servidor.'],
+            ['ONLINE', '🎯', 'MATCHMAKING', 'Sistema que busca y empareja jugadores.'],
+            ['ONLINE', '🏆', 'RANKED', 'Partidas competitivas que afectan tu clasificación.'],
+            ['COMUNIDAD', '👑', 'MAIN', 'Personaje que más usás.'],
+            ['COMUNIDAD', '📈', 'META', 'Estrategias, personajes u objetos considerados más efectivos en un momento determinado.'],
+            ['COMUNIDAD', '☠️', 'TOXICIDAD', 'Comportamientos hostiles o agresivos dentro de una comunidad.'],
+            ['COMUNIDAD', '📺', 'STREAMER', 'Persona que transmite contenido en vivo.'],
+            ['COMUNIDAD', '🧩', 'MOD', 'Modificación creada por la comunidad para un juego.']
+        ];
+
+        const host = document.getElementById('tama3d');
+        const canvas = document.getElementById('tama-canvas');
+        const live = document.getElementById('tama-live');
+        let idx = 0;
+
+        // ---------- LCD texture ----------
+        const SW = 320, SH = 272;
+        const lcd = document.createElement('canvas');
+        lcd.width = SW;
+        lcd.height = SH;
+        const ctx = lcd.getContext('2d');
+        const lcdTexture = new THREE.CanvasTexture(lcd);
+        lcdTexture.colorSpace = THREE.SRGBColorSpace;
+        lcdTexture.magFilter = THREE.NearestFilter;
+        lcdTexture.anisotropy = 8;
+
+        function wrap(text, maxChars) {
+            const words = text.split(' ');
+            const lines = [];
+            let line = '';
+            words.forEach((w) => {
+                if ((line + ' ' + w).trim().length > maxChars) { lines.push(line); line = w; }
+                else line = (line + ' ' + w).trim();
+            });
+            if (line) lines.push(line);
+            return lines;
+        }
+
+        function drawLcd() {
+            const d = DATA[idx];
+            ctx.fillStyle = '#cdea6a';
+            ctx.fillRect(0, 0, SW, SH);
+            ctx.fillStyle = 'rgba(29, 42, 5, 0.07)';
+            for (let y = 0; y < SH; y += 4) ctx.fillRect(0, y, SW, 1);
+            ctx.fillStyle = '#1d2a05';
+            ctx.textBaseline = 'top';
+            ctx.font = '12px "Press Start 2P", monospace';
+            ctx.textAlign = 'left';
+            ctx.fillText(d[0], 14, 14);
+            ctx.textAlign = 'right';
+            ctx.fillText(String(idx + 1).padStart(2, '0') + '/' + DATA.length, SW - 14, 14);
+            ctx.fillRect(14, 36, SW - 28, 3);
+
+            ctx.textAlign = 'center';
+            ctx.save();
+            ctx.filter = 'grayscale(1) contrast(3) brightness(0.55)';
+            ctx.font = '48px sans-serif';
+            ctx.fillText(d[1], SW / 2, 46);
+            ctx.restore();
+
+            ctx.font = '30px "Press Start 2P", monospace';
+            ctx.fillText(d[2], SW / 2, 102);
+
+            ctx.font = '17px "Press Start 2P", monospace';
+            wrap(d[3], 18).forEach((l, i) => ctx.fillText(l, SW / 2, 142 + i * 24));
+
+            lcdTexture.needsUpdate = true;
+            live.textContent = d[2] + ': ' + d[3];
+        }
+
+        // ---------- Scene ----------
+        let renderer;
+        try {
+            renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+        } catch (e) {
+            renderer = null;
+        }
+
+        const scene = new THREE.Scene();
+        const baseFov = 32;
+        const referenceAspect = 560 / 660;
+        const camera = new THREE.PerspectiveCamera(baseFov, 1, 0.1, 50);
+        camera.position.set(0, 0.6, 7.6);
+
+        const device = new THREE.Group();
+        scene.add(device);
+        const pressable = [];
+
+        if (renderer) {
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.outputColorSpace = THREE.SRGBColorSpace;
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            renderer.toneMappingExposure = 1.05;
+
+            const pmrem = new THREE.PMREMGenerator(renderer);
+            scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+            const key = new THREE.DirectionalLight(0xffffff, 2.2);
+            key.position.set(2.5, 3, 4);
+            scene.add(key);
+            const pink = new THREE.PointLight(0xff3cac, 14, 12);
+            pink.position.set(-3, -1, 2.5);
+            scene.add(pink);
+            const lime = new THREE.PointLight(0xcaff19, 10, 12);
+            lime.position.set(3, 2, 1.5);
+            scene.add(lime);
+
+            // Shell: sphere with a five-pointed star outline in XY, flattened in Z
+            const shellMat = new THREE.MeshPhysicalMaterial({
+                color: 0x512fd4, roughness: 0.22, metalness: 0, clearcoat: 1, clearcoatRoughness: 0.12
+            });
+            const shellGeo = new THREE.SphereGeometry(1, 160, 120);
+            shellGeo.rotateX(Math.PI / 2);
+            const pos = shellGeo.attributes.position;
+            for (let i = 0; i < pos.count; i++) {
+                const x = pos.getX(i), y = pos.getY(i), z = pos.getZ(i);
+                const phi = Math.atan2(y, x);
+                const g = 1.15 + 0.52 * Math.pow((1 + Math.cos(5 * (phi - Math.PI / 2))) / 2, 0.9);
+                pos.setXYZ(i, x * g, y * g, z * 0.42);
+            }
+            shellGeo.computeVertexNormals();
+            const shell = new THREE.Mesh(shellGeo, shellMat);
+            device.add(shell);
+
+            // Swivel carabiner clasp
+            const steel = new THREE.MeshPhysicalMaterial({ color: 0xb4bac2, roughness: 0.28, metalness: 1, clearcoat: 0.4 });
+            const clasp = new THREE.Group();
+            clasp.position.set(0, 1.8, 0);
+            clasp.scale.setScalar(0.5);
+            device.add(clasp);
+
+            // Lug on the shell, perpendicular to the clasp eye so the two link together
+            const lug = new THREE.Mesh(new THREE.TorusGeometry(0.11, 0.035, 16, 40), steel);
+            lug.rotation.y = Math.PI / 2;
+            lug.position.set(0, 1.7, 0);
+            device.add(lug);
+
+            const eye = new THREE.Mesh(new THREE.TorusGeometry(0.2, 0.04, 16, 40), steel);
+            eye.scale.set(1.25, 0.8, 1);
+            eye.position.y = 0.12;
+            clasp.add(eye);
+
+            [-0.075, 0.075].forEach((x) => {
+                const bolt = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, 0.3, 16), steel);
+                bolt.position.set(x, 0.38, 0);
+                clasp.add(bolt);
+                const nut = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.075, 0.07, 6), steel);
+                nut.position.set(x, 0.3, 0);
+                clasp.add(nut);
+            });
+
+            const block = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.3, 0.3), steel);
+            block.position.y = 0.66;
+            clasp.add(block);
+
+            const screw = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 0.05, 20), steel);
+            screw.rotation.x = Math.PI / 2;
+            screw.position.set(0.1, 0.68, 0.17);
+            clasp.add(screw);
+
+            // U-shaped hook: two straight legs joined by a semicircle
+            const hookPts = [];
+            const hw = 0.19, legBottom = 0.78, legTop = 1.2;
+            for (let y = legBottom; y <= legTop; y += 0.07) hookPts.push(new THREE.Vector3(-hw, y, 0));
+            for (let a = Math.PI; a >= 0; a -= Math.PI / 24) {
+                hookPts.push(new THREE.Vector3(Math.cos(a) * hw, legTop + Math.sin(a) * hw, 0));
+            }
+            for (let y = legTop; y >= legBottom; y -= 0.07) hookPts.push(new THREE.Vector3(hw, y, 0));
+            const hook = new THREE.Mesh(
+                new THREE.TubeGeometry(new THREE.CatmullRomCurve3(hookPts, false, 'centripetal'), 160, 0.065, 16),
+                steel
+            );
+            clasp.add(hook);
+
+            // Screen bezel (rounded rectangle extrusion)
+            const bw = 1.55, bh = 1.28, br = 0.2;
+            const shape = new THREE.Shape();
+            shape.moveTo(-bw / 2 + br, -bh / 2);
+            shape.lineTo(bw / 2 - br, -bh / 2);
+            shape.quadraticCurveTo(bw / 2, -bh / 2, bw / 2, -bh / 2 + br);
+            shape.lineTo(bw / 2, bh / 2 - br);
+            shape.quadraticCurveTo(bw / 2, bh / 2, bw / 2 - br, bh / 2);
+            shape.lineTo(-bw / 2 + br, bh / 2);
+            shape.quadraticCurveTo(-bw / 2, bh / 2, -bw / 2, bh / 2 - br);
+            shape.lineTo(-bw / 2, -bh / 2 + br);
+            shape.quadraticCurveTo(-bw / 2, -bh / 2, -bw / 2 + br, -bh / 2);
+            const bezel = new THREE.Mesh(
+                new THREE.ExtrudeGeometry(shape, { depth: 0.35, bevelEnabled: true, bevelSize: 0.03, bevelThickness: 0.03, bevelSegments: 4 }),
+                new THREE.MeshPhysicalMaterial({ color: 0x1c1830, roughness: 0.3, clearcoat: 1 })
+            );
+            bezel.position.set(0, 0.15, 0.1);
+            device.add(bezel);
+
+            // LCD
+            const screen = new THREE.Mesh(
+                new THREE.PlaneGeometry(1.4, 1.4 * SH / SW),
+                new THREE.MeshBasicMaterial({ map: lcdTexture })
+            );
+            screen.position.set(0, 0.15, 0.495);
+            device.add(screen);
+
+            // Buttons
+            const mkButton = (x, y, z, color, act) => {
+                const m = new THREE.Mesh(
+                    new THREE.SphereGeometry(0.15, 32, 24),
+                    new THREE.MeshPhysicalMaterial({ color, roughness: 0.2, clearcoat: 1, emissive: color, emissiveIntensity: 0.15 })
+                );
+                m.scale.z = 0.55;
+                m.position.set(x, y, z);
+                m.userData.baseZ = z;
+                m.userData.act = act;
+                m.userData.press = 0;
+                device.add(m);
+                pressable.push(m);
+            };
+            mkButton(-0.58, -0.86, 0.36, 0xff3cac, 'prev');
+            mkButton(0, -0.9, 0.27, 0xcaff19, 'cat');
+            mkButton(0.58, -0.86, 0.36, 0xff3cac, 'next');
+
+        }
+
+        // ---------- Behavior ----------
+        function step(n) { idx = (idx + n + DATA.length) % DATA.length; drawLcd(); }
+        function nextCat() {
+            const c = DATA[idx][0];
+            for (let i = 1; i <= DATA.length; i++) {
+                const j = (idx + i) % DATA.length;
+                if (DATA[j][0] !== c) { idx = j; break; }
+            }
+            drawLcd();
+        }
+        function act(a) {
+            if (a === 'prev') step(-1); else if (a === 'next') step(1); else nextCat();
+            const b = pressable.find((m) => m.userData.act === a);
+            if (b) b.userData.press = 1;
+        }
+
+        document.querySelectorAll('.tama-btn').forEach((b) => {
+            b.addEventListener('click', () => act(b.dataset.act));
+        });
+        host.closest('.tama').addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') act('prev');
+            if (e.key === 'ArrowRight') act('next');
+        });
+
+        // Pointer: tilt and click on 3D buttons
+        const mouse = new THREE.Vector2();
+        const target = { x: 0, y: 0 };
+        const ray = new THREE.Raycaster();
+
+        function setMouse(e) {
+            const r = canvas.getBoundingClientRect();
+            mouse.x = ((e.clientX - r.left) / r.width) * 2 - 1;
+            mouse.y = -((e.clientY - r.top) / r.height) * 2 + 1;
+        }
+        canvas.addEventListener('pointermove', (e) => {
+            setMouse(e);
+            target.y = mouse.x * 0.45;
+            target.x = -mouse.y * 0.25;
+            ray.setFromCamera(mouse, camera);
+            canvas.style.cursor = ray.intersectObjects(pressable).length ? 'pointer' : 'default';
+        });
+        canvas.addEventListener('pointerleave', () => { target.x = 0; target.y = 0; });
+        canvas.addEventListener('pointerdown', (e) => {
+            setMouse(e);
+            ray.setFromCamera(mouse, camera);
+            const hit = ray.intersectObjects(pressable)[0];
+            if (hit) act(hit.object.userData.act);
+        });
+
+        function resize() {
+            const w = host.clientWidth, h = host.clientHeight;
+            if (renderer) renderer.setSize(w, h, false);
+            camera.aspect = w / h;
+            camera.fov = THREE.MathUtils.radToDeg(2 * Math.atan(
+                Math.tan(THREE.MathUtils.degToRad(baseFov) / 2) * referenceAspect / camera.aspect
+            ));
+            camera.updateProjectionMatrix();
+        }
+        window.addEventListener('resize', resize);
+
+        const clock = new THREE.Clock();
+        const INTRO = 2.4;
+        const easeOutBack = (p) => 1 + 2.2 * Math.pow(p - 1, 3) + 1.2 * Math.pow(p - 1, 2);
+        function tick() {
+            const t = clock.getElapsedTime();
+            const p = Math.min(t / INTRO, 1);
+            if (p < 1) {
+                // Cae desde arriba dando una vuelta completa
+                device.position.y = (1 - easeOutBack(Math.min(p / 0.7, 1))) * 4.5;
+                device.rotation.y = 2 * Math.PI * (1 - Math.pow(1 - p, 3));
+                device.rotation.x = 0;
+            } else {
+                if (!tick.done) { device.rotation.y = 0; tick.done = true; }
+                device.rotation.y += (target.y - device.rotation.y) * 0.08;
+                device.rotation.x += (target.x - device.rotation.x) * 0.08;
+                device.position.y = Math.sin(t * 1.4) * 0.05;
+            }
+            pressable.forEach((m) => {
+                m.userData.press = Math.max(0, m.userData.press - 0.08);
+                m.position.z = m.userData.baseZ - m.userData.press * 0.06;
+            });
+            if (renderer) renderer.render(scene, camera);
+            requestAnimationFrame(tick);
+        }
+
+        resize();
+        drawLcd();
+        if (document.fonts && document.fonts.load) {
+            document.fonts.load('22px "Press Start 2P"').then(drawLcd);
+        }
+        tick();
+    </script>
+    <script src="sparkles.js"></script>
+</body>
+</html>

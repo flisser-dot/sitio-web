@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industria nacional | Fem Respawn</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        .ind-hero { padding: 0 0 40px; }
+        .ind-hero h1 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2.5rem, 7vw, 5.5rem); line-height: 1; margin: 12px 0 20px; }
+        .ind-hero h1 span { color: var(--green); }
+        .ind-hero p { max-width: 620px; color: var(--gray); font-size: 1.1rem; }
+
+        .ind-carousel { display: grid; grid-template-columns: 1.3fr 1fr; align-items: center; gap: 7vw; padding: 20px 0 0; }
+
+        .ind-stage { position: relative; height: clamp(300px, 38vw, 460px); perspective: 1400px; overflow: hidden; cursor: grab; touch-action: pan-y; user-select: none; }
+        .ind-stage.dragging { cursor: grabbing; }
+
+        .ind-slide { position: absolute; top: 50%; left: 50%; width: 50%; aspect-ratio: 16 / 10; margin: calc(-25% * 10 / 16) 0 0 -25%; border-radius: 16px; overflow: hidden; background: linear-gradient(135deg, var(--purple), var(--pink)); box-shadow: 0 20px 60px rgba(0,0,0,.6); transition: transform .5s cubic-bezier(.2,.8,.2,1), opacity .5s, filter .5s; }
+        .ind-slide:nth-child(even) { background: linear-gradient(135deg, var(--purple-light), var(--green)); }
+        .ind-slide img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; -webkit-user-drag: none; }
+        .ind-stage.dragging .ind-slide { transition: none; }
+
+        .ind-text { min-height: 260px; }
+        .ind-text .ind-tag { font-family: 'DM Mono', monospace; font-size: .8rem; letter-spacing: .08em; color: var(--green); }
+        .ind-text h2 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2rem, 4.5vw, 4rem); line-height: 1; margin: 10px 0 14px; text-transform: uppercase; }
+        .ind-text .ind-sub { color: var(--pink); font-weight: 600; font-size: 1.1rem; margin: 0 0 18px; }
+        .ind-text .ind-desc { color: var(--gray); font-size: 1.1rem; margin: 0 0 20px; }
+        .ind-text a.ind-main-link { color: var(--green); font-family: 'DM Mono', monospace; text-decoration: none; }
+        .ind-text .ind-links a { color: var(--off-white); }
+        .ind-text > * { transition: opacity .3s; }
+        .ind-text.fade > * { opacity: 0; }
+
+        .ind-dots { grid-column: 1; display: flex; justify-content: center; gap: 8px; margin-top: -20px; }
+        .ind-dot { width: 10px; height: 10px; padding: 0; border: 1px solid var(--gray); border-radius: 10px; background: transparent; cursor: pointer; transition: width .3s, background .3s; }
+        .ind-dot.active { width: 32px; border-color: var(--green); background: var(--green); }
+
+        @media (max-width: 800px) {
+            .ind-carousel { grid-template-columns: 1fr; }
+            .ind-dots { margin-top: 0; }
+        }
+    </style>
+</head>
+
+<body class="guide-page">
+
+    <header class="guide-header">
+        <a href="index.html" class="logo" aria-label="Fem Respawn, volver al inicio">
+            <span class="logo-main">Fem</span>
+            <span class="logo-sub">Respawn</span>
+        </a>
+        <a class="guide-back" href="index.html#explora">← VOLVER A EXPLORÁ</a>
+    </header>
+
+    <main class="guide-main">
+
+        <section class="ind-hero">
+            <div class="eyebrow"><span>//</span> EXPLORÁ · INDUSTRIA NACIONAL</div>
+            <h1>Hecho en <span>Argentina</span></h1>
+            <p>Estudios y producciones argentinas para conocer y apoyar. Pasá el cursor sobre cada tarjeta para ver más.</p>
+        </section>
+
+        <!-- Reemplazá cada img/src, título, texto y link por los datos reales -->
+        <section class="ind-carousel">
+
+            <div class="ind-stage" id="stage"></div>
+
+            <div class="ind-text" id="text">
+                <span class="ind-tag"></span>
+                <h2></h2>
+                <p class="ind-sub"></p>
+                <p class="ind-desc"></p>
+                <a class="ind-main-link" href="#" target="_blank" rel="noopener">VER MÁS →</a>
+                <nav class="guide-console-links ind-links" aria-label="Dónde jugar"></nav>
+            </div>
+
+            <div class="ind-dots" id="dots"></div>
+
+        </section>
+
+        <a class="guide-back guide-back-bottom" href="index.html#explora">← VOLVER A EXPLORÁ</a>
+    </main>
+
+    <script>
+        // Reemplazá cada entrada por los datos reales (img, nombre, tagline, texto, link)
+        const items = [
+            { img: 'etermax.png', tag: '// ESTUDIO', name: 'Etermax', sub: 'Compañía internacional de tecnología y entretenimiento.', desc: 'Estudio argentino detrás de Preguntados y Apalabrados, con millones de jugadores en todo el mundo.', links: [{ label: 'SITIO OFICIAL', url: 'https://www.etermax.com/' }] },
+            { img: 'purpleplay.png', tag: '// ESTUDIO', name: 'PURPLE TREE STUDIO', sub: 'Principal desarrolladora de juegos arcade en Argentina.', desc: 'Creador de juegos como Golazo!, Beat the champions y Thunder Ray.', links: [{ label: 'SITIO OFICIAL', url: 'https://www.purpleplay.games/' }] },
+            { img: 'ADVA.jpg', tag: '// ASOCIACIÓN', name: 'ADVA', sub: 'Asociación de desarrolladores de videojuegos argentinos.', desc: 'Una organización sin fines de lucro compuesta por estudios y desarrolladores de videojuegos que trabajan para promover el crecimiento del entretenimiento digital e interactivo producido en Argentina.', links: [{ label: 'SITIO OFICIAL', url: 'https://adva.vg/' }] },
+            { img: 'storyteller.jpg', tag: '// JUEGO', name: 'STORYTELLEER', sub: 'Narrativa / Puzzle', desc: 'Un juego que permite cambiar de personajes y entornos para recrear escenas de cuentos clásicos.', links: [{ label: 'GOOGLE PLAY STORE', url: 'https://play.google.com/store/apps/details?id=com.netflix.NGP.Storyteller&hl=es_CL' }, { label: 'NETFLIX', url: 'https://www.netflix.com/cl/games/81569948' }, { label: 'STEAM', url: 'https://store.steampowered.com/app/1624540/Storyteller/?l=spanish' }] },
+            { img: 'delta.jpg', tag: '// JUEGO', name: 'La hija del Delta', sub: 'Narrativa / Decisiones / Indie', desc: 'Guiá a Julia por un pantano misterioso y descubrí cómo tus decisiones cambian su historia.', links: [{ label: 'STEAM', url: 'https://store.steampowered.com/app/3301850/La_Hija_del_Delta/' }] },
+            { img: 'pombero.jpg', tag: '// JUEGO', name: 'Pomberito', sub: ' Terror / Indie', desc: 'Sobreviví 5 noches en el corazón del noreste argentino y descubrí la verdad detrás de los escalofriantes relatos del Pombero', links: [{ label: 'STEAM', url: 'https://store.steampowered.com/app/2761100/Pomberito/?l=spanish' }] },
+            
+        ];
+
+        const stage = document.getElementById('stage');
+        const text = document.getElementById('text');
+        const dotsEl = document.getElementById('dots');
+        let current = 0;
+        let drag = null;
+
+        const slides = items.map((it, i) => {
+            const s = document.createElement('div');
+            s.className = 'ind-slide';
+            s.innerHTML = '<img alt="" draggable="false">';
+            const img = s.firstChild;
+            img.src = it.img;
+            img.onerror = () => img.remove();
+            stage.appendChild(s);
+            s.addEventListener('click', () => { if (!drag?.moved) go(i); });
+            return s;
+        });
+
+        const dots = items.map((_, i) => {
+            const d = document.createElement('button');
+            d.className = 'ind-dot';
+            d.setAttribute('aria-label', 'Ir a ' + (i + 1));
+            d.onclick = () => go(i);
+            dotsEl.appendChild(d);
+            return d;
+        });
+
+        // offset: posición relativa al activo (puede ser fraccionaria al arrastrar)
+        function layout(shift = 0) {
+            slides.forEach((s, i) => {
+                const o = i - current + shift;
+                const a = Math.abs(o);
+                const dir = Math.sign(o);
+                const x = Math.max(-1, Math.min(1, o)) * 50 + Math.max(0, a - 1) * dir * 8;
+                const rot = -Math.max(-1, Math.min(1, o)) * 28;
+                const scale = 1 - Math.min(a, 1) * 0.22;
+                s.style.transform = `translateX(${x}%) translateZ(${-Math.min(a, 2) * 120}px) rotateY(${rot}deg) scale(${scale})`;
+                s.style.opacity = a > 2 ? 0 : 1 - Math.min(a, 1) * 0.55;
+                s.style.filter = `brightness(${1 - Math.min(a, 1) * 0.5})`;
+                s.style.zIndex = 100 - Math.round(a * 10);
+                s.style.pointerEvents = a > 2 ? 'none' : '';
+            });
+        }
+
+        function renderText() {
+            const it = items[current];
+            text.classList.add('fade');
+            setTimeout(() => {
+                text.querySelector('.ind-tag').textContent = it.tag;
+                text.querySelector('h2').textContent = it.name;
+                text.querySelector('.ind-sub').textContent = it.sub;
+                text.querySelector('.ind-desc').textContent = it.desc;
+                text.querySelector('.ind-main-link').href = it.link || '#';
+                text.querySelector('.ind-main-link').hidden = !!it.links;
+                const nav = text.querySelector('.ind-links');
+                nav.innerHTML = '';
+                (it.links || []).forEach(l => {
+                    const a = document.createElement('a');
+                    a.href = l.url;
+                    a.target = '_blank';
+                    a.rel = 'noopener noreferrer';
+                    a.textContent = l.label;
+                    nav.appendChild(a);
+                });
+                text.classList.remove('fade');
+            }, 150);
+        }
+
+        function go(i) {
+            current = (i + items.length) % items.length;
+            dots.forEach((d, k) => d.classList.toggle('active', k === current));
+            layout();
+            renderText();
+        }
+
+        stage.addEventListener('pointerdown', e => {
+            drag = { x: e.clientX, moved: false };
+            stage.setPointerCapture(e.pointerId);
+            stage.classList.add('dragging');
+        });
+        stage.addEventListener('pointermove', e => {
+            if (!drag) return;
+            const dx = e.clientX - drag.x;
+            if (Math.abs(dx) > 5) drag.moved = true;
+            layout(dx / (stage.clientWidth * 0.5));
+        });
+        const end = e => {
+            if (!drag) return;
+            const dx = e.clientX - drag.x;
+            stage.classList.remove('dragging');
+            const threshold = stage.clientWidth * 0.12;
+            if (dx < -threshold) go(current + 1);
+            else if (dx > threshold) go(current - 1);
+            else layout();
+            setTimeout(() => { drag = null; }, 0);
+        };
+        stage.addEventListener('pointerup', end);
+        stage.addEventListener('pointercancel', end);
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'ArrowRight') go(current + 1);
+            if (e.key === 'ArrowLeft') go(current - 1);
+        });
+
+        go(Math.max(0, items.findIndex(it => it.img === 'storyteller.jpg')));
+    </script>
+
+</body>
+</html>

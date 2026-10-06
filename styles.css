@@ -3301,7 +3301,7 @@ footer p {
 /* ---------- GLOSSARY: 3D tamagotchi ---------- */
 .tama { display: flex; flex-direction: column; align-items: center; gap: 18px; padding: 10px 0; }
 
-.tama3d { position: relative; width: min(460px, 100%); height: 540px; }
+.tama3d { position: relative; width: min(560px, 100%); height: 660px; }
 
 .tama3d canvas { width: 100%; height: 100%; display: block; touch-action: none; }
 
