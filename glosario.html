@@ -17,9 +17,11 @@
         .guide-sections .guide-section { border-top: 0; padding: 16px 0 0; align-items: center; }
         .tama { gap: 10px; padding: 0; }
         .tama3d { height: clamp(340px, calc(100vh - 230px), 660px); }
+        .guide-back-fixed { display: block; width: calc(100% - 100px); max-width: 1440px; margin: 0 auto; padding: 14px 0 24px; }
+        @media (max-width: 850px) { .guide-back-fixed { width: calc(100% - 36px); } }
     </style>
 </head>
-<body class="guide-page">
+<body class="guide-page glossary-page">
     <header class="guide-header">
         <a href="index.html" class="logo" aria-label="Fem Respawn, volver al inicio">
             <span class="logo-main">Fem</span>
@@ -51,6 +53,7 @@
             </section>
         </div>
     </main>
+    <a class="guide-back guide-back-fixed" href="index.html#explora">← VOLVER A EXPLORÁ</a>
     <script type="module">
         import * as THREE from 'three';
         import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
@@ -61,12 +64,12 @@
             ['BÁSICOS', '❤️', 'HP', 'Puntos de vida.'],
             ['BÁSICOS', '🔮', 'MP', 'Puntos de magia/energía.'],
             ['BÁSICOS', '⏳', 'COOLDOWN', 'Tiempo que tenés que esperar para volver a usar una habilidad.'],
-            ['BÁSICOS', '🎁', 'LOOT', 'Objetos o recompensas que encontrás.'],
-            ['JUGABILIDAD', '🚩', 'CHECKPOINT', 'Punto desde donde podés continuar después de perder.'],
+            ['BÁSICOS', '🎁', 'LOOT', 'Objetos o recompensas que encontrás o te dan.'],
+            ['JUGABILIDAD', '🚩', 'CHECKPOINT', 'Punto de guardado desde donde podés continuar.'],
             ['JUGABILIDAD', '🔄', 'RESPAWN', 'Volver a aparecer después de morir.'],
-            ['JUGABILIDAD', '👹', 'BOSS', 'Enemigo especialmente poderoso.'],
+            ['JUGABILIDAD', '👹', 'BOSS', 'Jefe de nivel o enemigo especialmente poderoso.'],
             ['JUGABILIDAD', '⬆️', 'BUFF', 'Efecto que mejora temporalmente una habilidad o estadística.'],
-            ['JUGABILIDAD', '⬇️', 'NERF', 'Cambio que reduce el poder de algo.'],
+            ['JUGABILIDAD', '⬇️', 'NERF', 'Cambio que reduce el poder de algo (lo contrario de un buff).'],
             ['JUGABILIDAD', '🛠️', 'BUILD', 'Combinación de habilidades, objetos o características de un personaje.'],
             ['ONLINE', '🤝', 'GG', '"Good game", usado al terminar una partida.'],
             ['ONLINE', '💤', 'AFK', 'Jugador que está temporalmente ausente.'],
@@ -77,7 +80,6 @@
             ['COMUNIDAD', '👑', 'MAIN', 'Personaje que más usás.'],
             ['COMUNIDAD', '📈', 'META', 'Estrategias, personajes u objetos considerados más efectivos en un momento determinado.'],
             ['COMUNIDAD', '☠️', 'TOXICIDAD', 'Comportamientos hostiles o agresivos dentro de una comunidad.'],
-            ['COMUNIDAD', '📺', 'STREAMER', 'Persona que transmite contenido en vivo.'],
             ['COMUNIDAD', '🧩', 'MOD', 'Modificación creada por la comunidad para un juego.']
         ];
 
@@ -97,13 +99,14 @@
         lcdTexture.magFilter = THREE.NearestFilter;
         lcdTexture.anisotropy = 8;
 
-        function wrap(text, maxChars) {
+        function wrap(text, maxWidth) {
             const words = text.split(' ');
             const lines = [];
             let line = '';
             words.forEach((w) => {
-                if ((line + ' ' + w).trim().length > maxChars) { lines.push(line); line = w; }
-                else line = (line + ' ' + w).trim();
+                const candidate = (line + ' ' + w).trim();
+                if (line && ctx.measureText(candidate).width > maxWidth) { lines.push(line); line = w; }
+                else line = candidate;
             });
             if (line) lines.push(line);
             return lines;
@@ -124,6 +127,14 @@
             ctx.fillText(String(idx + 1).padStart(2, '0') + '/' + DATA.length, SW - 14, 14);
             ctx.fillRect(14, 36, SW - 28, 3);
 
+            ctx.strokeStyle = '#1d2a05';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(SW - 42, 45, 24, 10);
+            ctx.fillStyle = '#1d2a05';
+            ctx.fillRect(SW - 17, 48, 3, 4);
+            ctx.fillStyle = '#526d16';
+            ctx.fillRect(SW - 39, 48, 16, 4);
+
             ctx.textAlign = 'center';
             ctx.save();
             ctx.filter = 'grayscale(1) contrast(3) brightness(0.55)';
@@ -131,11 +142,18 @@
             ctx.fillText(d[1], SW / 2, 46);
             ctx.restore();
 
-            ctx.font = '30px "Press Start 2P", monospace';
+            let termFontSize = d[2] === 'MATCHMAKING' ? 25 : 30;
+            ctx.font = `${termFontSize}px "Press Start 2P", monospace`;
+            while (ctx.measureText(d[2]).width > SW - 36 && termFontSize > 20) {
+                termFontSize -= 1;
+                ctx.font = `${termFontSize}px "Press Start 2P", monospace`;
+            }
             ctx.fillText(d[2], SW / 2, 102);
 
-            ctx.font = '17px "Press Start 2P", monospace';
-            wrap(d[3], 18).forEach((l, i) => ctx.fillText(l, SW / 2, 142 + i * 24));
+            const descriptionFontSize = d[3].length > 60 ? 14 : 17;
+            ctx.font = `${descriptionFontSize}px "Press Start 2P", monospace`;
+            const lineHeight = descriptionFontSize + 6;
+            wrap(d[3], SW - 36).forEach((l, i) => ctx.fillText(l, SW / 2, 142 + i * lineHeight));
 
             lcdTexture.needsUpdate = true;
             live.textContent = d[2] + ': ' + d[3];
@@ -155,6 +173,22 @@
         const camera = new THREE.PerspectiveCamera(baseFov, 1, 0.1, 50);
         camera.position.set(0, 0.6, 7.6);
 
+        const shadowCanvas = document.createElement('canvas');
+        shadowCanvas.width = 128;
+        shadowCanvas.height = 48;
+        const shadowContext = shadowCanvas.getContext('2d');
+        const shadowGradient = shadowContext.createRadialGradient(64, 24, 2, 64, 24, 64);
+        shadowGradient.addColorStop(0, 'rgba(0, 0, 0, 0.46)');
+        shadowGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        shadowContext.fillStyle = shadowGradient;
+        shadowContext.fillRect(0, 0, 128, 48);
+        const shadow = new THREE.Mesh(
+            new THREE.PlaneGeometry(2.5, 0.62),
+            new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(shadowCanvas), transparent: true, depthWrite: false })
+        );
+        shadow.position.set(0, -1.56, -0.3);
+        scene.add(shadow);
+
         const device = new THREE.Group();
         scene.add(device);
         const pressable = [];
@@ -163,24 +197,55 @@
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             renderer.outputColorSpace = THREE.SRGBColorSpace;
             renderer.toneMapping = THREE.ACESFilmicToneMapping;
-            renderer.toneMappingExposure = 1.05;
+            renderer.toneMappingExposure = 0.94;
 
             const pmrem = new THREE.PMREMGenerator(renderer);
             scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
 
-            const key = new THREE.DirectionalLight(0xffffff, 2.2);
+            const ambient = new THREE.HemisphereLight(0xe8eaff, 0x211638, 0.7);
+            scene.add(ambient);
+            const key = new THREE.DirectionalLight(0xffffff, 1.55);
             key.position.set(2.5, 3, 4);
             scene.add(key);
-            const pink = new THREE.PointLight(0xff3cac, 14, 12);
+            const rim = new THREE.DirectionalLight(0x9878ff, 1.25);
+            rim.position.set(-3, 1.5, -3);
+            scene.add(rim);
+            const pink = new THREE.PointLight(0xff3cac, 5, 10);
             pink.position.set(-3, -1, 2.5);
             scene.add(pink);
-            const lime = new THREE.PointLight(0xcaff19, 10, 12);
+            const lime = new THREE.PointLight(0xcaff19, 3.5, 9);
             lime.position.set(3, 2, 1.5);
             scene.add(lime);
 
+            const grainCanvas = document.createElement('canvas');
+            grainCanvas.width = 64;
+            grainCanvas.height = 64;
+            const grainContext = grainCanvas.getContext('2d');
+            const grain = grainContext.createImageData(64, 64);
+            for (let i = 0; i < grain.data.length; i += 4) {
+                const value = 190 + Math.random() * 65;
+                grain.data[i] = value;
+                grain.data[i + 1] = value;
+                grain.data[i + 2] = value;
+                grain.data[i + 3] = 255;
+            }
+            grainContext.putImageData(grain, 0, 0);
+            const roughnessMap = new THREE.CanvasTexture(grainCanvas);
+            roughnessMap.wrapS = THREE.RepeatWrapping;
+            roughnessMap.wrapT = THREE.RepeatWrapping;
+            roughnessMap.repeat.set(5, 5);
+
             // Shell: sphere with a five-pointed star outline in XY, flattened in Z
             const shellMat = new THREE.MeshPhysicalMaterial({
-                color: 0x512fd4, roughness: 0.22, metalness: 0, clearcoat: 1, clearcoatRoughness: 0.12
+                color: 0x512fd4,
+                roughness: 0.33,
+                roughnessMap,
+                metalness: 0,
+                clearcoat: 0.66,
+                clearcoatRoughness: 0.3,
+                transmission: 0.035,
+                thickness: 0.18,
+                ior: 1.46
             });
             const shellGeo = new THREE.SphereGeometry(1, 160, 120);
             shellGeo.rotateX(Math.PI / 2);
@@ -192,20 +257,35 @@
                 pos.setXYZ(i, x * g, y * g, z * 0.42);
             }
             shellGeo.computeVertexNormals();
+            const shellNormals = shellGeo.attributes.normal;
+            const shellRowSize = 161;
+            for (let row = 0; row <= 120; row++) {
+                const first = row * shellRowSize;
+                const last = first + 160;
+                shellNormals.setXYZ(last, shellNormals.getX(first), shellNormals.getY(first), shellNormals.getZ(first));
+            }
+            shellNormals.needsUpdate = true;
             const shell = new THREE.Mesh(shellGeo, shellMat);
             device.add(shell);
 
             // Swivel carabiner clasp
-            const steel = new THREE.MeshPhysicalMaterial({ color: 0xb4bac2, roughness: 0.28, metalness: 1, clearcoat: 0.4 });
+            const steel = new THREE.MeshPhysicalMaterial({ color: 0xb4bac2, roughness: 0.24, metalness: 0.78, clearcoat: 0.55 });
             const clasp = new THREE.Group();
             clasp.position.set(0, 1.8, 0);
-            clasp.scale.setScalar(0.5);
+            clasp.scale.setScalar(0.4);
             device.add(clasp);
 
+            const connector = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.1, 0.12, 0.14, 32),
+                new THREE.MeshPhysicalMaterial({ color: 0x7040ff, roughness: 0.28, clearcoat: 0.8, clearcoatRoughness: 0.2 })
+            );
+            connector.position.set(0, 1.63, 0.08);
+            device.add(connector);
+
             // Lug on the shell, perpendicular to the clasp eye so the two link together
-            const lug = new THREE.Mesh(new THREE.TorusGeometry(0.11, 0.035, 16, 40), steel);
+            const lug = new THREE.Mesh(new THREE.TorusGeometry(0.1, 0.03, 16, 40), steel);
             lug.rotation.y = Math.PI / 2;
-            lug.position.set(0, 1.7, 0);
+            lug.position.set(0, 1.7, 0.02);
             device.add(lug);
 
             const eye = new THREE.Mesh(new THREE.TorusGeometry(0.2, 0.04, 16, 40), steel);
@@ -245,8 +325,8 @@
             );
             clasp.add(hook);
 
-            // Screen bezel (rounded rectangle extrusion)
-            const bw = 1.55, bh = 1.28, br = 0.2;
+            // Recessed screen housing and rounded plastic bezel
+            const bw = 1.56, bh = 1.3, br = 0.2;
             const shape = new THREE.Shape();
             shape.moveTo(-bw / 2 + br, -bh / 2);
             shape.lineTo(bw / 2 - br, -bh / 2);
@@ -257,38 +337,93 @@
             shape.quadraticCurveTo(-bw / 2, bh / 2, -bw / 2, bh / 2 - br);
             shape.lineTo(-bw / 2, -bh / 2 + br);
             shape.quadraticCurveTo(-bw / 2, -bh / 2, -bw / 2 + br, -bh / 2);
+            const screenWidth = 1.38;
+            const screenHeight = screenWidth * SH / SW;
+            const holeRadius = 0.16;
+            const screenHole = new THREE.Path();
+            screenHole.moveTo(-screenWidth / 2, -screenHeight / 2 + holeRadius);
+            screenHole.lineTo(-screenWidth / 2, screenHeight / 2 - holeRadius);
+            screenHole.quadraticCurveTo(-screenWidth / 2, screenHeight / 2, -screenWidth / 2 + holeRadius, screenHeight / 2);
+            screenHole.lineTo(screenWidth / 2 - holeRadius, screenHeight / 2);
+            screenHole.quadraticCurveTo(screenWidth / 2, screenHeight / 2, screenWidth / 2, screenHeight / 2 - holeRadius);
+            screenHole.lineTo(screenWidth / 2, -screenHeight / 2 + holeRadius);
+            screenHole.quadraticCurveTo(screenWidth / 2, -screenHeight / 2, screenWidth / 2 - holeRadius, -screenHeight / 2);
+            screenHole.lineTo(-screenWidth / 2 + holeRadius, -screenHeight / 2);
+            screenHole.quadraticCurveTo(-screenWidth / 2, -screenHeight / 2, -screenWidth / 2, -screenHeight / 2 + holeRadius);
+            shape.holes.push(screenHole);
+            const screenShape = new THREE.Shape();
+            screenShape.moveTo(-screenWidth / 2 + holeRadius, -screenHeight / 2);
+            screenShape.lineTo(screenWidth / 2 - holeRadius, -screenHeight / 2);
+            screenShape.quadraticCurveTo(screenWidth / 2, -screenHeight / 2, screenWidth / 2, -screenHeight / 2 + holeRadius);
+            screenShape.lineTo(screenWidth / 2, screenHeight / 2 - holeRadius);
+            screenShape.quadraticCurveTo(screenWidth / 2, screenHeight / 2, screenWidth / 2 - holeRadius, screenHeight / 2);
+            screenShape.lineTo(-screenWidth / 2 + holeRadius, screenHeight / 2);
+            screenShape.quadraticCurveTo(-screenWidth / 2, screenHeight / 2, -screenWidth / 2, screenHeight / 2 - holeRadius);
+            screenShape.lineTo(-screenWidth / 2, -screenHeight / 2 + holeRadius);
+            screenShape.quadraticCurveTo(-screenWidth / 2, -screenHeight / 2, -screenWidth / 2 + holeRadius, -screenHeight / 2);
+            const screenGeometry = new THREE.ShapeGeometry(screenShape, 8);
+            const screenPositions = screenGeometry.attributes.position;
+            const screenUvs = screenGeometry.attributes.uv;
+            for (let i = 0; i < screenPositions.count; i++) {
+                screenUvs.setXY(i, screenPositions.getX(i) / screenWidth + 0.5, screenPositions.getY(i) / screenHeight + 0.5);
+            }
+            screenUvs.needsUpdate = true;
             const bezel = new THREE.Mesh(
-                new THREE.ExtrudeGeometry(shape, { depth: 0.35, bevelEnabled: true, bevelSize: 0.03, bevelThickness: 0.03, bevelSegments: 4 }),
-                new THREE.MeshPhysicalMaterial({ color: 0x1c1830, roughness: 0.3, clearcoat: 1 })
+                new THREE.ExtrudeGeometry(shape, { depth: 0.14, bevelEnabled: true, bevelSize: 0.025, bevelThickness: 0.025, bevelSegments: 5 }),
+                new THREE.MeshPhysicalMaterial({ color: 0x111019, roughness: 0.24, clearcoat: 0.88, clearcoatRoughness: 0.16 })
             );
-            bezel.position.set(0, 0.15, 0.1);
+            bezel.position.set(0, 0.15, 0.34);
             device.add(bezel);
 
             // LCD
             const screen = new THREE.Mesh(
-                new THREE.PlaneGeometry(1.4, 1.4 * SH / SW),
+                screenGeometry,
                 new THREE.MeshBasicMaterial({ map: lcdTexture })
             );
-            screen.position.set(0, 0.15, 0.495);
+            screen.position.set(0, 0.15, 0.47);
             device.add(screen);
 
+            const screenGlass = new THREE.Mesh(
+                screenGeometry,
+                new THREE.MeshPhysicalMaterial({ color: 0xffffff, transparent: true, opacity: 0.045, roughness: 0.08, clearcoat: 1, clearcoatRoughness: 0.06, depthWrite: false })
+            );
+            screenGlass.position.set(0, 0.15, 0.478);
+            device.add(screenGlass);
+
+            const screenGlint = new THREE.Mesh(
+                new THREE.PlaneGeometry(1.22, 0.012),
+                new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.16, depthWrite: false })
+            );
+            screenGlint.position.set(-0.03, 0.69, 0.48);
+            device.add(screenGlint);
+
             // Buttons
-            const mkButton = (x, y, z, color, act) => {
+            const buttonSeatGeo = new THREE.SphereGeometry(1, 48, 32);
+            const buttonSeatMat = new THREE.MeshPhysicalMaterial({ color: 0x49366f, roughness: 0.48, clearcoat: 0.32, clearcoatRoughness: 0.34 });
+            const buttonRimMat = new THREE.MeshPhysicalMaterial({ color: 0x614a91, roughness: 0.38, clearcoat: 0.42, clearcoatRoughness: 0.3 });
+            const mkButton = (x, y, z, color, act, radius) => {
+                const seat = new THREE.Mesh(buttonSeatGeo, buttonSeatMat);
+                seat.scale.set(radius * 1.18, radius * 1.18, 0.018);
+                seat.position.set(x, y, z - 0.025);
+                device.add(seat);
+                const rim = new THREE.Mesh(new THREE.TorusGeometry(radius * 1.07, radius * 0.045, 12, 48), buttonRimMat);
+                rim.position.set(x, y, z - 0.01);
+                device.add(rim);
                 const m = new THREE.Mesh(
-                    new THREE.SphereGeometry(0.15, 32, 24),
-                    new THREE.MeshPhysicalMaterial({ color, roughness: 0.2, clearcoat: 1, emissive: color, emissiveIntensity: 0.15 })
+                    new THREE.SphereGeometry(radius, 48, 32),
+                    new THREE.MeshPhysicalMaterial({ color, roughness: 0.38, clearcoat: 0.5, clearcoatRoughness: 0.28, emissive: color, emissiveIntensity: 0.015 })
                 );
-                m.scale.z = 0.55;
-                m.position.set(x, y, z);
-                m.userData.baseZ = z;
+                m.scale.set(1, 1, 0.3);
+                m.position.set(x, y, z - 0.018);
+                m.userData.baseZ = z - 0.018;
                 m.userData.act = act;
                 m.userData.press = 0;
                 device.add(m);
                 pressable.push(m);
             };
-            mkButton(-0.58, -0.86, 0.36, 0xff3cac, 'prev');
-            mkButton(0, -0.9, 0.27, 0xcaff19, 'cat');
-            mkButton(0.58, -0.86, 0.36, 0xff3cac, 'next');
+            mkButton(-0.58, -0.86, 0.36, 0xff4fac, 'prev', 0.105);
+            mkButton(0, -0.9, 0.32, 0xb69aff, 'cat', 0.085);
+            mkButton(0.58, -0.86, 0.36, 0xff4fac, 'next', 0.105);
 
         }
 
@@ -370,7 +505,7 @@
                 device.position.y = Math.sin(t * 1.4) * 0.05;
             }
             pressable.forEach((m) => {
-                m.userData.press = Math.max(0, m.userData.press - 0.08);
+                m.userData.press = Math.max(0, m.userData.press - 0.22);
                 m.position.z = m.userData.baseZ - m.userData.press * 0.06;
             });
             if (renderer) renderer.render(scene, camera);
