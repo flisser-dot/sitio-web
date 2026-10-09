@@ -1,6 +1,6 @@
 const areas = [
     {
-        id: 'diseno', group: 'crear', number: '01', icon: '◈', title: 'Diseño de juego',
+        id: 'diseno', group: 'crear', number: '01', icon: '◈', title: 'Diseño de juego', skills: ['Creatividad', 'Lógica', 'Observación'],
         summary: 'Define las reglas, los retos y el ritmo de cada partida.',
         what: 'Diseñar es decidir cómo se juega: qué puede hacer cada persona, qué desafíos encuentra y cómo evoluciona la experiencia.',
         tasks: ['Crear mecánicas y reglas.', 'Diseñar niveles, objetivos y progresión.', 'Probar ideas y ajustar el equilibrio.'],
@@ -9,7 +9,7 @@ const areas = [
         teams: ['Arte y animación', 'Programación', 'UX y accesibilidad'], interests: ['crear', 'resolver', 'historias', 'equipo']
     },
     {
-        id: 'arte', group: 'crear', number: '02', icon: '✧', title: 'Arte y animación',
+        id: 'arte', group: 'crear', number: '02', icon: '✧', title: 'Arte y animación', skills: ['Color y composición', 'Dibujo', 'Herramientas 2D/3D'],
         summary: 'Da forma a personajes, escenarios, objetos y movimiento.',
         what: 'El área visual construye la identidad del juego y convierte conceptos en imágenes que se pueden explorar e interpretar.',
         tasks: ['Explorar ideas visuales y referencias.', 'Crear arte 2D, modelos 3D, texturas o escenarios.', 'Preparar personajes y objetos para animación.'],
@@ -18,7 +18,7 @@ const areas = [
         teams: ['Diseño de juego', 'Animación', 'Programación', 'Narrativa'], interests: ['crear', 'historias']
     },
     {
-        id: 'narrativa', group: 'crear', number: '03', icon: '✎', title: 'Narrativa y escritura',
+        id: 'narrativa', group: 'crear', number: '03', icon: '✎', title: 'Narrativa y escritura', skills: ['Escritura', 'Estructura', 'Empatía'],
         summary: 'Crea personajes, diálogos y mundos con historias propias.',
         what: 'La narrativa diseña cómo aparecen las historias dentro del juego: quiénes las cuentan, qué decisiones las cambian y cómo se relacionan con lo que se juega.',
         tasks: ['Escribir diálogos, escenas y trasfondos.', 'Diseñar historias ramificadas.', 'Coordinar textos con niveles y mecánicas.'],
@@ -27,7 +27,7 @@ const areas = [
         teams: ['Diseño de juego', 'Arte', 'Audio', 'Localización'], interests: ['crear', 'historias', 'equipo']
     },
     {
-        id: 'musica', group: 'crear', number: '04', icon: '♫', title: 'Composición musical',
+        id: 'musica', group: 'crear', number: '04', icon: '♫', title: 'Composición musical', skills: ['Ritmo', 'Composición', 'Escucha'],
         summary: 'Compone música que acompaña el tono y el ritmo del juego.',
         what: 'La música ayuda a construir atmósferas y acompaña momentos, espacios y cambios de la experiencia.',
         tasks: ['Componer temas y variaciones.', 'Adaptar la música a distintas situaciones.', 'Preparar piezas para su implementación.'],
@@ -36,7 +36,7 @@ const areas = [
         teams: ['Diseño de sonido', 'Narrativa', 'Diseño de juego', 'Programación'], interests: ['crear', 'historias']
     },
     {
-        id: 'audio-narrativa', group: 'crear', number: '05', icon: '◖', title: 'Diseño de sonido',
+        id: 'audio-narrativa', group: 'crear', number: '05', icon: '◖', title: 'Diseño de sonido', skills: ['Escucha', 'Grabación', 'Edición de audio'],
         summary: 'Construye sonidos y ambientes que responden a lo que pasa.',
         what: 'El diseño de sonido crea e integra efectos, ambientes y voces para que el mundo del juego se sienta vivo y legible.',
         tasks: ['Grabar o crear efectos sonoros.', 'Editar voces y ambientes.', 'Integrar sonidos que reaccionan a las acciones.'],
@@ -45,7 +45,7 @@ const areas = [
         teams: ['Composición musical', 'Programación', 'Diseño de juego', 'Narrativa'], interests: ['crear', 'resolver', 'historias']
     },
     {
-        id: 'programacion', group: 'construir', number: '06', icon: '⌘', title: 'Programación',
+        id: 'programacion', group: 'construir', number: '06', icon: '⌘', title: 'Programación', skills: ['Lógica', 'Resolución de problemas', 'Depuración'],
         summary: 'Convierte ideas y diseños en sistemas que funcionan.',
         what: 'El desarrollo implementa mecánicas y herramientas, conecta los sistemas del juego y los adapta a distintas plataformas.',
         tasks: ['Programar controles y comportamiento.', 'Conectar sistemas y herramientas.', 'Encontrar errores y optimizar rendimiento.'],
@@ -54,7 +54,7 @@ const areas = [
         teams: ['Diseño de juego', 'Arte', 'UX', 'Calidad'], interests: ['resolver', 'equipo']
     },
     {
-        id: 'ux', group: 'construir', number: '07', icon: '◎', title: 'UX y accesibilidad',
+        id: 'ux', group: 'construir', number: '07', icon: '◎', title: 'UX y accesibilidad', skills: ['Empatía', 'Prototipado', 'Accesibilidad'],
         summary: 'Hace que jugar sea claro, cómodo y accesible.',
         what: 'UX observa cómo se entiende y se usa el juego. La interfaz y la accesibilidad ayudan a que más personas puedan jugar a su manera.',
         tasks: ['Diseñar menús e información en pantalla.', 'Probar flujos y detectar confusiones.', 'Proponer opciones de acceso y personalización.'],
@@ -63,7 +63,7 @@ const areas = [
         teams: ['Diseño de juego', 'Programación', 'Calidad', 'Arte'], interests: ['resolver', 'equipo']
     },
     {
-        id: 'calidad', group: 'construir', number: '08', icon: '⌕', title: 'Calidad y testing',
+        id: 'calidad', group: 'construir', number: '08', icon: '⌕', title: 'Calidad y testing', skills: ['Atención al detalle', 'Curiosidad', 'Comunicación clara'],
         summary: 'Prueba el juego y ayuda a detectar qué puede mejorar.',
         what: 'QA verifica versiones, documenta problemas de forma clara y comprueba que los cambios solucionen lo detectado.',
         tasks: ['Probar escenarios y dispositivos.', 'Registrar pasos para reproducir errores.', 'Volver a probar las correcciones.'],
@@ -72,7 +72,7 @@ const areas = [
         teams: ['Programación', 'Diseño de juego', 'UX', 'Localización'], interests: ['resolver']
     },
     {
-        id: 'datos', group: 'construir', number: '09', icon: '▦', title: 'Datos y analítica',
+        id: 'datos', group: 'construir', number: '09', icon: '▦', title: 'Datos y analítica', skills: ['Análisis', 'Hojas de cálculo', 'Comunicación'],
         summary: 'Usa datos para entender patrones y tomar decisiones.',
         what: 'El análisis de datos ayuda a interpretar cómo se juega, encontrar tendencias y evaluar cambios sin reemplazar la observación cualitativa.',
         tasks: ['Organizar y revisar datos.', 'Buscar patrones de uso y progreso.', 'Comunicar hallazgos al equipo.'],
@@ -81,7 +81,7 @@ const areas = [
         teams: ['Diseño de juego', 'Producción', 'UX', 'Marketing'], interests: ['resolver']
     },
     {
-        id: 'produccion', group: 'conectar', number: '10', icon: '◷', title: 'Producción',
+        id: 'produccion', group: 'conectar', number: '10', icon: '◷', title: 'Producción', skills: ['Organización', 'Priorización', 'Comunicación'],
         summary: 'Coordina tiempos, prioridades y comunicación entre áreas.',
         what: 'Producción facilita el trabajo del equipo y ayuda a que los proyectos avancen con acuerdos claros y expectativas realistas.',
         tasks: ['Organizar etapas y prioridades.', 'Acompañar la comunicación del equipo.', 'Identificar riesgos y dependencias.'],
@@ -90,7 +90,7 @@ const areas = [
         teams: ['Todas las áreas'], interests: ['equipo', 'resolver']
     },
     {
-        id: 'comunidad', group: 'conectar', number: '11', icon: '◌', title: 'Comunidad',
+        id: 'comunidad', group: 'conectar', number: '11', icon: '◌', title: 'Comunidad', skills: ['Escucha', 'Moderación', 'Comunicación'],
         summary: 'Escucha y acompaña a quienes juegan.',
         what: 'El trabajo de comunidad crea espacios de conversación, comparte información y ayuda a que el equipo comprenda a su público.',
         tasks: ['Moderar y cuidar espacios.', 'Escuchar preguntas y comentarios.', 'Compartir novedades y acercar respuestas.'],
@@ -99,7 +99,7 @@ const areas = [
         teams: ['Marketing', 'Producción', 'Narrativa', 'Esports'], interests: ['equipo', 'historias']
     },
     {
-        id: 'marketing', group: 'conectar', number: '12', icon: '↗', title: 'Marketing y comunicación',
+        id: 'marketing', group: 'conectar', number: '12', icon: '↗', title: 'Marketing y comunicación', skills: ['Escritura', 'Estrategia', 'Creatividad'],
         summary: 'Cuenta qué hace especial al juego y conecta con su público.',
         what: 'Marketing y comunicación definen cómo presentar un proyecto, a quién puede interesarle y qué información necesita conocer.',
         tasks: ['Preparar mensajes y contenidos.', 'Planificar campañas y materiales.', 'Coordinar anuncios con el equipo.'],
@@ -108,7 +108,7 @@ const areas = [
         teams: ['Comunidad', 'Producción', 'Arte', 'Publishing'], interests: ['crear', 'equipo', 'historias']
     },
     {
-        id: 'traduccion', group: 'conectar', number: '13', icon: '文', title: 'Traducción y localización',
+        id: 'traduccion', group: 'conectar', number: '13', icon: '文', title: 'Traducción y localización', skills: ['Idiomas', 'Escritura', 'Sensibilidad cultural'],
         summary: 'Adapta textos y experiencias a otros idiomas y contextos.',
         what: 'La localización adapta textos, referencias, formatos y elementos de interfaz para que el juego funcione en distintos lugares.',
         tasks: ['Traducir diálogos e interfaz.', 'Revisar tono y consistencia.', 'Probar textos dentro del juego.'],
@@ -117,77 +117,144 @@ const areas = [
         teams: ['Narrativa', 'Calidad', 'Marketing', 'Producción'], interests: ['historias', 'equipo']
     },
     {
-        id: 'esports', group: 'jugar', number: '14', icon: '⌁', title: 'Esports y competición',
+        id: 'esports', group: 'jugar', number: '14', icon: '⌁', title: 'Esports y competición', skills: ['Estrategia', 'Análisis', 'Coordinación'],
         summary: 'Organiza y desarrolla experiencias competitivas alrededor de los juegos.',
         what: 'El ecosistema competitivo incluye torneos, equipos, producción de eventos, análisis, comunicación y apoyo a quienes compiten.',
         tasks: ['Coordinar torneos y calendarios.', 'Analizar partidas y estrategias.', 'Producir transmisiones y eventos.'],
         fits: 'Te entusiasman la estrategia, los eventos en vivo, el trabajo en equipo o el análisis de partidas.',
         start: 'Organizá una partida amistosa con reglas claras y observá qué hace que la experiencia sea justa y disfrutable.',
         teams: ['Comunidad', 'Producción', 'Marketing', 'Diseño de juego'], interests: ['competir', 'equipo']
+    },
+    {
+        id: 'coach', group: 'jugar', number: '15', icon: '♟', title: 'Coach de esports', skills: ['Comunicación', 'Análisis táctico', 'Liderazgo'],
+        summary: 'Acompaña al equipo y prepara estrategias para competir.',
+        what: 'La persona coach ayuda a un equipo a entrenar, analizar sus partidas y coordinar estrategias para mejorar su rendimiento.',
+        tasks: ['Planificar entrenamientos y objetivos.', 'Revisar partidas y detectar oportunidades.', 'Dar devoluciones y adaptar estrategias con el equipo.'],
+        fits: 'Te gusta analizar juegos, explicar ideas y ayudar a otras personas a crecer en equipo.',
+        start: 'Elegí una partida competitiva, anotá decisiones clave y proponé una estrategia distinta para una próxima ronda.',
+        teams: ['Jugadoras y jugadores', 'Analistas', 'Producción', 'Psicología deportiva'], interests: ['competir', 'equipo', 'resolver']
+    },
+    {
+        id: 'arbitraje', group: 'jugar', number: '16', icon: '⚖', title: 'Árbitra de esports', skills: ['Reglamentos', 'Imparcialidad', 'Atención al detalle'],
+        summary: 'Aplica las reglas y cuida que la competencia sea justa.',
+        what: 'La árbitra supervisa las partidas, interpreta el reglamento y resuelve situaciones para que todas las personas compitan en las mismas condiciones.',
+        tasks: ['Verificar que se cumplan las reglas.', 'Resolver consultas y disputas durante el torneo.', 'Registrar decisiones y comunicar sanciones con claridad.'],
+        fits: 'Te interesa la justicia, prestar atención a los detalles y tomar decisiones claras con imparcialidad.',
+        start: 'Armá reglas breves para un torneo amistoso y pensá cómo resolverías situaciones dudosas antes de que ocurran.',
+        teams: ['Producción de torneos', 'Equipos', 'Comunidad', 'Organización'], interests: ['competir', 'resolver', 'equipo']
     }
 ];
 
 const groups = [
-    { id: 'crear', label: 'IMAGINAR Y CREAR', icon: '✧', areas: 'Diseño · Arte · Narrativa · Música · Sonido', count: '05 ÁREAS' },
-    { id: 'construir', label: 'CONSTRUIR Y MEJORAR', icon: '⌘', areas: 'Programación · UX · Calidad · Datos', count: '04 ÁREAS' },
-    { id: 'conectar', label: 'ORGANIZAR Y CONECTAR', icon: '◌', areas: 'Producción · Comunidad · Marketing · Localización', count: '04 ÁREAS' },
-    { id: 'jugar', label: 'JUGAR Y COMPETIR', icon: '⌁', areas: 'Esports · Torneos · Eventos', count: '01 ÁREA' }
+    { id: 'crear', label: 'IMAGINAR Y CREAR', areas: 'Diseño · Arte · Narrativa · Música · Sonido', count: '5 ÁREAS', description: 'Imaginá reglas, mundos, personajes y sonidos que convierten una idea en una experiencia para jugar.' },
+    { id: 'construir', label: 'CONSTRUIR Y MEJORAR', areas: 'Programación · UX · Calidad · Datos', count: '4 ÁREAS', description: 'Programá, probá y mejorá sistemas para que cada idea funcione y sea fácil de usar.' },
+    { id: 'conectar', label: 'ORGANIZAR Y CONECTAR', areas: 'Producción · Comunidad · Marketing · Localización', count: '4 ÁREAS', description: 'Organizá el trabajo del equipo y acercá el juego a las personas que lo crean y lo juegan.' },
+    { id: 'jugar', label: 'JUGAR Y COMPETIR', areas: 'Esports y competición · Coach · Árbitra de esports', count: '3 ÁREAS', description: 'Prepará competencias, equipos y eventos para que cada partida se convierta en espectáculo.' }
 ];
 
-const advisorAnswers = {
-    q1: {
-        crear: ['diseno', 'arte', 'narrativa', 'musica', 'audio-narrativa'],
-        resolver: ['programacion', 'ux', 'calidad', 'datos'],
-        historias: ['narrativa', 'musica', 'audio-narrativa', 'comunidad', 'traduccion'],
-        organizar: ['produccion', 'comunidad', 'marketing', 'traduccion'],
-        competir: ['esports', 'comunidad', 'marketing']
-    },
-    q2: {
-        visual: ['arte', 'diseno', 'ux'],
-        sistemas: ['programacion', 'datos', 'calidad', 'diseno'],
-        palabras: ['narrativa', 'traduccion', 'marketing', 'comunidad'],
-        personas: ['produccion', 'comunidad', 'marketing', 'esports']
-    },
-    q3: {
-        detalle: ['calidad', 'datos', 'traduccion', 'ux'],
-        construir: ['programacion', 'arte', 'audio-narrativa', 'musica', 'diseno'],
-        coordinar: ['produccion', 'marketing', 'comunidad', 'traduccion'],
-        competir: ['esports', 'comunidad']
-    }
-};
-
 const groupLabels = Object.fromEntries(groups.map((group) => [group.id, group.label]));
+const cardGroupLabels = { crear: 'CREACIÓN', construir: 'TECNOLOGÍA', conectar: 'EQUIPO', jugar: 'COMPETICIÓN' };
 const areasGrid = document.querySelector('#areas-grid');
-const areasCount = document.querySelector('#areas-count');
 const areasEmpty = document.querySelector('#areas-empty');
 const mapButtons = document.querySelectorAll('[data-map-group]');
-const interestButtons = document.querySelectorAll('[data-interest-filter]');
+const areasExplorer = document.querySelector('#areas-explorer');
+const selectedGroupPanel = document.querySelector('#areas-selected-group');
+const selectedGroupKicker = document.querySelector('#areas-selected-kicker');
+const selectedGroupTitle = document.querySelector('#areas-selected-title');
+const selectedGroupDescription = document.querySelector('#areas-selected-description');
+const selectedGroupDisciplines = document.querySelector('#areas-selected-disciplines');
+const selectedGroupCount = document.querySelector('#areas-selected-count');
 const areaDialog = document.querySelector('#area-dialog');
 const areaDialogBody = document.querySelector('#area-dialog-body');
-const advisorForm = document.querySelector('#areas-advisor-form');
-const advisorResults = document.querySelector('#areas-advisor-results');
-const recommendations = document.querySelector('#areas-advisor-recommendations');
 let activeGroup = 'all';
-let activeInterest = 'all';
+const reduceAreaMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const areaCardObserver = !reduceAreaMotion && 'IntersectionObserver' in window
+    ? new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+        });
+    }, { rootMargin: '0px 0px -48px 0px', threshold: 0.08 })
+    : null;
 
 function renderAreas() {
+    if (areaCardObserver) areaCardObserver.disconnect();
     const visibleAreas = areas.filter((area) => {
         const matchesGroup = activeGroup === 'all' || area.group === activeGroup;
-        const matchesInterest = activeInterest === 'all' || area.interests.includes(activeInterest);
-        return matchesGroup && matchesInterest;
+        return matchesGroup;
     });
-    areasCount.textContent = `${visibleAreas.length} ${visibleAreas.length === 1 ? 'área' : 'áreas'}`;
     areasEmpty.hidden = visibleAreas.length > 0;
-    areasGrid.replaceChildren(...visibleAreas.map((area) => {
-        const card = document.createElement('button');
-        card.type = 'button';
-        card.className = 'areas-card';
-        card.dataset.roleId = area.id;
-        card.dataset.group = area.group;
-        card.setAttribute('aria-haspopup', 'dialog');
-        card.innerHTML = `<span class="areas-card-symbol" aria-hidden="true">${area.icon}</span><span class="areas-card-meta">${area.number} / ${groupLabels[area.group]}</span><h3>${area.title}</h3><p>${area.summary}</p><span class="areas-card-link">EXPLORAR ÁREA <span aria-hidden="true">↗</span></span>`;
-        return card;
-    }));
+    const groupSections = groups.map((group, groupIndex) => {
+        const groupAreas = visibleAreas.filter((area) => area.group === group.id);
+        if (!groupAreas.length) return null;
+
+        const section = document.createElement('section');
+        section.className = 'areas-card-group';
+        section.dataset.group = group.id;
+        const heading = document.createElement('div');
+        heading.className = 'areas-card-group-heading';
+        const headingLabel = document.createElement('span');
+        headingLabel.className = 'guide-step-number';
+        headingLabel.textContent = `${String(groupIndex + 1).padStart(2, '0')} / ${group.label}`;
+        heading.append(headingLabel);
+
+        const grid = document.createElement('div');
+        grid.className = 'areas-card-grid';
+        groupAreas.forEach((area, cardIndex) => {
+            const card = document.createElement('button');
+            card.type = 'button';
+            card.className = 'areas-card areas-card-reveal';
+            card.dataset.roleId = area.id;
+            card.dataset.group = area.group;
+            card.style.setProperty('--reveal-delay', `${(cardIndex % 3) * 90}ms`);
+            card.setAttribute('aria-haspopup', 'dialog');
+
+            const meta = document.createElement('span');
+            meta.className = 'areas-card-meta';
+            meta.textContent = `${area.number} / ${cardGroupLabels[area.group]}`;
+            const icon = document.createElement('span');
+            icon.className = 'areas-card-icon';
+            icon.setAttribute('aria-hidden', 'true');
+            icon.textContent = area.icon;
+            const title = document.createElement('span');
+            title.className = 'areas-card-title';
+            title.textContent = area.title;
+            const summary = document.createElement('span');
+            summary.className = 'areas-card-summary';
+            summary.textContent = area.summary;
+            const divider = document.createElement('span');
+            divider.className = 'areas-card-divider';
+            const fitLabel = document.createElement('span');
+            fitLabel.className = 'areas-card-fit-label';
+            fitLabel.textContent = 'HABILIDADES QUE SUMAN';
+            const tags = document.createElement('span');
+            tags.className = 'areas-card-tags';
+            area.skills.forEach((skill) => {
+                const tag = document.createElement('span');
+                tag.textContent = skill;
+                tags.appendChild(tag);
+            });
+            const link = document.createElement('span');
+            link.className = 'areas-card-link';
+            link.append('Ver tareas y cómo empezar');
+            const arrow = document.createElement('span');
+            arrow.className = 'areas-card-arrow';
+            arrow.setAttribute('aria-hidden', 'true');
+            arrow.textContent = '↗';
+            link.appendChild(arrow);
+            card.append(meta, icon, title, summary, divider, fitLabel, tags, link);
+            grid.appendChild(card);
+        });
+        section.append(heading, grid);
+        return section;
+    }).filter(Boolean);
+    areasGrid.replaceChildren(...groupSections);
+    const renderedCards = areasGrid.querySelectorAll('.areas-card');
+    renderedCards.forEach((card) => {
+        if (areaCardObserver) areaCardObserver.observe(card);
+        else card.classList.add('is-visible');
+    });
 }
 
 function openArea(areaId) {
@@ -209,6 +276,7 @@ function openArea(areaId) {
 
     const sections = [
         ['¿Qué tareas podrías hacer?', area.tasks],
+        ['Habilidades que suman', area.skills],
         ['Quizás te interese si...', area.fits],
         ['Una forma de empezar', area.start],
         ['Suele colaborar con', area.teams]
@@ -246,21 +314,39 @@ document.addEventListener('click', (event) => {
 
 mapButtons.forEach((button) => {
     button.addEventListener('click', () => {
-        activeGroup = button.dataset.mapGroup;
-        activeInterest = 'all';
-        mapButtons.forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
-        interestButtons.forEach((item) => item.setAttribute('aria-pressed', String(item.dataset.interestFilter === 'all')));
-        renderAreas();
-        document.querySelector('#areas-explorer').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-});
+        if (button.getAttribute('aria-pressed') === 'true') {
+            activeGroup = 'all';
+            mapButtons.forEach((item) => {
+                item.setAttribute('aria-pressed', 'false');
+                item.setAttribute('aria-expanded', 'false');
+            });
+            selectedGroupPanel.hidden = true;
+            areasExplorer.hidden = true;
+            delete selectedGroupPanel.dataset.group;
+            delete areasExplorer.dataset.group;
+            return;
+        }
 
-interestButtons.forEach((button) => {
-    button.addEventListener('click', () => {
-        activeInterest = button.dataset.interestFilter;
-        activeGroup = 'all';
-        interestButtons.forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
-        mapButtons.forEach((item) => item.setAttribute('aria-pressed', 'false'));
+        button.classList.remove('is-activating');
+        void button.offsetWidth;
+        button.classList.add('is-activating');
+        activeGroup = button.dataset.mapGroup;
+        const selectedGroup = groups.find((group) => group.id === activeGroup);
+        const selectedGroupIndex = groups.indexOf(selectedGroup);
+        mapButtons.forEach((item) => {
+            const selected = item === button;
+            item.setAttribute('aria-pressed', String(selected));
+            item.setAttribute('aria-expanded', String(selected));
+        });
+        selectedGroupKicker.textContent = `${String(selectedGroupIndex + 1).padStart(2, '0')} / 04 · MAPA DE ÁREAS`;
+        selectedGroupTitle.textContent = selectedGroup.label;
+        selectedGroupDescription.textContent = selectedGroup.description;
+        selectedGroupDisciplines.textContent = selectedGroup.areas;
+        selectedGroupCount.textContent = selectedGroup.count.replace(/^0/, '');
+        selectedGroupPanel.dataset.group = activeGroup;
+        areasExplorer.dataset.group = activeGroup;
+        selectedGroupPanel.hidden = false;
+        areasExplorer.hidden = false;
         renderAreas();
     });
 });
@@ -268,26 +354,6 @@ interestButtons.forEach((button) => {
 document.querySelector('.areas-dialog-close').addEventListener('click', () => areaDialog.close());
 areaDialog.addEventListener('click', (event) => {
     if (event.target === areaDialog) areaDialog.close();
-});
-
-advisorForm.addEventListener('submit', (event) => {
-    event.preventDefault();
-    const answers = new FormData(advisorForm);
-    const scores = new Map(areas.map((area) => [area.id, 0]));
-    ['q1', 'q2', 'q3'].forEach((question) => {
-        (advisorAnswers[question][answers.get(question)] || []).forEach((id) => scores.set(id, scores.get(id) + 1));
-    });
-    const results = [...areas].sort((a, b) => scores.get(b.id) - scores.get(a.id)).slice(0, 3);
-    recommendations.replaceChildren(...results.map((area) => {
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.className = 'areas-recommendation';
-        button.dataset.roleId = area.id;
-        button.innerHTML = `<span aria-hidden="true">${area.icon}</span><strong>${area.title}</strong><span aria-hidden="true">↗</span>`;
-        return button;
-    }));
-    advisorResults.hidden = false;
-    advisorResults.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 });
 
 renderAreas();

@@ -1,6 +1,6 @@
 document.addEventListener('click', function (e) {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     var guideQuizLink = e.target.closest('.guide-cta .main-button');
-    if (guideQuizLink && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     if (!e.target.closest('button, a, summary, [role="button"], .category, .explore-option, .tama3d canvas')) return;
     var glyphs = ['✦', '✧', '⋆', '✩', '✭'];
     for (var i = 0; i < 12; i++) {

@@ -21,47 +21,45 @@
     <main class="guide-main areas-main">
         <section class="areas-hero" aria-labelledby="areas-title">
             <div class="areas-hero-copy">
-                <span class="section-label">// TRABAJÁ / ÁREAS Y ROLES</span>
+                <span class="section-label">// 01 · TRABAJÁ / ÁREAS Y ROLES</span>
                 <h1 id="areas-title">Hay muchos caminos para <span>crear un juego.</span></h1>
-                <p class="guide-intro">Un videojuego se construye en equipo: diseño, arte, programación, sonido, calidad y muchas otras disciplinas se encuentran para darle vida. No hace falta saber programar ni haber creado un juego para empezar a explorar.</p>
-                <a class="areas-explore-link" href="#areas-map">EXPLORÁ LAS ÁREAS <span aria-hidden="true">↓</span></a>
+                <p class="guide-intro">Detrás de cada juego hay un equipo de personas que aportan ideas, crean mundos, diseñan personajes, programan, componen música y prueban que todo funcione.</p>
+                <p> Son rutas orientativas, no divisiones estrictas: muchas áreas se cruzan y colaboran.</p>
             </div>
-            <img src="Ilustradora creativa con tablet brillante-Photoroom.png" alt="Ilustradora trabajando en una tableta digital">
         </section>
 
         <section class="areas-map" id="areas-map" aria-labelledby="areas-map-title">
             <div class="areas-map-heading">
-                <span class="guide-step-number">14 ÁREAS · UN MISMO UNIVERSO</span>
                 <h2 id="areas-map-title">¿Qué te gustaría hacer?</h2>
                 <p>Elegí un grupo según tus intereses y descubrí las áreas que lo componen.</p>
             </div>
             <div class="areas-map-groups">
-                <button class="areas-map-group" type="button" data-map-group="crear" aria-pressed="false">
-                    <span class="areas-map-icon" aria-hidden="true">✧</span>
+                <button class="areas-map-group" type="button" data-map-group="crear" aria-pressed="false" aria-expanded="false" aria-controls="areas-selected-group areas-explorer">
+                    <span class="areas-map-art areas-map-art--create" aria-hidden="true"><span class="areas-map-art-center">✧</span><i></i><i></i><i></i></span>
                     <span class="areas-map-label">IMAGINAR Y CREAR</span>
-                    <span class="areas-map-areas">Diseño · Arte · Narrativa · Música · Sonido</span>
-                    <span class="areas-map-count">05 ÁREAS</span>
                 </button>
-                <button class="areas-map-group" type="button" data-map-group="construir" aria-pressed="false">
-                    <span class="areas-map-icon" aria-hidden="true">⌘</span>
+                <button class="areas-map-group" type="button" data-map-group="construir" aria-pressed="false" aria-expanded="false" aria-controls="areas-selected-group areas-explorer">
+                    <span class="areas-map-art areas-map-art--build" aria-hidden="true"><span class="areas-map-art-center">&lt;/&gt;</span><i></i><i></i><i></i></span>
                     <span class="areas-map-label">CONSTRUIR Y MEJORAR</span>
-                    <span class="areas-map-areas">Programación · UX · Calidad · Datos</span>
-                    <span class="areas-map-count">04 ÁREAS</span>
                 </button>
-                <button class="areas-map-group" type="button" data-map-group="conectar" aria-pressed="false">
-                    <span class="areas-map-icon" aria-hidden="true">◌</span>
+                <button class="areas-map-group" type="button" data-map-group="conectar" aria-pressed="false" aria-expanded="false" aria-controls="areas-selected-group areas-explorer">
+                    <span class="areas-map-art areas-map-art--connect" aria-hidden="true"><span class="areas-map-art-center">✦</span><i></i><i></i><i></i><i></i><i></i></span>
                     <span class="areas-map-label">ORGANIZAR Y CONECTAR</span>
-                    <span class="areas-map-areas">Producción · Comunidad · Marketing · Localización</span>
-                    <span class="areas-map-count">04 ÁREAS</span>
                 </button>
-                <button class="areas-map-group" type="button" data-map-group="jugar" aria-pressed="false">
-                    <span class="areas-map-icon" aria-hidden="true">⌁</span>
+                <button class="areas-map-group" type="button" data-map-group="jugar" aria-pressed="false" aria-expanded="false" aria-controls="areas-selected-group areas-explorer">
+                    <span class="areas-map-art areas-map-art--play" aria-hidden="true"><span class="areas-map-art-center">VS</span><i></i><i></i><i></i></span>
                     <span class="areas-map-label">JUGAR Y COMPETIR</span>
-                    <span class="areas-map-areas">Esports · Torneos · Eventos</span>
-                    <span class="areas-map-count">01 ÁREA</span>
                 </button>
             </div>
-            <p class="areas-map-note">Son rutas orientativas, no divisiones estrictas: muchas áreas se cruzan y colaboran.</p>
+            <div class="areas-selected-group" id="areas-selected-group" aria-live="polite" aria-atomic="true" hidden>
+                <div>
+                    <span class="guide-step-number" id="areas-selected-kicker"></span>
+                    <h3 id="areas-selected-title"></h3>
+                    <p id="areas-selected-description"></p>
+                    <p class="areas-selected-disciplines" id="areas-selected-disciplines"></p>
+                </div>
+                <span class="areas-selected-count" id="areas-selected-count"></span>
+            </div>
         </section>
 
         <section class="areas-directory" aria-labelledby="areas-directory-title" hidden>
@@ -192,69 +190,16 @@
             </article>
         </section>
 
-        <section class="areas-explorer" id="areas-explorer" aria-labelledby="areas-explorer-title">
+        <section class="areas-explorer" id="areas-explorer" aria-labelledby="areas-explorer-title" hidden>
             <div class="areas-directory-heading">
                 <div>
-                    <span class="guide-step-number">EXPLORAR ÁREAS</span>
                     <h2 id="areas-explorer-title">Descubrí tu lugar en el juego</h2>
-                    <p>Elegí una tarjeta para conocer tareas, intereses y formas de empezar.</p>
+                    <p>Conocé qué hace cada perfil, las habilidades que suma y cómo empezar.</p>
                 </div>
-                <span class="areas-count" id="areas-count" aria-live="polite">14 áreas</span>
-            </div>
-            <div class="areas-filters" role="group" aria-label="Filtrar áreas por interés">
-                <span class="areas-filter-label">ME INTERESA</span>
-                <button type="button" data-interest-filter="all" aria-pressed="true">Todas</button>
-                <button type="button" data-interest-filter="crear" aria-pressed="false">Crear</button>
-                <button type="button" data-interest-filter="resolver" aria-pressed="false">Resolver problemas</button>
-                <button type="button" data-interest-filter="historias" aria-pressed="false">Contar historias</button>
-                <button type="button" data-interest-filter="equipo" aria-pressed="false">Trabajar en equipo</button>
-                <button type="button" data-interest-filter="competir" aria-pressed="false">Competir</button>
             </div>
             <div class="areas-grid" id="areas-grid"></div>
             <p class="areas-empty" id="areas-empty" hidden>No encontramos áreas para ese filtro.</p>
         </section>
-
-        <section class="areas-advisor" aria-labelledby="areas-advisor-title">
-            <div class="areas-advisor-heading">
-                <span class="guide-step-number">ORIENTADOR · 3 PREGUNTAS</span>
-                <h2 id="areas-advisor-title">¿Por dónde te gustaría empezar?</h2>
-                <p>No es un test que te encasilla: sugiere caminos posibles para explorar.</p>
-            </div>
-            <form class="areas-advisor-form" id="areas-advisor-form">
-                <fieldset class="areas-question">
-                    <legend>01 / ¿Qué te entusiasma más?</legend>
-                    <label><input type="radio" name="q1" value="crear" required> Imaginar y crear</label>
-                    <label><input type="radio" name="q1" value="resolver"> Resolver problemas</label>
-                    <label><input type="radio" name="q1" value="historias"> Contar historias</label>
-                    <label><input type="radio" name="q1" value="organizar"> Organizar y conectar</label>
-                    <label><input type="radio" name="q1" value="competir"> Jugar y competir</label>
-                </fieldset>
-                <fieldset class="areas-question">
-                    <legend>02 / ¿Qué tipo de tarea elegirías?</legend>
-                    <label><input type="radio" name="q2" value="visual" required> Crear imágenes</label>
-                    <label><input type="radio" name="q2" value="sistemas"> Entender sistemas</label>
-                    <label><input type="radio" name="q2" value="palabras"> Trabajar con palabras</label>
-                    <label><input type="radio" name="q2" value="personas"> Trabajar con personas</label>
-                </fieldset>
-                <fieldset class="areas-question">
-                    <legend>03 / ¿Qué te gustaría aportar?</legend>
-                    <label><input type="radio" name="q3" value="detalle" required> Atención al detalle</label>
-                    <label><input type="radio" name="q3" value="construir"> Construir algo nuevo</label>
-                    <label><input type="radio" name="q3" value="coordinar"> Coordinar un equipo</label>
-                    <label><input type="radio" name="q3" value="competir"> Energía competitiva</label>
-                </fieldset>
-                <button class="areas-advisor-submit" type="submit">VER CAMINOS POSIBLES <span aria-hidden="true">↗</span></button>
-            </form>
-            <div class="areas-advisor-results" id="areas-advisor-results" aria-live="polite" hidden>
-                <h3>Podrían interesarte</h3>
-                <div id="areas-advisor-recommendations"></div>
-            </div>
-        </section>
-
-        <aside class="areas-note">
-            <h2>No hay una sola puerta de entrada</h2>
-            <p>Podés acercarte desde lo que ya sabés hacer y seguir aprendiendo en el camino. Crear, organizar, investigar, escribir o resolver problemas también son habilidades valiosas para un equipo de videojuegos.</p>
-        </aside>
 
         <dialog class="areas-dialog" id="area-dialog" aria-labelledby="area-dialog-title">
             <button class="areas-dialog-close" type="button" aria-label="Cerrar ficha">×</button>
@@ -264,5 +209,6 @@
         <a class="guide-back guide-back-bottom" href="index.html#trabaja">← VOLVER A TRABAJÁ</a>
     </main>
     <script src="areas-map.js"></script>
+    <script src="sparkles.js"></script>
 </body>
 </html>
