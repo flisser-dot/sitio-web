@@ -104,7 +104,7 @@
 
             <section class="guide-section" id="controles-accesibilidad">
                 <div class="guide-section-heading">
-                    <span class="guide-step-number">03 / ACCESIBILIDAD</span>
+                    <span class="guide-step-number">02 / ACCESIBILIDAD</span>
                     <h2>Formas de jugar: a tu ritmo y sin culpa</h2>
                     <p>Controles y accesibilidad</p>
                 </div>
@@ -134,7 +134,7 @@
 
             <section class="guide-section" id="estilos-de-juego">
                 <div class="guide-section-heading">
-                    <span class="guide-step-number">02 / GÉNEROS</span>
+                    <span class="guide-step-number">03 / GÉNEROS</span>
                     <h2>Descubrí tu estilo de juego</h2>
                     <p>Elegí un género y explorá juegos de ese estilo.</p>
                 </div>
@@ -152,7 +152,6 @@
                     </nav>
                     <div class="genre-showcase" aria-live="polite">
                         <div class="genre-showcase-copy">
-                            <span class="guide-step-number" id="genre-current-label">GÉNEROS</span>
                             <p id="genre-description">Una selección de juegos para cada estilo.</p>
                         </div>
                         <div class="genre-gallery" id="genre-gallery"></div>
@@ -161,7 +160,7 @@
             </section>
 
             <section class="guide-section guide-cta">
-                <a class="main-button" href="test.html">Test: qué juego es para vos?<span>⋆˙⟡</span></a>
+                <a class="main-button" href="test.html">Test: ¿Qué juego es para vos?<span>⋆˙⟡</span></a>
             </section>
         </div>
 
@@ -170,8 +169,7 @@
     <script>
         const genres = {
             rpg: {
-                label: 'RPG',
-                description: 'Construí tu personaje, elegí sus habilidades, tomá decisiones y explorá nuevos mundos.',
+                layout: 'pair-left',
                 games: [
                     { name: "Baldur's Gate 3", image: 'BG3.jpeg' },
                     { name: 'Persona 5', image: 'Persona%205.jpg', position: '50% 56%' },
@@ -179,81 +177,72 @@
                 ]
             },
             simulacion: {
-                label: 'SIMULACIÓN',
-                description: 'Viví experiencias que imitan actividades reales, desde manejar un vehículo hasta construir una ciudad.',
+                layout: 'pair-right',
                 games: [
-                    { name: 'Los Sims 4', image: 'sims 4.jpg' },
-                    { name: 'Stardew Valley', image: 'stardew.jpg' },
+                    { name: 'Los Sims 4', image: 'sims 4.jpg', position: '50% 0%' },
+                    { name: 'Stardew Valley', image: 'stardewvalley.png'},
                     { name: 'Cities: Skylines', image: 'cities.jpg' }
                 ]
             },
             shooters: {
-                label: 'SHOOTERS',
-                description: 'Jugá en primera o tercera persona. La precisión y la estrategia son clave para enfrentarte a otros jugadores o enemigos.',
+                layout: 'pair-left',
                 games: [
                     { name: 'Counter-Strike 2', image: 'cs2.jpg' },
-                    { name: 'Valorant', image: 'valorant.jpg' },
-                    { name: 'Overwatch', image: 'overwatch.jpg' }
+                    { name: 'Valorant', image: 'valo.jpg', position: '50% 0%' },
+                    { name: 'Overwatch', image: 'over.jpg', position: '50% 0%' }
                 ]
             },
             indie: {
-                label: 'INDIE',
-                description: 'Juegos independientes que destacan por su originalidad y enfoque creativo.',
+                layout: 'pair-right',
                 games: [
-                    { name: 'Undertale', image: 'undertale.PNG' },
-                    { name: 'Terraria', image: 'terraria.jpg' },
-                    { name: 'Outer Wilds', image: 'outer wilds.jpg' }
+                    { name: 'This bed we made', image: 'this bed.jpg' },
+                    { name: 'Terraria', image: 'terrar.jpg', position: '50% 60%' },
+                    { name: 'Outer Wilds', image: 'outer.jpg' }
                 ]
             },
             roguelike: {
-                label: 'ROGUELIKE / ROGUELITE',
-                description: 'Cada partida propone un desafío distinto, con niveles que cambian y espacio para mejorar con cada intento.',
+                layout: 'pair-left',
                 games: [
                     { name: 'Hades', image: 'hades.PNG' },
-                    { name: 'Balatro', image: 'balatro.jpg' },
-                    { name: 'Dead Cells', image: 'dead cells.jpg' }
+                    { name: 'Balatro', image: 'balatr.jpg' },
+                    { name: 'Dead Cells', image: 'deadcells.png' }
                 ]
             },
             estrategia: {
-                label: 'ESTRATEGIA',
-                description: 'Pensá tus movimientos, administrá recursos y tomá decisiones para alcanzar tus objetivos.',
+                layout: 'pair-right',
                 games: [
                     { name: 'Age of Empires II', image: 'AGEOFEMPIRES2.jpg' },
-                    { name: 'Civilization VI', image: 'civilization vi.jpg' },
-                    { name: 'League of Legends', image: 'lol.jpg' }
+                    { name: 'Civilization VI', image: 'civ.jpg', position: '50% 0%' },
+                    { name: 'Crusader Kings III', image: 'crusaders.jpg',position: '50% 0%' }
                 ]
             },
             puzzle: {
-                label: 'PUZZLE',
-                description: 'Resolvé acertijos y desafíos mentales que ponen a prueba tu lógica y creatividad.',
+                layout: 'pair-left',
                 games: [
                     { name: 'Portal 2', image: 'portal2.jpg' },
-                    { name: 'Little Nightmares', image: 'little nightmares.png' },
+                    { name: 'One Shot', image: 'oneshot.png' },
                     { name: 'Superliminal', image: 'superliminal.jpg' }
                 ]
             },
             plataforma: {
-                label: 'PLATAFORMA',
-                description: 'Saltá, corré y explorá niveles desafiantes mientras dominás la mecánica del juego.',
+                layout: 'pair-right',
                 games: [
-                    { name: 'Terraria', image: 'terraria.jpg' },
-                    { name: 'Dead Cells', image: 'dead cells.jpg' },
-                    { name: 'Little Nightmares', image: 'little nightmares.png' }
+                    { name: 'Celeste', image: 'celeste.PNG' },
+                    { name: 'Ori and the Blind Forest', image: 'ori.jpg', position: '50% 60%' },
+                    { name: 'Little Nightmares', image: 'little nightmares.png', position: '50% 0%' }
                 ]
             },
             terror: {
-                label: 'TERROR',
-                description: 'Enfrentá tus miedos y sumergite en atmósferas inquietantes llenas de suspenso y horror.',
+                layout: 'pair-left',
                 games: [
-                    { name: 'Pomberito', image: 'pombero.jpg' },
-                    { name: 'The Quarry', image: 'quarry.jpg' },
-                    { name: 'Little Nightmares', image: 'little nightmares.png' }
+                    { name: 'Resident Evil 2: Remake', image: 'resident evil 2.jpg' },
+                    { name: 'Alice: Madness Returns', image: 'alice.png' },
+                    { name: 'Silent Hill 2', image: 'silenthill2.png' }
                 ]
             }
         };
 
         const genreButtons = document.querySelectorAll('.genre-option');
-        const genreLabel = document.querySelector('#genre-current-label');
         const genreDescription = document.querySelector('#genre-description');
         const genreGallery = document.querySelector('#genre-gallery');
 
@@ -264,7 +253,7 @@
                 option.classList.toggle('is-active', selected);
                 option.setAttribute('aria-pressed', String(selected));
             });
-            genreLabel.textContent = `${String([...genreButtons].indexOf(button) + 1).padStart(2, '0')} / ${genre.label}`;
+            genreGallery.dataset.layout = genre.layout;
             genreDescription.textContent = genre.description;
             genreGallery.classList.remove('is-visible');
             const games = genre.games.map((game) => {
@@ -289,6 +278,15 @@
             button.addEventListener('mouseenter', () => selectGenre(button));
             button.addEventListener('focus', () => selectGenre(button));
             button.addEventListener('click', () => selectGenre(button));
+        });
+
+        const quizLink = document.querySelector('.guide-cta .main-button');
+        quizLink.addEventListener('click', (event) => {
+            if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            event.preventDefault();
+            document.body.classList.add('is-leaving');
+            window.setTimeout(() => { window.location.href = quizLink.href; }, 320);
         });
     </script>
     <script src="sparkles.js"></script>

@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
-<body class="guide-page">
+<body class="guide-page quiz-page">
     <header class="guide-header">
         <a href="index.html" class="logo" aria-label="Fem Respawn, volver al inicio">
             <span class="logo-main">Fem</span>
@@ -29,7 +29,7 @@
 
         <section class="quiz" id="quiz" aria-live="polite">
             <div class="quiz-start" id="quiz-start">
-                <button type="button" class="main-button quiz-btn" id="quiz-begin">EMPEZAR EL TEST ⋆˙⟡</button>
+                <button type="button" class="main-button quiz-btn" id="quiz-begin">EMPEZAR EL TEST <span aria-hidden="true">✦</span></button>
             </div>
 
             <div class="quiz-question" id="quiz-question" hidden>
@@ -66,13 +66,13 @@
                 name: 'ACCIÓN / AVENTURA',
                 text: 'Te mueve explorar, pelear y avanzar: mundos para recorrer y desafíos que te mantienen en movimiento.',
                 tags: 'Exploración · acción · aventura',
-                games: ['Zelda: Breath of the Wild', 'God of War', 'Hollow Knight']
+                games: ['Zelda: Breath of the Wild', 'God of War', 'Ghost of Tsushima']
             },
             rpg: {
                 name: 'RPG',
                 text: 'Te gusta explorar, crear personajes y meterte de lleno en una historia donde tus decisiones importan.',
                 tags: 'Personajes · Decisiones · Exploración',
-                games: ['Skyrim', 'Dragon Age: Origins', 'Cyberpunk 2077']
+                games: ['Kingdom Come: Deliverance II', 'Dragon Age: Inquisition', 'Elden Ring']
             },
             shooters: {
                 name: 'SHOOTERS',
@@ -84,19 +84,19 @@
                 name: 'ESTRATEGIA',
                 text: 'Disfrutás ganar por tu ingenio: Te gusta pensar tus próximos movimientos, armar un plan y ponerlo a prueba.',
                 tags: 'Planificación · Tácticas · Decisiones',
-                games: ['Civilization VI', 'Age of Empires IV', 'League of Legends']
+                games: ['Civilization VI', 'Roma II', 'League of Legends']
             },
             simulacion: {
                 name: 'SIMULACIÓN',
                 text: 'Construir, cuidar y organizar tu propio mundo, probando distintas posibilidades, jugando atu ritmo y sin presión.',
                 tags: 'Creatividad · Personalización · Tranquilidad',
-                games: ['Animal Crossing', 'Dressmaker', 'Pokemon Pokopia']
+                games: ['Animal Crossing', 'Paralives', 'Pokemon Pokopia']
             },
             narrativos: {
                 name: 'JUEGOS NARRATIVOS',
                 text: 'Te gusta descubrir historias, conocer personajes y que tus decisiones son parte de lo que pasa.',
                 tags: 'Aventura · Decisiones · Emoción',
-                games: ['Red Dead Redemption 2', 'Detroit: Become Human', 'What Remains of Edith Finch']
+                games: ['The Last Of Us', 'Detroit: Become Human', 'What Remains of Edith Finch']
             },
             puzzle: {
                 name: 'PUZZLE',
@@ -108,7 +108,7 @@
                 name: 'ROGUELIKE / ROGUELITE',
                 text: 'Cada partida es distinta y fallar es parte del juego: te encanta intentar de nuevo y mejorar.',
                 tags: 'Exploración · Acción · Progreso',
-                games: ['Hades', 'Slay the Spire', 'Cult of the Lamb']
+                games: ['Darkest Dungeon', 'Slay the Spire', 'Cult of the Lamb']
             }
         };
 

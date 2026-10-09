@@ -38,6 +38,10 @@
             <a href="#redes">REDES</a>
         </nav>
 
+        <div class="header-code">
+            AR / 01
+        </div>
+
     </header>
 
 
@@ -234,7 +238,7 @@
 
                     <a class="explore-option" href="glosario.html">
                         <h3>GLOSARIO DE SUPERVIVENCIA</h3>
-                        <p>Las palabras que vas a escuchar por todos lados.</p>
+                        <p>Las palabras que vas a escuchar por todos lados, explicadas en un Tamagotchi 3D.</p>
                     </a>
 
                     <a class="explore-option" id="test-juego" href="test.html">
@@ -287,10 +291,10 @@
 
                 <div class="explore-options">
 
-                    <a class="explore-option" href="areas.html">
-                        <h3>ÁREAS Y ROLES</h3>
+                    <article class="explore-option" tabindex="0">
+                        <h3>ÁEAS Y ROLES</h3>
                         <p>Un recorrido por los distintos roles y disciplinas para que descubras dónde encaja tu talento.</p>
-                    </a>
+                    </article>
 
                     <article class="explore-option" tabindex="0">
                         <h3>FORMACIÓN</h3>
@@ -544,16 +548,6 @@
 
     </footer>
 
-    <script>
-        const navigationTabs = document.querySelectorAll('.header .navigation a');
-        navigationTabs.forEach((tab) => {
-            tab.addEventListener('click', () => {
-                navigationTabs.forEach((option) => {
-                    option.classList.toggle('is-active', option === tab);
-                });
-            });
-        });
-    </script>
     <script src="sparkles.js"></script>
 </body>
 </html>
