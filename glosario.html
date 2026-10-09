@@ -16,13 +16,13 @@
         .guide-sections .guide-section { border-top: 0; padding: 16px 0 0; align-items: center; }
         .tama { gap: 10px; padding: 0; }
         .tama3d { height: clamp(340px, calc(100vh - 230px), 660px); }
-        .guide-back-fixed { display: block; width: calc(100% - 100px); max-width: 1440px; margin: 0 auto; padding: 14px 0 24px; }
-        @media (max-width: 850px) { .guide-back-fixed { width: calc(100% - 36px); } }
+        .guide-back-fixed { display: inline-flex; width: fit-content; max-width: calc(100% - 36px); margin: 14px 0 24px max(50px, calc((100% - 1440px) / 2)); padding: 9px 10px; }
+        @media (max-width: 850px) { .guide-back-fixed { margin-left: 18px; margin-right: 18px; } }
         @media (max-width: 600px) {
             .tama { gap: 12px; padding-bottom: 24px; }
             .tama3d { width: min(88vw, 440px); height: auto; aspect-ratio: 560 / 660; }
             .tama-btn { min-width: 72px; min-height: 56px; padding: 14px 18px; touch-action: manipulation; }
-            .guide-back-fixed { padding-bottom: calc(32px + env(safe-area-inset-bottom)); }
+            .guide-back-fixed { margin-bottom: calc(24px + env(safe-area-inset-bottom)); }
         }
     </style>
 </head>
@@ -500,7 +500,9 @@
             const p = Math.min(t / INTRO, 1);
             if (p < 1) {
                 // Cae desde arriba dando una vuelta completa
-                device.position.y = (1 - easeOutBack(Math.min(p / 0.7, 1))) * 4.5;
+                device.position.y = (1 - easeOutBack(Math.min(p / 0.7, 1))) * 5.5;
+                const landing = Math.max(0, 1 - Math.abs(p - 0.74) / 0.12);
+                device.scale.set(1 + landing * 0.025, 1 - landing * 0.05, 1 + landing * 0.025);
                 device.rotation.y = 2 * Math.PI * (1 - Math.pow(1 - p, 3));
                 device.rotation.x = 0;
             } else {
@@ -508,6 +510,7 @@
                 device.rotation.y += (target.y - device.rotation.y) * 0.08;
                 device.rotation.x += (target.x - device.rotation.x) * 0.08;
                 device.position.y = Math.sin(t * 1.4) * 0.05;
+                device.scale.set(1, 1, 1);
             }
             pressable.forEach((m) => {
                 m.userData.press = Math.max(0, m.userData.press - 0.22);

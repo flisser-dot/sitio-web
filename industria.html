@@ -11,38 +11,81 @@
     <link rel="stylesheet" href="styles.css">
 
     <style>
-        .ind-hero { padding: 0 0 40px; }
-        .ind-hero h1 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2.5rem, 7vw, 5.5rem); line-height: 1; margin: 12px 0 20px; }
+        .ind-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, 360px); align-items: center; gap: clamp(18px, 4vw, 48px); padding: 0 0 22px; }
+        .ind-hero-copy { min-width: 0; }
+        .ind-argentina-float { display: block; width: min(100%, 440px); height: auto; justify-self: center; filter: drop-shadow(0 12px 18px rgba(0,0,0,.24)); translate: var(--pointer-shift-x, 0px) var(--pointer-shift-y, 0px); transition: translate .42s cubic-bezier(.2, .75, .25, 1); --float-duration: 8s; --float-delay: -1.5s; --float-drift: -12px; --float-angle: 7deg; animation: areas-space-drift var(--float-duration) ease-in-out var(--float-delay) infinite alternate; }
+        @media (min-width: 1440px) {
+            .ind-hero { overflow-x: clip; overflow-y: visible; }
+            .ind-argentina-float { position: relative; left: clamp(80px, 6vw, 100px); top: clamp(100px, 8.5vw, 140px); }
+        }
+        .ind-hero h1 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2.4rem, 5.6vw, 4.75rem); line-height: 1; margin: 8px 0 14px; }
         .ind-hero h1 span { color: var(--green); }
         .ind-hero p { max-width: 620px; color: var(--gray); font-size: 1.1rem; }
 
-        .ind-carousel { display: grid; grid-template-columns: 1.3fr 1fr; align-items: center; gap: 7vw; padding: 20px 0 0; }
+        .ind-carousel { display: grid; grid-template-columns: 1.3fr 1fr; align-items: center; column-gap: clamp(30px, 4vw, 56px); row-gap: 8px; padding: 8px 0 0; }
 
-        .ind-stage { position: relative; height: clamp(300px, 38vw, 460px); perspective: 1400px; overflow: hidden; cursor: grab; touch-action: pan-y; user-select: none; }
+        .ind-stage { position: relative; height: clamp(340px, 42vw, 500px); perspective: 1400px; overflow: hidden; cursor: grab; touch-action: pan-y; user-select: none; }
         .ind-stage.dragging { cursor: grabbing; }
+        .ind-slide-track { position: absolute; z-index: 1; inset: 0; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 12%, #000 88%, transparent 100%); mask-image: linear-gradient(90deg, transparent 0%, #000 12%, #000 88%, transparent 100%); }
 
-        .ind-slide { position: absolute; top: 50%; left: 50%; width: 50%; aspect-ratio: 16 / 10; margin: calc(-25% * 10 / 16) 0 0 -25%; border-radius: 16px; overflow: hidden; background: linear-gradient(135deg, var(--purple), var(--pink)); box-shadow: 0 20px 60px rgba(0,0,0,.6); transition: transform .5s cubic-bezier(.2,.8,.2,1), opacity .5s, filter .5s; }
+        .ind-arrow { position: absolute; top: 50%; z-index: 110; width: 42px; height: 42px; padding: 0; display: grid; place-items: center; border: 1px solid rgba(152,120,255,.5); border-radius: 50%; background: rgba(12,10,20,.76); color: var(--off-white); font-size: 21px; line-height: 1; cursor: pointer; transform: translateY(-50%); transition: background-color .2s, color .2s, border-color .2s, transform .2s; backdrop-filter: blur(5px); }
+        .ind-arrow-prev { left: 12px; }
+        .ind-arrow-next { right: 12px; }
+        .ind-arrow:hover:not(:disabled), .ind-arrow:focus-visible:not(:disabled) { border-color: var(--green); background: var(--green); color: var(--black); transform: translateY(-50%) scale(1.06); outline: none; }
+        .ind-arrow:disabled { opacity: .32; cursor: not-allowed; }
+
+        .ind-slide { position: absolute; top: 50%; left: 50%; width: 56%; aspect-ratio: 16 / 10; margin: calc(-28% * 10 / 16) 0 0 -28%; border: 1px solid rgba(255,255,255,.16); border-radius: 14px; overflow: hidden; background: linear-gradient(135deg, var(--purple), var(--pink)); box-shadow: 0 18px 44px rgba(0,0,0,.48); transition: transform .5s cubic-bezier(.2,.8,.2,1), opacity .42s, filter .42s, box-shadow .42s, border-color .3s; }
         .ind-slide:nth-child(even) { background: linear-gradient(135deg, var(--purple-light), var(--green)); }
         .ind-slide img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; -webkit-user-drag: none; }
         .ind-stage.dragging .ind-slide { transition: none; }
+        .ind-slide.is-active { border: 2px solid rgba(182,157,255,.96); outline: 2px solid rgba(152,120,255,.64); outline-offset: 3px; }
 
-        .ind-text { min-height: 400px; }
+        .ind-text { min-height: 360px; }
         .ind-text .ind-tag { font-family: 'DM Mono', monospace; font-size: .8rem; letter-spacing: .08em; color: var(--green); }
         .ind-text h2 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2rem, 4.5vw, 4rem); line-height: 1; margin: 10px 0 14px; text-transform: uppercase; }
         .ind-text .ind-sub { color: var(--pink); font-weight: 600; font-size: 1.1rem; margin: 0 0 18px; }
         .ind-text .ind-desc { color: var(--gray); font-size: 1.1rem; margin: 0 0 20px; }
-        .ind-text a.ind-main-link { color: var(--green); font-family: 'DM Mono', monospace; text-decoration: none; }
-        .ind-text .ind-links a { color: var(--off-white); }
+        .ind-text .ind-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+        .ind-text a.ind-main-link, .ind-text .ind-links a { min-height: 44px; padding: 10px 14px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; border: 1px solid rgba(152,120,255,.62); border-radius: 8px; background: linear-gradient(135deg, rgba(112,64,255,.22), rgba(33,22,65,.52)); box-shadow: inset 0 0 10px rgba(152,120,255,.05); color: var(--off-white); font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 600; text-decoration: none; transition: background .22s ease, color .22s ease, border-color .22s ease, box-shadow .22s ease, transform .22s ease; }
+        .ind-text .ind-main-link[hidden] { display: none; }
+        .ind-text a.ind-main-link:hover, .ind-text a.ind-main-link:focus-visible, .ind-text .ind-links a:hover, .ind-text .ind-links a:focus-visible { border-color: var(--green); background: var(--green); box-shadow: 0 6px 20px rgba(202,255,25,.18); color: var(--black); transform: translateY(-2px); outline: none; }
+        .ind-external-arrow { font-size: 16px; line-height: 1; transition: transform .2s ease; }
+        .ind-text .ind-links a:hover .ind-external-arrow, .ind-text .ind-links a:focus-visible .ind-external-arrow { transform: translate(2px,-2px); }
+        .ind-text a.ind-main-link:focus-visible, .ind-text .ind-links a:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
         .ind-text > * { transition: opacity .3s; }
         .ind-text.fade > * { opacity: 0; }
 
-        .ind-dots { grid-column: 1; display: flex; justify-content: center; gap: 8px; margin-top: -20px; }
+        .ind-dots { grid-column: 1; display: flex; justify-content: center; gap: 8px; margin-top: -8px; position: relative; z-index: 120; transform: translateY(-82px); }
         .ind-dot { width: 10px; height: 10px; padding: 0; border: 1px solid var(--gray); border-radius: 10px; background: transparent; cursor: pointer; transition: width .3s, background .3s; }
         .ind-dot.active { width: 32px; border-color: var(--green); background: var(--green); }
+        .ind-dot:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
 
         @media (max-width: 800px) {
+            .ind-hero { padding-bottom: 18px; }
             .ind-carousel { grid-template-columns: 1fr; }
-            .ind-dots { margin-top: 0; }
+            .ind-carousel { column-gap: 18px; row-gap: 8px; padding-top: 4px; }
+            .ind-stage { height: clamp(300px, 68vw, 420px); }
+            .ind-slide { width: 60%; margin: calc(-30% * 10 / 16) 0 0 -30%; }
+            .ind-dots { transform: translateY(-92px); }
+            .ind-text { min-height: 0; }
+        }
+
+        @media (max-width: 560px) {
+            .ind-hero { grid-template-columns: 1fr; gap: 34px; }
+            .ind-argentina-float { width: min(100%, 300px); justify-self: end; }
+        }
+
+        @media (max-width: 480px) {
+            .ind-stage { height: 300px; }
+            .ind-slide { width: 66%; margin: calc(-33% * 10 / 16) 0 0 -33%; }
+            .ind-dots { transform: translateY(-100px); }
+            .ind-arrow { width: 38px; height: 38px; }
+            .ind-arrow-prev { left: 4px; }
+            .ind-arrow-next { right: 4px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .ind-argentina-float { animation: none; translate: none; transition: none; }
         }
     </style>
 </head>
@@ -54,36 +97,43 @@
             <span class="logo-main">Fem</span>
             <span class="logo-sub">Respawn</span>
         </a>
-        <a class="guide-back" href="index.html#explora">← VOLVER A EXPLORÁ</a>
+        <a class="guide-back" href="index.html#trabaja">← VOLVER A TRABAJÁ</a>
     </header>
 
     <main class="guide-main">
 
         <section class="ind-hero">
-            <div class="eyebrow"><span>//</span> EXPLORÁ · INDUSTRIA NACIONAL</div>
-            <h1>Hecho en <span>Argentina</span></h1>
-            <p>Estudios y producciones argentinas para conocer y apoyar. Pasá el cursor sobre cada tarjeta para ver más.</p>
+            <div class="ind-hero-copy">
+                <div class="eyebrow"><span>//</span> EXPLORÁ · INDUSTRIA NACIONAL</div>
+                <h1>Hecho en <span>Argentina</span></h1>
+                <p>Estudios y producciones argentinas para conocer y apoyar. Pasá el cursor sobre cada tarjeta para ver más.</p>
+            </div>
+            <img class="ind-argentina-float" src="argentina%20papa.png" alt="" aria-hidden="true">
         </section>
 
         <!-- Reemplazá cada img/src, título, texto y link por los datos reales -->
         <section class="ind-carousel">
 
-            <div class="ind-stage" id="stage"></div>
+            <div class="ind-stage" id="stage" aria-label="Carrusel de producciones argentinas">
+                <div class="ind-slide-track" id="slide-track" aria-hidden="true"></div>
+                <button class="ind-arrow ind-arrow-prev" id="ind-prev" type="button" aria-label="Producción anterior">‹</button>
+                <button class="ind-arrow ind-arrow-next" id="ind-next" type="button" aria-label="Producción siguiente">›</button>
+            </div>
 
             <div class="ind-text" id="text">
                 <span class="ind-tag"></span>
                 <h2></h2>
                 <p class="ind-sub"></p>
                 <p class="ind-desc"></p>
-                <a class="ind-main-link" href="#" target="_blank" rel="noopener">VER MÁS →</a>
+                <a class="ind-main-link" href="#" target="_blank" rel="noopener noreferrer">VER MÁS <span class="ind-external-arrow" aria-hidden="true">↗</span></a>
                 <nav class="guide-console-links ind-links" aria-label="Dónde jugar"></nav>
             </div>
 
-            <div class="ind-dots" id="dots"></div>
+            <div class="ind-dots" id="dots" role="group" aria-label="Posición del carrusel"></div>
 
         </section>
 
-        <a class="guide-back guide-back-bottom" href="index.html#explora">← VOLVER A EXPLORÁ</a>
+        <a class="guide-back guide-back-bottom" href="index.html#trabaja">← VOLVER A TRABAJÁ</a>
     </main>
 
     <script>
@@ -91,14 +141,15 @@
         const items = [
             { img: 'etermax.png', tag: '// ESTUDIO', name: 'Etermax', sub: 'Compañía internacional de tecnología y entretenimiento.', desc: 'Estudio argentino detrás de Preguntados y Apalabrados, con millones de jugadores en todo el mundo.', links: [{ label: 'SITIO OFICIAL', url: 'https://www.etermax.com/' }] },
             { img: 'purpleplay.png', tag: '// ESTUDIO', name: 'PURPLE TREE STUDIO', sub: 'Principal desarrolladora de juegos arcade en Argentina.', desc: 'Creador de juegos como Golazo!, Beat the champions y Thunder Ray.', links: [{ label: 'SITIO OFICIAL', url: 'https://www.purpleplay.games/' }] },
-            { img: 'ADVA.jpg', tag: '// ASOCIACIÓN', name: 'ADVA', sub: 'Asociación de desarrolladores de videojuegos argentinos.', desc: 'Una organización sin fines de lucro compuesta por estudios y desarrolladores de videojuegos que trabajan para promover el crecimiento del entretenimiento digital e interactivo producido en Argentina.', links: [{ label: 'SITIO OFICIAL', url: 'https://adva.vg/' }] },
+            { img: 'ADVA.jpg', tag: '// ASOCIACIÓN', name: 'ADVA', sub: 'Asociación de desarrolladores de videojuegos argentinos.', desc: 'Una organización sin fines de lucro que reúne a los estudios y creadores del país para impulsar y promover la industria nacional de videojuegos.', links: [{ label: 'SITIO OFICIAL', url: 'https://adva.vg/' }] },
             { img: 'storyteller.jpg', tag: '// JUEGO', name: 'STORYTELLER', sub: 'Narrativa / Puzzle', desc: 'Un juego que permite cambiar de personajes y entornos para recrear escenas de cuentos clásicos.', links: [{ label: 'GOOGLE PLAY STORE', url: 'https://play.google.com/store/apps/details?id=com.netflix.NGP.Storyteller&hl=es_CL' }, { label: 'NETFLIX', url: 'https://www.netflix.com/cl/games/81569948' }, { label: 'STEAM', url: 'https://store.steampowered.com/app/1624540/Storyteller/?l=spanish' }] },
             { img: 'delta.jpg', pos: '0% 50%', tag: '// JUEGO', name: 'La hija del Delta', sub: 'Narrativa / Decisiones / Indie', desc: 'Guiá a Julia por un pantano misterioso y descubrí cómo tus decisiones cambian su historia.', links: [{ label: 'STEAM', url: 'https://store.steampowered.com/app/3301850/La_Hija_del_Delta/' }] },
-            { img: 'pombero.jpg', pos: '0% 50%', tag: '// JUEGO', name: 'Pomberito', sub: ' Terror / Indie', desc: 'Sobreviví 5 noches en el corazón del noreste argentino y descubrí la verdad detrás de los escalofriantes relatos del Pombero', links: [{ label: 'STEAM', url: 'https://store.steampowered.com/app/2761100/Pomberito/?l=spanish' }] },
+            { img: 'pombero.jpg', pos: '0% 50%', tag: '// JUEGO', name: 'Pomberito', sub: ' Terror / Indie', desc: 'Sobreviví 5 noches en el corazón del noreste argentino y descubrí la verdad detrás de los escalofriantes relatos del Pombero.', links: [{ label: 'STEAM', url: 'https://store.steampowered.com/app/2761100/Pomberito/?l=spanish' }] },
             
         ];
 
         const stage = document.getElementById('stage');
+        const slideTrack = document.getElementById('slide-track');
         const text = document.getElementById('text');
         const dotsEl = document.getElementById('dots');
         let current = 0;
@@ -112,7 +163,7 @@
             img.src = it.img;
             if (it.pos) img.style.objectPosition = it.pos;
             img.onerror = () => img.remove();
-            stage.appendChild(s);
+            slideTrack.appendChild(s);
             s.addEventListener('click', () => { if (!drag?.moved) go(i); });
             return s;
         });
@@ -132,12 +183,15 @@
                 const o = i - current + shift;
                 const a = Math.abs(o);
                 const dir = Math.sign(o);
-                const x = Math.max(-1, Math.min(1, o)) * 50 + Math.max(0, a - 1) * dir * 8;
+                const x = Math.max(-1, Math.min(1, o)) * 66 + Math.max(0, a - 1) * dir * 8;
                 const rot = -Math.max(-1, Math.min(1, o)) * 28;
-                const scale = 1 - Math.min(a, 1) * 0.22;
+                const focus = Math.max(0, 1 - Math.min(a, 1));
+                const scale = 0.86 + focus * 0.2;
                 s.style.transform = `translateX(${x}%) translateZ(${-Math.min(a, 2) * 120}px) rotateY(${rot}deg) scale(${scale})`;
-                s.style.opacity = a > 2 ? 0 : 1 - Math.min(a, 1) * 0.55;
-                s.style.filter = `brightness(${1 - Math.min(a, 1) * 0.5})`;
+                s.style.opacity = a > 2 ? 0 : 0.72 + focus * 0.28;
+                s.style.filter = `brightness(${0.78 + focus * 0.3}) saturate(${0.88 + focus * 0.2}) blur(${(1 - focus) * 0.35}px)`;
+                s.style.boxShadow = focus > 0.95 ? '0 24px 64px rgba(0,0,0,.52), 0 0 38px rgba(152,120,255,.38)' : '0 18px 44px rgba(0,0,0,.5)';
+                s.classList.toggle('is-active', a < 0.5);
                 s.style.zIndex = 100 - Math.round(a * 10);
                 s.style.pointerEvents = a > 2 ? 'none' : '';
             });
@@ -160,7 +214,12 @@
                     a.href = l.url;
                     a.target = '_blank';
                     a.rel = 'noopener noreferrer';
-                    a.textContent = l.label;
+                    a.append(l.label);
+                    const arrow = document.createElement('span');
+                    arrow.className = 'ind-external-arrow';
+                    arrow.setAttribute('aria-hidden', 'true');
+                    arrow.textContent = '↗';
+                    a.appendChild(arrow);
                     nav.appendChild(a);
                 });
                 text.classList.remove('fade');
@@ -169,10 +228,19 @@
 
         function go(i) {
             current = Math.max(0, Math.min(items.length - 1, i));
-            dots.forEach((d, k) => d.classList.toggle('active', k === current));
+            dots.forEach((d, k) => {
+                const active = k === current;
+                d.classList.toggle('active', active);
+                d.setAttribute('aria-current', active ? 'step' : 'false');
+            });
+            document.getElementById('ind-prev').disabled = current === 0;
+            document.getElementById('ind-next').disabled = current === items.length - 1;
             layout();
             renderText();
         }
+
+        document.getElementById('ind-prev').addEventListener('click', () => go(current - 1));
+        document.getElementById('ind-next').addEventListener('click', () => go(current + 1));
 
         stage.addEventListener('pointerdown', e => {
             drag = { x: e.clientX, moved: false, id: e.pointerId };
@@ -211,6 +279,43 @@
         });
 
         go(Math.max(0, items.findIndex(it => it.img === 'storyteller.jpg')));
+
+        const argentinaScene = document.querySelector('.ind-hero');
+        const argentinaFloat = document.querySelector('.ind-argentina-float');
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const canRepelArgentina = !reduceMotion && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+        if (canRepelArgentina) {
+            let pointerX = 0;
+            let pointerY = 0;
+            let pointerFrame = 0;
+
+            argentinaScene.addEventListener('pointermove', event => {
+                if (event.pointerType !== 'mouse') return;
+                pointerX = event.clientX;
+                pointerY = event.clientY;
+                if (pointerFrame) return;
+
+                pointerFrame = requestAnimationFrame(() => {
+                    pointerFrame = 0;
+                    const rect = argentinaFloat.getBoundingClientRect();
+                    const deltaX = rect.left + rect.width / 2 - pointerX;
+                    const deltaY = rect.top + rect.height / 2 - pointerY;
+                    const distance = Math.hypot(deltaX, deltaY);
+                    const strength = Math.max(0, 1 - distance / 120);
+                    const amount = distance ? (strength * 28) / distance : 0;
+                    argentinaFloat.style.setProperty('--pointer-shift-x', `${deltaX * amount}px`);
+                    argentinaFloat.style.setProperty('--pointer-shift-y', `${deltaY * amount}px`);
+                });
+            });
+
+            argentinaScene.addEventListener('pointerleave', () => {
+                if (pointerFrame) cancelAnimationFrame(pointerFrame);
+                pointerFrame = 0;
+                argentinaFloat.style.setProperty('--pointer-shift-x', '0px');
+                argentinaFloat.style.setProperty('--pointer-shift-y', '0px');
+            });
+        }
     </script>
 
 </body>

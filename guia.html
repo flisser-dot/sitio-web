@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
-<body class="guide-page">
+<body class="guide-page guide-start-page">
     <header class="guide-header">
         <a href="index.html" class="logo" aria-label="Fem Respawn, volver al inicio">
             <span class="logo-main">Fem</span>
@@ -46,8 +46,8 @@
                         </p>
                         <p><span class="guide-ideal-label">PLATAFORMAS</span></p>
                         <nav class="guide-console-links" aria-label="Plataformas de juegos para computadora">
-                            <a href="https://store.steampowered.com/" target="_blank" rel="noopener noreferrer">STEAM</a>
-                            <a href="https://itch.io/" target="_blank" rel="noopener noreferrer">ITCH.IO</a>
+                            <a href="https://store.steampowered.com/" target="_blank" rel="noopener noreferrer"><svg class="guide-platform-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="17" cy="7" r="3.5"/><circle cx="6.5" cy="17.5" r="2.7"/><path d="m8.9 16 4.8-5.1m-5.2 7.5 3.8 1.5a3 3 0 0 0 3.5-3"/></svg><span>STEAM</span></a>
+                            <a href="https://itch.io/" target="_blank" rel="noopener noreferrer"><svg class="guide-platform-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/></svg><span>ITCH.IO</span></a>
                         </nav>
                         <div class="guide-ideal">
                             <span class="guide-ideal-label">IDEAL PARA</span>
@@ -65,9 +65,9 @@
                         <p>Algunas también cuentan con servicios de suscripción para acceder a muchos títulos por una cuota mensual.</p>
                         <p>TIPOS</p>
                         <nav class="guide-console-links" aria-label="Páginas oficiales de consolas">
-                            <a href="https://www.playstation.com/es-ar/ps5/" target="_blank" rel="noopener noreferrer">PS5</a>
-                            <a href="https://www.xbox.com/es-AR/consoles" target="_blank" rel="noopener noreferrer">XBOX</a>
-                            <a href="https://www.nintendo.com/es-ar/switch/" target="_blank" rel="noopener noreferrer">NINTENDO SWITCH</a>
+                            <a href="https://www.playstation.com/es-ar/ps5/" target="_blank" rel="noopener noreferrer"><svg class="guide-platform-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 8h10a4 4 0 0 1 3.8 5l-.8 2.5a2 2 0 0 1-3.3 1.1L14 15H10l-2.7 2.1A2 2 0 0 1 4 16l-.8-3A4 4 0 0 1 7 8Z"/><path d="M8 10.5v4m-2-2h4m6-1h.01m2 2h.01"/></svg><span>PS5</span></a>
+                            <a href="https://www.xbox.com/es-AR/consoles" target="_blank" rel="noopener noreferrer"><svg class="guide-platform-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M7 6.8c2.1.2 4 1.8 5 3.3 1-1.5 2.9-3.1 5-3.3M7.1 17.2c1.4-2.1 3-3.7 4.9-5.5m4.9 5.5c-1.4-2.1-3-3.7-4.9-5.5"/></svg><span>XBOX</span></a>
+                            <a href="https://www.nintendo.com/es-ar/switch/" target="_blank" rel="noopener noreferrer"><svg class="guide-platform-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="2.5" width="7" height="19" rx="3.2"/><rect x="14" y="2.5" width="7" height="19" rx="3.2"/><circle cx="6.5" cy="8" r=".8"/><circle cx="17.5" cy="15.5" r=".8"/></svg><span>NINTENDO SWITCH</span></a>
                         </nav>
 
                         <div class="guide-ideal">
@@ -87,8 +87,8 @@
                             podés disfrutar en partidas cortas.</p>
                         <p><span class="guide-ideal-label">STORES</span></p>
                         <nav class="guide-console-links" aria-label="Tiendas de aplicaciones móviles">
-                            <a href="https://play.google.com/store/games" target="_blank" rel="noopener noreferrer">GOOGLE PLAY</a>
-                            <a href="https://www.apple.com/app-store/" target="_blank" rel="noopener noreferrer">APP STORE</a>
+                            <a href="https://play.google.com/store/games" target="_blank" rel="noopener noreferrer"><svg class="guide-platform-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 3.5v17L19 12 5 3.5Z"/><path d="m5 3.5 10.5 12.2M5 20.5 15.5 8.3"/></svg><span>GOOGLE PLAY</span></a>
+                            <a href="https://www.apple.com/app-store/" target="_blank" rel="noopener noreferrer"><svg class="guide-platform-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 20 7-16 7 16M8 14h8"/></svg><span>APP STORE</span></a>
                         </nav>
                         <div class="guide-ideal">
                             <span class="guide-ideal-label">IDEAL PARA</span>
@@ -288,6 +288,7 @@
             document.body.classList.add('is-leaving');
             window.setTimeout(() => { window.location.href = quizLink.href; }, 320);
         });
+
     </script>
     <script src="sparkles.js"></script>
 </body>

@@ -20,6 +20,11 @@
 
     <main class="guide-main areas-main">
         <section class="areas-hero" aria-labelledby="areas-title">
+            <div class="areas-hero-space" aria-hidden="true">
+                <img class="areas-space-float areas-space-float--rocket" src="nave-Photoroom.png" alt="">
+                <img class="areas-space-float areas-space-float--hero-planet" src="aaa2-Photoroom.png" alt="">
+                <img class="areas-space-float areas-space-float--meteor" src="meteorito-Photoroom.png" alt="">
+            </div>
             <div class="areas-hero-copy">
                 <span class="section-label">// 01 · TRABAJÁ / ÁREAS Y ROLES</span>
                 <h1 id="areas-title">Hay muchos caminos para <span>crear un juego.</span></h1>
@@ -29,27 +34,37 @@
         </section>
 
         <section class="areas-map" id="areas-map" aria-labelledby="areas-map-title">
-            <div class="areas-map-heading">
-                <h2 id="areas-map-title">¿Qué te gustaría hacer?</h2>
-                <p>Elegí un grupo según tus intereses y descubrí las áreas que lo componen.</p>
-            </div>
-            <div class="areas-map-groups">
-                <button class="areas-map-group" type="button" data-map-group="crear" aria-pressed="false" aria-expanded="false" aria-controls="areas-selected-group areas-explorer">
-                    <span class="areas-map-art areas-map-art--create" aria-hidden="true"><span class="areas-map-art-center">✧</span><i></i><i></i><i></i></span>
-                    <span class="areas-map-label">IMAGINAR Y CREAR</span>
-                </button>
-                <button class="areas-map-group" type="button" data-map-group="construir" aria-pressed="false" aria-expanded="false" aria-controls="areas-selected-group areas-explorer">
-                    <span class="areas-map-art areas-map-art--build" aria-hidden="true"><span class="areas-map-art-center">&lt;/&gt;</span><i></i><i></i><i></i></span>
-                    <span class="areas-map-label">CONSTRUIR Y MEJORAR</span>
-                </button>
-                <button class="areas-map-group" type="button" data-map-group="conectar" aria-pressed="false" aria-expanded="false" aria-controls="areas-selected-group areas-explorer">
-                    <span class="areas-map-art areas-map-art--connect" aria-hidden="true"><span class="areas-map-art-center">✦</span><i></i><i></i><i></i><i></i><i></i></span>
-                    <span class="areas-map-label">ORGANIZAR Y CONECTAR</span>
-                </button>
-                <button class="areas-map-group" type="button" data-map-group="jugar" aria-pressed="false" aria-expanded="false" aria-controls="areas-selected-group areas-explorer">
-                    <span class="areas-map-art areas-map-art--play" aria-hidden="true"><span class="areas-map-art-center">VS</span><i></i><i></i><i></i></span>
-                    <span class="areas-map-label">JUGAR Y COMPETIR</span>
-                </button>
+            <div class="areas-map-scene">
+                <div class="areas-map-space" aria-hidden="true">
+                    <div class="areas-space-backdrop"></div>
+                    <img class="areas-space-float areas-space-float--planet" src="planetita.png" alt="">
+                    <img class="areas-space-float areas-space-float--ufo" src="nave alien-Photoroom.png" alt="">
+                    <img class="areas-space-float areas-space-float--music" src="muusik.png" alt="">
+                    <img class="areas-space-float areas-space-float--astronaut" src="astronauta.png" alt="">
+                    <img class="areas-space-float areas-space-float--alien" src="alien-Photoroom.png" alt="">
+                </div>
+                <div class="areas-map-heading">
+                    <h2 id="areas-map-title">¿Qué te gustaría hacer?</h2>
+                    <p>Elegí un grupo según tus intereses y descubrí las áreas que lo componen.</p>
+                </div>
+                <div class="areas-map-groups">
+                    <button class="areas-map-group" type="button" data-map-group="crear" aria-pressed="false" aria-expanded="false" aria-controls="areas-selected-group areas-explorer">
+                        <span class="areas-map-art areas-map-art--create" aria-hidden="true"><span class="areas-map-art-center">✧</span><i></i><i></i><i></i></span>
+                        <span class="areas-map-label">IMAGINAR Y CREAR</span>
+                    </button>
+                    <button class="areas-map-group" type="button" data-map-group="construir" aria-pressed="false" aria-expanded="false" aria-controls="areas-selected-group areas-explorer">
+                        <span class="areas-map-art areas-map-art--build" aria-hidden="true"><span class="areas-map-art-center">&lt;/&gt;</span><i></i><i></i><i></i></span>
+                        <span class="areas-map-label">CONSTRUIR Y MEJORAR</span>
+                    </button>
+                    <button class="areas-map-group" type="button" data-map-group="conectar" aria-pressed="false" aria-expanded="false" aria-controls="areas-selected-group areas-explorer">
+                        <span class="areas-map-art areas-map-art--connect" aria-hidden="true"><span class="areas-map-art-center">✦</span><i></i><i></i><i></i><i></i><i></i></span>
+                        <span class="areas-map-label">ORGANIZAR Y CONECTAR</span>
+                    </button>
+                    <button class="areas-map-group" type="button" data-map-group="jugar" aria-pressed="false" aria-expanded="false" aria-controls="areas-selected-group areas-explorer">
+                        <span class="areas-map-art areas-map-art--play" aria-hidden="true"><span class="areas-map-art-center">VS</span><i></i><i></i><i></i></span>
+                        <span class="areas-map-label">JUGAR Y COMPETIR</span>
+                    </button>
+                </div>
             </div>
             <div class="areas-selected-group" id="areas-selected-group" aria-live="polite" aria-atomic="true" hidden>
                 <div>
@@ -191,6 +206,10 @@
         </section>
 
         <section class="areas-explorer" id="areas-explorer" aria-labelledby="areas-explorer-title" hidden>
+            <div class="areas-explorer-sparkles" aria-hidden="true">
+                <img class="areas-explorer-sparkles-large" src="estrellitas-Photoroom.png" alt="">
+                <img class="areas-explorer-sparkles-small" src="estrellita.png" alt="">
+            </div>
             <div class="areas-directory-heading">
                 <div>
                     <h2 id="areas-explorer-title">Descubrí tu lugar en el juego</h2>

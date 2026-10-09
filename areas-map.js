@@ -156,6 +156,7 @@ const groupLabels = Object.fromEntries(groups.map((group) => [group.id, group.la
 const cardGroupLabels = { crear: 'CREACIÓN', construir: 'TECNOLOGÍA', conectar: 'EQUIPO', jugar: 'COMPETICIÓN' };
 const areasGrid = document.querySelector('#areas-grid');
 const areasEmpty = document.querySelector('#areas-empty');
+const areasMap = document.querySelector('#areas-map');
 const mapButtons = document.querySelectorAll('[data-map-group]');
 const areasExplorer = document.querySelector('#areas-explorer');
 const selectedGroupPanel = document.querySelector('#areas-selected-group');
@@ -168,6 +169,8 @@ const areaDialog = document.querySelector('#area-dialog');
 const areaDialogBody = document.querySelector('#area-dialog-body');
 let activeGroup = 'all';
 const reduceAreaMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const spaceScenes = [...document.querySelectorAll('.areas-map, .areas-hero')];
+const canRepelSpaceObjects = !reduceAreaMotion && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 const areaCardObserver = !reduceAreaMotion && 'IntersectionObserver' in window
     ? new IntersectionObserver((entries, observer) => {
         entries.forEach((entry) => {
@@ -177,6 +180,52 @@ const areaCardObserver = !reduceAreaMotion && 'IntersectionObserver' in window
         });
     }, { rootMargin: '0px 0px -48px 0px', threshold: 0.08 })
     : null;
+
+if (canRepelSpaceObjects) {
+    spaceScenes.forEach((scene) => {
+        const spaceObjects = [...scene.querySelectorAll('.areas-space-float')];
+        if (!spaceObjects.length) return;
+
+        let pointerX = 0;
+        let pointerY = 0;
+        let pointerFrame = 0;
+
+        scene.addEventListener('pointermove', (event) => {
+            if (event.pointerType !== 'mouse') return;
+            pointerX = event.clientX;
+            pointerY = event.clientY;
+            if (pointerFrame) return;
+
+            pointerFrame = requestAnimationFrame(() => {
+                pointerFrame = 0;
+                const radius = 120;
+                const shifts = spaceObjects.map((image) => {
+                    const rect = image.getBoundingClientRect();
+                    const deltaX = rect.left + rect.width / 2 - pointerX;
+                    const deltaY = rect.top + rect.height / 2 - pointerY;
+                    const distance = Math.hypot(deltaX, deltaY);
+                    const strength = Math.max(0, 1 - distance / radius);
+                    const amount = distance ? (strength * 28) / distance : 0;
+                    return [image, deltaX * amount, deltaY * amount];
+                });
+
+                shifts.forEach(([image, shiftX, shiftY]) => {
+                    image.style.setProperty('--pointer-shift-x', `${shiftX}px`);
+                    image.style.setProperty('--pointer-shift-y', `${shiftY}px`);
+                });
+            });
+        });
+
+        scene.addEventListener('pointerleave', () => {
+            if (pointerFrame) cancelAnimationFrame(pointerFrame);
+            pointerFrame = 0;
+            spaceObjects.forEach((image) => {
+                image.style.setProperty('--pointer-shift-x', '0px');
+                image.style.setProperty('--pointer-shift-y', '0px');
+            });
+        });
+    });
+}
 
 function renderAreas() {
     if (areaCardObserver) areaCardObserver.disconnect();
@@ -257,9 +306,18 @@ function renderAreas() {
     });
 }
 
+const areaDialogTones = {
+    crear: '#caff19',
+    construir: '#9878ff',
+    conectar: '#ff3cac',
+    jugar: '#7040ff'
+};
+
 function openArea(areaId) {
     const area = areas.find((item) => item.id === areaId);
     if (!area) return;
+    areaDialog.dataset.group = area.group;
+    areaDialog.style.setProperty('--dialog-tone', areaDialogTones[area.group]);
     areaDialogBody.replaceChildren();
     const header = document.createElement('header');
     const label = document.createElement('span');
@@ -313,7 +371,18 @@ document.addEventListener('click', (event) => {
 });
 
 mapButtons.forEach((button) => {
+    const orb = button.querySelector('.areas-map-art-center');
+    orb.addEventListener('animationend', (event) => {
+        if (event.animationName === 'areas-orb-select' || event.animationName === 'areas-map-orb-response') {
+            button.classList.remove('is-activating');
+        }
+    });
+
     button.addEventListener('click', () => {
+        button.classList.remove('is-activating');
+        void button.offsetWidth;
+        button.classList.add('is-activating');
+
         if (button.getAttribute('aria-pressed') === 'true') {
             activeGroup = 'all';
             mapButtons.forEach((item) => {
@@ -324,13 +393,12 @@ mapButtons.forEach((button) => {
             areasExplorer.hidden = true;
             delete selectedGroupPanel.dataset.group;
             delete areasExplorer.dataset.group;
+            delete areasMap.dataset.group;
             return;
         }
 
-        button.classList.remove('is-activating');
-        void button.offsetWidth;
-        button.classList.add('is-activating');
         activeGroup = button.dataset.mapGroup;
+        areasMap.dataset.group = activeGroup;
         const selectedGroup = groups.find((group) => group.id === activeGroup);
         const selectedGroupIndex = groups.indexOf(selectedGroup);
         mapButtons.forEach((item) => {
@@ -338,7 +406,6 @@ mapButtons.forEach((button) => {
             item.setAttribute('aria-pressed', String(selected));
             item.setAttribute('aria-expanded', String(selected));
         });
-        selectedGroupKicker.textContent = `${String(selectedGroupIndex + 1).padStart(2, '0')} / 04 · MAPA DE ÁREAS`;
         selectedGroupTitle.textContent = selectedGroup.label;
         selectedGroupDescription.textContent = selectedGroup.description;
         selectedGroupDisciplines.textContent = selectedGroup.areas;
