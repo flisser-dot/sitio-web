@@ -16,6 +16,23 @@
         .guide-sections .guide-section { border-top: 0; padding: 16px 0 0; align-items: center; }
         .tama { gap: 10px; padding: 0; }
         .tama3d { height: clamp(340px, calc(100vh - 230px), 660px); }
+        .tama3d::before, .tama3d::after { content: ""; display: none; position: absolute; width: 110px; height: 150px; background: center / contain no-repeat; opacity: .28; pointer-events: none; z-index: -1; }
+        @media (min-width: 1024px) {
+            .tama3d { isolation: isolate; }
+            .tama3d::before { display: block; left: 0; top: 12%; background-image: url("holographic star 3d-Photoroom.png"); transform: rotate(-18deg); }
+            .tama3d::after { display: block; right: 0; bottom: 12%; background-image: url("estrellitas-Photoroom.png"); transform: rotate(16deg); }
+        }
+        .tama3d[aria-busy="true"] canvas { visibility: hidden; }
+        .tama-loading { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 24px; text-align: center; color: var(--gray); }
+        .tama-loading[hidden] { display: none; }
+        .tama-loading-spinner { position: relative; width: 96px; height: 96px; animation: tama-loading-spin 4s linear infinite; }
+        .tama-loading-star { position: absolute; inset: 0; transform: rotate(var(--angle)); }
+        .tama-loading-star::before { content: ""; position: absolute; top: 2px; left: 39px; width: 18px; height: 18px; background: #7546b8; opacity: .6; clip-path: polygon(50% 0, 61% 35%, 98% 35%, 68% 57%, 79% 94%, 50% 72%, 21% 94%, 32% 57%, 2% 35%, 39% 35%); animation: tama-loading-trail 1.6s ease-in-out infinite; animation-delay: var(--delay); }
+        .tama-loading-star:nth-child(even)::before { background: rgba(255, 60, 172, .55); }
+        .tama-btn:disabled { opacity: .4; cursor: wait; }
+        @keyframes tama-loading-spin { to { transform: rotate(360deg); } }
+        @keyframes tama-loading-trail { 0%, 100% { opacity: .12; transform: scale(.6); } 50% { opacity: .6; transform: scale(1.1); } }
+        @media (prefers-reduced-motion: reduce) { .tama-loading-spinner, .tama-loading-star::before { animation: none; } }
         .guide-back-fixed { display: inline-flex; width: fit-content; max-width: calc(100% - 36px); margin: 14px 0 24px max(50px, calc((100% - 1440px) / 2)); padding: 9px 10px; }
         @media (max-width: 850px) { .guide-back-fixed { margin-left: 18px; margin-right: 18px; } }
         @media (max-width: 600px) {
@@ -44,14 +61,27 @@
                     <p>Las palabras que vas a escuchar por todos lados.</p>
                 </div>
                 <div class="tama" id="tama">
-                    <div class="tama3d" id="tama3d">
+                    <div class="tama3d" id="tama3d" aria-busy="true">
                         <canvas id="tama-canvas" aria-label="Tamagotchi 3D con el glosario"></canvas>
+                        <div class="tama-loading" id="tama-loading" role="status">
+                            <span class="tama-loading-spinner" aria-hidden="true">
+                                <span class="tama-loading-star" style="--angle: 0deg; --delay: 0s;"></span>
+                                <span class="tama-loading-star" style="--angle: 45deg; --delay: -.2s;"></span>
+                                <span class="tama-loading-star" style="--angle: 90deg; --delay: -.4s;"></span>
+                                <span class="tama-loading-star" style="--angle: 135deg; --delay: -.6s;"></span>
+                                <span class="tama-loading-star" style="--angle: 180deg; --delay: -.8s;"></span>
+                                <span class="tama-loading-star" style="--angle: 225deg; --delay: -1s;"></span>
+                                <span class="tama-loading-star" style="--angle: 270deg; --delay: -1.2s;"></span>
+                                <span class="tama-loading-star" style="--angle: 315deg; --delay: -1.4s;"></span>
+                            </span>
+                            <span class="sr-only">Cargando tamagotchi...</span>
+                        </div>
                     </div>
                     <p class="sr-only" id="tama-live" aria-live="polite"></p>
                     <div class="tama-buttons">
-                        <button type="button" class="tama-btn" data-act="prev" aria-label="Palabra anterior">◀</button>
-                        <button type="button" class="tama-btn tama-btn-mid" data-act="cat" aria-label="Siguiente categoría">●</button>
-                        <button type="button" class="tama-btn" data-act="next" aria-label="Palabra siguiente">▶</button>
+                        <button type="button" class="tama-btn" data-act="prev" aria-label="Palabra anterior" disabled>◀</button>
+                        <button type="button" class="tama-btn tama-btn-mid" data-act="cat" aria-label="Siguiente categoría" disabled>●</button>
+                        <button type="button" class="tama-btn" data-act="next" aria-label="Palabra siguiente" disabled>▶</button>
                     </div>
                     <p class="tama-hint"><span class="tama-hint-side">◀</span> <span class="tama-hint-center">●</span> <span class="tama-hint-side">▶</span> &nbsp;·&nbsp; el botón del medio salta de categoría</p>
                 </div>
@@ -60,8 +90,22 @@
     </main>
     <a class="guide-back guide-back-fixed" href="index.html#explora">← VOLVER A EXPLORÁ</a>
     <script type="module">
-        import * as THREE from 'three';
-        import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+        const loading = document.getElementById('tama-loading');
+        function showLoadError() {
+            document.getElementById('tama3d').setAttribute('aria-busy', 'false');
+            document.getElementById('tama-canvas').hidden = true;
+            loading.textContent = 'No se pudo cargar el tamagotchi. Volvé a intentar recargando la página.';
+            loading.hidden = false;
+        }
+
+        let THREE, RoomEnvironment;
+        try {
+            THREE = await import('three');
+            ({ RoomEnvironment } = await import('three/addons/environments/RoomEnvironment.js'));
+        } catch (error) {
+            showLoadError();
+            throw error;
+        }
 
         const DATA = [
             ['BÁSICOS', '🧙', 'NPC', 'Personaje controlado por el juego.'],
@@ -173,7 +217,7 @@
         }
 
         const scene = new THREE.Scene();
-        const baseFov = 32;
+        const baseFov = 36;
         const referenceAspect = 560 / 660;
         const camera = new THREE.PerspectiveCamera(baseFov, 1, 0.1, 50);
         camera.position.set(0, 0.6, 7.6);
@@ -182,11 +226,12 @@
         shadowCanvas.width = 128;
         shadowCanvas.height = 48;
         const shadowContext = shadowCanvas.getContext('2d');
-        const shadowGradient = shadowContext.createRadialGradient(64, 24, 2, 64, 24, 64);
+        shadowContext.scale(1, 48 / 128);
+        const shadowGradient = shadowContext.createRadialGradient(64, 64, 2, 64, 64, 60);
         shadowGradient.addColorStop(0, 'rgba(0, 0, 0, 0.46)');
         shadowGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
         shadowContext.fillStyle = shadowGradient;
-        shadowContext.fillRect(0, 0, 128, 48);
+        shadowContext.fillRect(0, 0, 128, 128);
         const shadow = new THREE.Mesh(
             new THREE.PlaneGeometry(2.5, 0.62),
             new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(shadowCanvas), transparent: true, depthWrite: false })
@@ -203,6 +248,8 @@
             renderer.outputColorSpace = THREE.SRGBColorSpace;
             renderer.toneMapping = THREE.ACESFilmicToneMapping;
             renderer.toneMappingExposure = 0.94;
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
             const pmrem = new THREE.PMREMGenerator(renderer);
             scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
@@ -211,6 +258,16 @@
             scene.add(ambient);
             const key = new THREE.DirectionalLight(0xffffff, 1.55);
             key.position.set(2.5, 3, 4);
+            key.castShadow = true;
+            key.shadow.mapSize.set(2048, 2048);
+            key.shadow.camera.left = -3;
+            key.shadow.camera.right = 3;
+            key.shadow.camera.top = 3;
+            key.shadow.camera.bottom = -3;
+            key.shadow.camera.near = 0.5;
+            key.shadow.camera.far = 12;
+            key.shadow.normalBias = 0.005;
+            key.shadow.bias = -0.0001;
             scene.add(key);
             const rim = new THREE.DirectionalLight(0x9878ff, 1.25);
             rim.position.set(-3, 1.5, -3);
@@ -259,7 +316,9 @@
                 const x = pos.getX(i), y = pos.getY(i), z = pos.getZ(i);
                 const phi = Math.atan2(y, x);
                 const g = 1.15 + 0.52 * Math.pow((1 + Math.cos(5 * (phi - Math.PI / 2))) / 2, 0.9);
-                pos.setXYZ(i, x * g, y * g, z * 0.42);
+                const shellY = y * g;
+                const neckBlend = THREE.MathUtils.smoothstep(shellY, 1.36, 1.67);
+                pos.setXYZ(i, x * g, shellY + neckBlend * 0.06, z * 0.42);
             }
             shellGeo.computeVertexNormals();
             const shellNormals = shellGeo.attributes.normal;
@@ -271,26 +330,22 @@
             }
             shellNormals.needsUpdate = true;
             const shell = new THREE.Mesh(shellGeo, shellMat);
+            shell.receiveShadow = true;
             device.add(shell);
 
             // Swivel carabiner clasp
-            const steel = new THREE.MeshPhysicalMaterial({ color: 0xb4bac2, roughness: 0.24, metalness: 0.78, clearcoat: 0.55 });
+            const steel = new THREE.MeshPhysicalMaterial({ color: 0x9ba2ac, roughness: 0.36, metalness: 1, clearcoat: 0.12, clearcoatRoughness: 0.4, envMapIntensity: 0.65 });
             const clasp = new THREE.Group();
             clasp.position.set(0, 1.8, 0);
             clasp.scale.setScalar(0.4);
             device.add(clasp);
 
-            const connector = new THREE.Mesh(
-                new THREE.CylinderGeometry(0.1, 0.12, 0.14, 32),
-                new THREE.MeshPhysicalMaterial({ color: 0x7040ff, roughness: 0.28, clearcoat: 0.8, clearcoatRoughness: 0.2 })
-            );
-            connector.position.set(0, 1.63, 0.08);
-            device.add(connector);
-
             // Lug on the shell, perpendicular to the clasp eye so the two link together
             const lug = new THREE.Mesh(new THREE.TorusGeometry(0.1, 0.03, 16, 40), steel);
             lug.rotation.y = Math.PI / 2;
             lug.position.set(0, 1.7, 0.02);
+            lug.castShadow = true;
+            lug.receiveShadow = true;
             device.add(lug);
 
             const eye = new THREE.Mesh(new THREE.TorusGeometry(0.2, 0.04, 16, 40), steel);
@@ -329,6 +384,11 @@
                 steel
             );
             clasp.add(hook);
+            clasp.traverse((part) => {
+                if (!part.isMesh) return;
+                part.castShadow = true;
+                part.receiveShadow = true;
+            });
 
             // Recessed screen housing and rounded plastic bezel
             const bw = 1.56, bh = 1.3, br = 0.2;
@@ -419,10 +479,10 @@
                     new THREE.MeshPhysicalMaterial({ color, roughness: 0.38, clearcoat: 0.5, clearcoatRoughness: 0.28, emissive: color, emissiveIntensity: 0.015 })
                 );
                 m.scale.set(1, 1, 0.3);
-                m.position.set(x, y, z - 0.018);
-                m.userData.baseZ = z - 0.018;
+                m.position.set(x, y, z + 0.004);
+                m.userData.baseZ = z + 0.004;
                 m.userData.act = act;
-                m.userData.press = 0;
+                m.userData.pressStarted = -Infinity;
                 device.add(m);
                 pressable.push(m);
             };
@@ -445,7 +505,7 @@
         function act(a) {
             if (a === 'prev') step(-1); else if (a === 'next') step(1); else nextCat();
             const b = pressable.find((m) => m.userData.act === a);
-            if (b) b.userData.press = 1;
+            if (b) b.userData.pressStarted = clock.getElapsedTime();
         }
 
         document.querySelectorAll('.tama-btn').forEach((b) => {
@@ -486,13 +546,13 @@
             if (renderer) renderer.setSize(w, h, false);
             camera.aspect = w / h;
             camera.fov = THREE.MathUtils.radToDeg(2 * Math.atan(
-                Math.tan(THREE.MathUtils.degToRad(baseFov) / 2) * referenceAspect / camera.aspect
+                Math.tan(THREE.MathUtils.degToRad(baseFov) / 2) * Math.max(1, referenceAspect / camera.aspect)
             ));
             camera.updateProjectionMatrix();
         }
         window.addEventListener('resize', resize);
 
-        const clock = new THREE.Clock();
+        const clock = new THREE.Clock(false);
         const INTRO = 2.4;
         const easeOutBack = (p) => 1 + 2.2 * Math.pow(p - 1, 3) + 1.2 * Math.pow(p - 1, 2);
         function tick() {
@@ -500,7 +560,7 @@
             const p = Math.min(t / INTRO, 1);
             if (p < 1) {
                 // Cae desde arriba dando una vuelta completa
-                device.position.y = (1 - easeOutBack(Math.min(p / 0.7, 1))) * 5.5;
+                device.position.y = (1 - easeOutBack(Math.min(p / 0.7, 1))) * 0.25;
                 const landing = Math.max(0, 1 - Math.abs(p - 0.74) / 0.12);
                 device.scale.set(1 + landing * 0.025, 1 - landing * 0.05, 1 + landing * 0.025);
                 device.rotation.y = 2 * Math.PI * (1 - Math.pow(1 - p, 3));
@@ -513,19 +573,38 @@
                 device.scale.set(1, 1, 1);
             }
             pressable.forEach((m) => {
-                m.userData.press = Math.max(0, m.userData.press - 0.22);
-                m.position.z = m.userData.baseZ - m.userData.press * 0.06;
+                const pressProgress = Math.min(1, (t - m.userData.pressStarted) / 0.12);
+                const pressAmount = pressProgress < 1 ? Math.sin(pressProgress * Math.PI) : 0;
+                m.position.z = m.userData.baseZ - pressAmount * 0.008;
+                m.material.emissiveIntensity = 0.015 + pressAmount * 0.09;
             });
             if (renderer) renderer.render(scene, camera);
             requestAnimationFrame(tick);
         }
 
         resize();
-        drawLcd();
-        if (document.fonts && document.fonts.load) {
-            document.fonts.load('22px "Press Start 2P"').then(drawLcd);
+        async function start() {
+            if (!renderer) {
+                showLoadError();
+                return;
+            }
+            try {
+                await document.fonts.load('22px "Press Start 2P"');
+                drawLcd();
+                await renderer.compileAsync(scene, camera);
+                renderer.render(scene, camera);
+                requestAnimationFrame(() => {
+                    clock.start();
+                    host.setAttribute('aria-busy', 'false');
+                    loading.hidden = true;
+                    document.querySelectorAll('.tama-btn').forEach((button) => { button.disabled = false; });
+                    tick();
+                });
+            } catch (error) {
+                showLoadError();
+            }
         }
-        tick();
+        start();
     </script>
     <script src="sparkles.js"></script>
 </body>

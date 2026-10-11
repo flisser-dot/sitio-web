@@ -39,12 +39,13 @@
                 </div>
                 <h2 id="quiz-title"></h2>
                 <div class="quiz-options" id="quiz-options"></div>
+                <button type="button" class="quiz-previous" id="quiz-previous" hidden>← PREGUNTA ANTERIOR</button>
             </div>
 
             <div class="quiz-result" id="quiz-result" hidden>
                 <span class="guide-step-number">TU RESULTADO</span>
                 <div class="quiz-card">
-                    <span class="quiz-card-star">✩</span>
+                    <img class="quiz-card-icon" id="result-icon" alt="" width="120" height="120">
                     <h2 id="result-name"></h2>
                     <p id="result-text"></p>
                     <p class="card-tags" id="result-tags"></p>
@@ -52,7 +53,7 @@
                 </div>
                 <div class="quiz-actions">
                     <button type="button" class="main-button quiz-btn" id="quiz-retry">↻ REPETIR EL TEST</button>
-                    <a class="guide-back" href="guia.html">EXPLORAR TODOS LOS GÉNEROS →</a>
+                    <a class="guide-back" id="quiz-explore" href="guia.html">EXPLORAR TODOS LOS GÉNEROS →</a>
                 </div>
             </div>
         </section>
@@ -64,48 +65,56 @@
         var GENRES = {
             accion: {
                 name: 'ACCIÓN / AVENTURA',
+                icon: 'adventureaction-icon-trimmed.png',
                 text: 'Te mueve explorar, pelear y avanzar: mundos para recorrer y desafíos que te mantienen en movimiento.',
                 tags: 'Exploración · acción · aventura',
                 games: ['Zelda: Breath of the Wild', 'God of War', 'Ghost of Tsushima']
             },
             rpg: {
                 name: 'RPG',
+                icon: 'rpg icono 3dc.png',
                 text: 'Te gusta explorar, crear personajes y meterte de lleno en una historia donde tus decisiones importan.',
                 tags: 'Personajes · Decisiones · Exploración',
                 games: ['Kingdom Come: Deliverance II', 'Dragon Age: Inquisition', 'Elden Ring']
             },
             shooters: {
                 name: 'SHOOTERS',
+                icon: 'shooter icon.png',
                 text: 'Puntería, reflejos y partidas intensas: lo tuyo es la acción rápida, sola o en equipo.',
                 tags: 'Reflejos · Precisión · Competición',
                 games: ['Call of Duty', 'Apex Legends', 'DOOM']
             },
             estrategia: {
                 name: 'ESTRATEGIA',
+                icon: 'white horse 3d.png',
                 text: 'Disfrutás ganar por tu ingenio: Te gusta pensar tus próximos movimientos, armar un plan y ponerlo a prueba.',
                 tags: 'Planificación · Tácticas · Decisiones',
                 games: ['Civilization VI', 'Roma II', 'League of Legends']
             },
             simulacion: {
                 name: 'SIMULACIÓN',
+                icon: 'simulation icon.png',
                 text: 'Construir, cuidar y organizar tu propio mundo, probando distintas posibilidades, jugando atu ritmo y sin presión.',
                 tags: 'Creatividad · Personalización · Tranquilidad',
                 games: ['Animal Crossing', 'Paralives', 'Pokemon Pokopia']
             },
             narrativos: {
                 name: 'JUEGOS NARRATIVOS',
+                icon: 'narr icon 3d.png',
                 text: 'Te gusta descubrir historias, conocer personajes y que tus decisiones son parte de lo que pasa.',
                 tags: 'Aventura · Decisiones · Emoción',
                 games: ['The Last Of Us', 'Detroit: Become Human', 'What Remains of Edith Finch']
             },
             puzzle: {
                 name: 'PUZZLE',
+                icon: 'puzzle icon 3d-trimmed.png',
                 text: 'Te gusta encontrar pistas, conectar ideas y descubrir soluciones a los retos.',
                 tags: 'Ingenio · Lógica · Desafíos',
                 games: ['Unpacking', 'Blue Prince', 'A little to the Left']
             },
             roguelike: {
                 name: 'ROGUELIKE / ROGUELITE',
+                icon: 'roguelike icon 3d-trimmed.png',
                 text: 'Cada partida es distinta y fallar es parte del juego: te encanta intentar de nuevo y mejorar.',
                 tags: 'Exploración · Acción · Progreso',
                 games: ['Darkest Dungeon', 'Slay the Spire', 'Cult of the Lamb']
@@ -116,7 +125,7 @@
             {
                 q: '¿Cómo te imaginás una tarde de juego ideal?',
                 a: [
-                    ['Recorriendo un nuevo mundo para descubrir todo lo que esconde', { aventura: 2, rpg: 1 }],
+                    ['Recorriendo un nuevo mundo para descubrir todo lo que esconde', { accion: 2, rpg: 1 }],
                     ['Planificando  el siguiente movimiento para encontrar la mejor forma de ganar', { estrategia: 2 }],
                     ['Creando y decorando un espacio o mundo', { simulacion: 2 }],
                     ['Poniendo a prueba mi ingenio', { puzzle: 2 }],
@@ -154,7 +163,7 @@
                     ['Mundos misteriosos para investigar', { narrativos: 2, puzzle: 1, roguelike: 2 }],
                     ['Escenarios intensos, llenos de acción', { accion: 2, shooters: 1, roguelike: 1 }],
                     ['Ciencia ficción y futurista', { shooters: 1, estrategia: 1, accion: 1, rpg: 2}],
-                    ['Lugares oscuros que me den un poco de miedo', { roguelike: 1, accion: 1}]
+                    ['Lugares oscuros que me den un poco de miedo', { roguelike: 1, accion: 1}],
                     ['Naturaleza y lugares para explorar', { accion: 1, simulacion: 2, rpg: 1 }]
                 ]
             },
@@ -181,12 +190,13 @@
                 ]
             }
         ];
-        var scores, current;
+        var scores, current, answers;
         var el = function (id) { return document.getElementById(id); };
 
         function reset() {
             scores = { accion: 0, rpg: 0, shooters: 0, estrategia: 0, simulacion: 0, narrativos: 0, puzzle: 0, roguelike: 0 };
             current = 0;
+            answers = [];
         }
 
         function show(id) {
@@ -197,6 +207,7 @@
 
         function render() {
             var item = QUESTIONS[current];
+            el('quiz-previous').hidden = current === 0;
             el('quiz-step').textContent = '0' + (current + 1) + ' / 0' + QUESTIONS.length;
             el('quiz-bar-fill').style.width = ((current + 1) / QUESTIONS.length * 100) + '%';
             el('quiz-title').textContent = item.q;
@@ -214,13 +225,25 @@
 
         function answer(points) {
             for (var k in points) { scores[k] += points[k]; }
+            answers.push(points);
             current++;
             if (current < QUESTIONS.length) { render(); } else { finish(); }
+        }
+
+        function previous() {
+            if (current === 0) return;
+            var points = answers.pop();
+            for (var genre in points) { scores[genre] -= points[genre]; }
+            current--;
+            render();
+            el('quiz-title').focus();
         }
 
         function finish() {
             var best = Object.keys(scores).reduce(function (a, b) { return scores[b] > scores[a] ? b : a; });
             var g = GENRES[best];
+            el('result-icon').src = g.icon;
+            el('result-icon').dataset.genre = best;
             el('result-name').textContent = g.name;
             el('result-text').textContent = g.text;
             el('result-tags').textContent = g.tags;
@@ -235,6 +258,16 @@
 
         el('quiz-begin').addEventListener('click', function () { reset(); render(); show('quiz-question'); });
         el('quiz-retry').addEventListener('click', function () { reset(); show('quiz-start'); });
+        el('quiz-title').tabIndex = -1;
+        el('quiz-previous').addEventListener('click', previous);
+        el('quiz-explore').addEventListener('click', function (event) {
+            if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+            try {
+                sessionStorage.setItem('guide-scroll-target', 'estilos-de-juego');
+            } catch (error) {
+                this.href = 'guia.html#estilos-de-juego';
+            }
+        });
         reset();
     </script>
     <script src="sparkles.js"></script>

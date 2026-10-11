@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industria nacional | Fem Respawn</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        .ind-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, 360px); align-items: center; gap: clamp(18px, 4vw, 48px); padding: 0 0 22px; }
+        .ind-hero-copy { min-width: 0; }
+        .ind-argentina-float { display: block; width: min(100%, 160px); height: auto; max-height: 240px; object-fit: contain; justify-self: center; filter: drop-shadow(0 12px 18px rgba(0,0,0,.24)); translate: var(--pointer-shift-x, 0px) var(--pointer-shift-y, 0px); transition: translate .42s cubic-bezier(.2, .75, .25, 1); --float-duration: 8s; --float-delay: -1.5s; --float-drift: -8px; --float-angle: 4deg; animation: areas-space-drift var(--float-duration) ease-in-out var(--float-delay) infinite alternate; }
+        .ind-hero h1 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2.4rem, 5.6vw, 4.75rem); line-height: 1; margin: 8px 0 14px; }
+        .ind-hero h1 span { color: var(--green); }
+        .ind-hero p { max-width: 620px; color: var(--gray); font-size: 1.1rem; }
+
+        .ind-carousel { display: grid; grid-template-columns: 1.3fr 1fr; align-items: center; column-gap: clamp(30px, 4vw, 56px); row-gap: 8px; padding: 8px 0 0; }
+
+        .ind-stage { position: relative; height: clamp(340px, 42vw, 500px); perspective: 1400px; overflow: hidden; cursor: grab; touch-action: pan-y; user-select: none; }
+        .ind-stage.dragging { cursor: grabbing; }
+        .ind-slide-track { position: absolute; z-index: 1; inset: 0; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 12%, #000 88%, transparent 100%); mask-image: linear-gradient(90deg, transparent 0%, #000 12%, #000 88%, transparent 100%); }
+
+        .ind-arrow { position: absolute; top: 50%; z-index: 110; width: 42px; height: 42px; padding: 0; display: grid; place-items: center; border: 1px solid rgba(152,120,255,.5); border-radius: 50%; background: rgba(12,10,20,.76); color: var(--off-white); font-size: 21px; line-height: 1; cursor: pointer; transform: translateY(-50%); transition: background-color .2s, color .2s, border-color .2s, transform .2s; backdrop-filter: blur(5px); }
+        .ind-arrow-prev { left: 12px; }
+        .ind-arrow-next { right: 12px; }
+        .ind-arrow:hover:not(:disabled), .ind-arrow:focus-visible:not(:disabled) { border-color: var(--green); background: var(--green); color: var(--black); transform: translateY(-50%) scale(1.06); outline: none; }
+        .ind-arrow:disabled { opacity: .32; cursor: not-allowed; }
+
+        .ind-slide { position: absolute; top: 50%; left: 50%; width: 56%; aspect-ratio: 16 / 10; margin: calc(-28% * 10 / 16) 0 0 -28%; border: 1px solid rgba(255,255,255,.16); border-radius: 14px; overflow: hidden; background: linear-gradient(135deg, var(--purple), var(--pink)); box-shadow: 0 18px 44px rgba(0,0,0,.48); transition: transform .5s cubic-bezier(.2,.8,.2,1), opacity .42s, filter .42s, box-shadow .42s, border-color .3s; }
+        .ind-slide:nth-child(even) { background: linear-gradient(135deg, var(--purple-light), var(--green)); }
+        .ind-slide img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; -webkit-user-drag: none; }
+        .ind-stage.dragging .ind-slide { transition: none; }
+        .ind-slide.is-active { border: 2px solid rgba(182,157,255,.96); outline: 2px solid rgba(152,120,255,.64); outline-offset: 3px; }
+
+        .ind-text { min-height: 360px; }
+        .ind-text .ind-tag { font-family: 'DM Mono', monospace; font-size: .8rem; letter-spacing: .08em; color: var(--green); }
+        .ind-text h2 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2rem, 4.5vw, 4rem); line-height: 1; margin: 10px 0 14px; text-transform: uppercase; }
+        .ind-text .ind-sub { color: var(--pink); font-weight: 600; font-size: 1.1rem; margin: 0 0 18px; }
+        .ind-text .ind-desc { color: var(--gray); font-size: 1.1rem; margin: 0 0 20px; }
+        .ind-text .ind-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+        .ind-text a.ind-main-link, .ind-text .ind-links a { min-height: 44px; padding: 10px 14px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; border: 1px solid rgba(152,120,255,.62); border-radius: 8px; background: linear-gradient(135deg, rgba(112,64,255,.22), rgba(33,22,65,.52)); box-shadow: inset 0 0 10px rgba(152,120,255,.05); color: var(--off-white); font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 600; text-decoration: none; transition: background .22s ease, color .22s ease, border-color .22s ease, box-shadow .22s ease, transform .22s ease; }
+        .ind-text .ind-main-link[hidden] { display: none; }
+        .ind-text a.ind-main-link:hover, .ind-text a.ind-main-link:focus-visible, .ind-text .ind-links a:hover, .ind-text .ind-links a:focus-visible { border-color: var(--green); background: var(--green); box-shadow: 0 6px 20px rgba(202,255,25,.18); color: var(--black); transform: translateY(-2px); outline: none; }
+        .ind-external-arrow { font-size: 16px; line-height: 1; transition: transform .2s ease; }
+        .ind-text .ind-links a:hover .ind-external-arrow, .ind-text .ind-links a:focus-visible .ind-external-arrow { transform: translate(2px,-2px); }
+        .ind-text a.ind-main-link:focus-visible, .ind-text .ind-links a:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
+        .ind-text > * { transition: opacity .3s; }
+        .ind-text.fade > * { opacity: 0; }
+
+        .ind-dots { grid-column: 1; display: flex; justify-content: center; gap: 8px; margin-top: -8px; position: relative; z-index: 120; transform: translateY(-82px); }
+        .ind-dot { width: 10px; height: 10px; padding: 0; border: 1px solid var(--gray); border-radius: 10px; background: transparent; cursor: pointer; transition: width .3s, background .3s; }
+        .ind-dot.active { width: 32px; border-color: var(--green); background: var(--green); }
+        .ind-dot:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
+
+        @media (max-width: 800px) {
+            .ind-hero { padding-bottom: 18px; }
+            .ind-carousel { grid-template-columns: 1fr; }
+            .ind-carousel { column-gap: 18px; row-gap: 8px; padding-top: 4px; }
+            .ind-stage { height: clamp(300px, 68vw, 420px); }
+            .ind-slide { width: 60%; margin: calc(-30% * 10 / 16) 0 0 -30%; }
+            .ind-dots { transform: translateY(-92px); }
+            .ind-text { min-height: 0; }
+        }
+
+        @media (max-width: 560px) {
+            .ind-hero { grid-template-columns: 1fr; gap: 34px; }
+            .ind-argentina-float { width: min(100%, 160px); justify-self: center; }
+        }
+
+        @media (max-width: 480px) {
+            .ind-stage { height: 300px; }
+            .ind-slide { width: 66%; margin: calc(-33% * 10 / 16) 0 0 -33%; }
+            .ind-dots { transform: translateY(-100px); }
+            .ind-arrow { width: 38px; height: 38px; }
+            .ind-arrow-prev { left: 4px; }
+            .ind-arrow-next { right: 4px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .ind-argentina-float { animation: none; translate: none; transition: none; }
+        }
+    </style>
+</head>
+
+<body class="guide-page industry-page">
+
+    <header class="guide-header">
+        <a href="index.html" class="logo" aria-label="Fem Respawn, volver al inicio">
+            <span class="logo-main">Fem</span>
+            <span class="logo-sub">Respawn</span>
+        </a>
+        <a class="guide-back" href="index.html#comunidad">← VOLVER A COMUNIDAD</a>
+    </header>
+
+    <main class="guide-main">
+
+        <section class="ind-hero">
+            <div class="ind-hero-copy">
+                <div class="eyebrow"><span>//</span> COMUNIDAD  · AGRUPACIONES</div>
+                <h1>Agrupaciones <span>y colectivos</span></h1>
+                <p>Explorá colectivos y grupos de mujeres y disidencias que impulsan el gaming en Argentina.</p>
+            </div>
+            <img class="ind-argentina-float" src="msn.png" alt="" aria-hidden="true">
+        </section>
+
+        <!-- Reemplazá cada img/src, título, texto y link por los datos reales -->
+        <section class="ind-carousel">
+
+            <div class="ind-stage" id="stage" aria-label="Carrusel de producciones argentinas">
+                <div class="ind-slide-track" id="slide-track" aria-hidden="true"></div>
+                <button class="ind-arrow ind-arrow-prev" id="ind-prev" type="button" aria-label="Producción anterior">‹</button>
+                <button class="ind-arrow ind-arrow-next" id="ind-next" type="button" aria-label="Producción siguiente">›</button>
+            </div>
+
+            <div class="ind-text" id="text">
+                <span class="ind-tag"></span>
+                <h2></h2>
+                <p class="ind-sub"></p>
+                <p class="ind-desc"></p>
+                <a class="ind-main-link" href="#" target="_blank" rel="noopener noreferrer">VER MÁS <span class="ind-external-arrow" aria-hidden="true">↗</span></a>
+                <nav class="guide-console-links ind-links" aria-label="Dónde jugar"></nav>
+            </div>
+
+            <div class="ind-dots" id="dots" role="group" aria-label="Posición del carrusel"></div>
+
+        </section>
+
+        <a class="guide-back guide-back-bottom" href="index.html#comunidad">← VOLVER A COMUNIDAD</a>
+    </main>
+
+    <script>
+        // Reemplazá cada entrada por los datos reales (img, nombre, tagline, texto, link)
+        const items = [
+            { img: 'wigar.jpg', tag: '// AGRUPACIÓN', name: 'Women in Games Argentina (WIGAr)', sub: 'Organización que promueve la inclusión de mujeres y disidencias en la industria de los videojuegos.', desc: 'Impulsa talleres, eventos y oportunidades de formación y conexión en el gaming.', links: [{ label: 'SITIO OFICIAL', url: 'https://www.womeningamesargentina.org/' }, { label: 'INSTAGRAM', url: 'https://www.instagram.com/womeningamesargentina/?hl=es' }] },
+            { img: 'bichoraro.jpg', tag: '// COOPERATIVA', name: 'Bicho Raro Games', sub: 'Cooperativa argentina de desarrollo de videojuegos fundada por mujeres.', desc: 'Crea juegos educativos y experiencias con narrativas personales y sociales, y también ofrece servicios de desarrollo y capacitación. Ideal para quienes quieren conocer el lado profesional y creativo del gaming.', links: [{ label: 'ITCHI.IO', url: 'https://bicho-raro.itch.io/' }, { label: 'LINKEDIN', url: 'https://www.linkedin.com/company/bichorarocoop' }, { label: 'Instagram', url: 'https://www.instagram.com/bichoraro.games/' }  ] },
+            { img: 'cienciagamer.png', tag: '// INVESTIGACIÓN', name: 'Ciencia Gamer Ok', sub: 'Proyecto de investigación dedeicado a la ciencia y videojuegos.', desc: 'Acerca los conocimientos científicos actuales sobre el uso de videojuegos, encargandose de "traducir" documentos académicos y artículos científicos. ', links: [{ label: 'SITIO OFICIAL', url: 'https://cienciagamer.com/index.html' }, { label: 'INSTAGRAM', url: 'https://www.instagram.com/cienciagamerok/' }, { label: 'LINKEDIN', url: 'https://www.linkedin.com/company/ciencia-gamer/' }] },
+            { img: 'sheroesingames.jpg', tag: '// INICIATIVA', name: 'Sheroes in games', sub: 'Iniciativa de programación de videojuegos para mujeres y niñas.', desc: 'Un proyecto educativo y comunitario que busca reducir la brecha de género en la industria de los videojuegos, fomentando la participación de mujeres y disidencias desde edades temprana.', links: [{ label: 'INSTAGRAM', url: 'https://www.instagram.com/sheroesingames/' }] },
+        ];
+
+        const stage = document.getElementById('stage');
+        const slideTrack = document.getElementById('slide-track');
+        const text = document.getElementById('text');
+        const dotsEl = document.getElementById('dots');
+        let current = 0;
+        let drag = null;
+
+        const slides = items.map((it, i) => {
+            const s = document.createElement('div');
+            s.className = 'ind-slide';
+            s.innerHTML = '<img alt="" draggable="false">';
+            const img = s.firstChild;
+            img.src = it.img;
+            if (it.pos) img.style.objectPosition = it.pos;
+            img.onerror = () => img.remove();
+            slideTrack.appendChild(s);
+            s.addEventListener('click', () => { if (!drag?.moved) go(i); });
+            return s;
+        });
+
+        const dots = items.map((_, i) => {
+            const d = document.createElement('button');
+            d.className = 'ind-dot';
+            d.setAttribute('aria-label', 'Ir a ' + (i + 1));
+            d.onclick = () => go(i);
+            dotsEl.appendChild(d);
+            return d;
+        });
+
+        // offset: posición relativa al activo (puede ser fraccionaria al arrastrar)
+        function layout(shift = 0) {
+            slides.forEach((s, i) => {
+                const o = i - current + shift;
+                const a = Math.abs(o);
+                const dir = Math.sign(o);
+                const x = Math.max(-1, Math.min(1, o)) * 66 + Math.max(0, a - 1) * dir * 8;
+                const rot = -Math.max(-1, Math.min(1, o)) * 28;
+                const focus = Math.max(0, 1 - Math.min(a, 1));
+                const scale = 0.86 + focus * 0.2;
+                s.style.transform = `translateX(${x}%) translateZ(${-Math.min(a, 2) * 120}px) rotateY(${rot}deg) scale(${scale})`;
+                s.style.opacity = a > 2 ? 0 : 0.72 + focus * 0.28;
+                s.style.filter = `brightness(${0.78 + focus * 0.3}) saturate(${0.88 + focus * 0.2}) blur(${(1 - focus) * 0.35}px)`;
+                s.style.boxShadow = focus > 0.95 ? '0 24px 64px rgba(0,0,0,.52), 0 0 38px rgba(152,120,255,.38)' : '0 18px 44px rgba(0,0,0,.5)';
+                s.classList.toggle('is-active', a < 0.5);
+                s.style.zIndex = 100 - Math.round(a * 10);
+                s.style.pointerEvents = a > 2 ? 'none' : '';
+            });
+        }
+
+        function renderText() {
+            const it = items[current];
+            text.classList.add('fade');
+            setTimeout(() => {
+                text.querySelector('.ind-tag').textContent = it.tag;
+                text.querySelector('h2').textContent = it.name;
+                text.querySelector('.ind-sub').textContent = it.sub;
+                text.querySelector('.ind-desc').textContent = it.desc;
+                text.querySelector('.ind-main-link').href = it.link || '#';
+                text.querySelector('.ind-main-link').hidden = !!it.links;
+                const nav = text.querySelector('.ind-links');
+                nav.innerHTML = '';
+                (it.links || []).forEach(l => {
+                    const a = document.createElement('a');
+                    a.href = l.url;
+                    a.target = '_blank';
+                    a.rel = 'noopener noreferrer';
+                    a.append(l.label);
+                    const arrow = document.createElement('span');
+                    arrow.className = 'ind-external-arrow';
+                    arrow.setAttribute('aria-hidden', 'true');
+                    arrow.textContent = '↗';
+                    a.appendChild(arrow);
+                    nav.appendChild(a);
+                });
+                text.classList.remove('fade');
+            }, 150);
+        }
+
+        function go(i) {
+            current = Math.max(0, Math.min(items.length - 1, i));
+            dots.forEach((d, k) => {
+                const active = k === current;
+                d.classList.toggle('active', active);
+                d.setAttribute('aria-current', active ? 'step' : 'false');
+            });
+            document.getElementById('ind-prev').disabled = current === 0;
+            document.getElementById('ind-next').disabled = current === items.length - 1;
+            layout();
+            renderText();
+        }
+
+        document.getElementById('ind-prev').addEventListener('click', () => go(current - 1));
+        document.getElementById('ind-next').addEventListener('click', () => go(current + 1));
+
+        stage.addEventListener('pointerdown', e => {
+            drag = { x: e.clientX, moved: false, id: e.pointerId };
+        });
+        stage.addEventListener('pointermove', e => {
+            if (!drag) return;
+            const dx = e.clientX - drag.x;
+            if (!drag.moved && Math.abs(dx) > 5) {
+                drag.moved = true;
+                stage.setPointerCapture(drag.id);
+                stage.classList.add('dragging');
+            }
+            if (drag.moved) {
+                // Un paso entre tarjetas equivale a 25% del ancho del carrusel
+                let s = Math.max(-1, Math.min(1, dx / (stage.clientWidth * 0.25)));
+                if ((current === 0 && s > 0) || (current === items.length - 1 && s < 0)) s *= 0.25;
+                layout(s);
+            }
+        });
+        const end = e => {
+            if (!drag) return;
+            const dx = e.clientX - drag.x;
+            stage.classList.remove('dragging');
+            const threshold = stage.clientWidth * 0.06;
+            if (drag.moved && dx < -threshold) go(current + 1);
+            else if (drag.moved && dx > threshold) go(current - 1);
+            else layout();
+            setTimeout(() => { drag = null; }, 0);
+        };
+        stage.addEventListener('pointerup', end);
+        stage.addEventListener('pointercancel', end);
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'ArrowRight') go(current + 1);
+            if (e.key === 'ArrowLeft') go(current - 1);
+        });
+
+        go(Math.max(0, items.findIndex(it => it.img === 'storyteller.jpg')));
+
+        const argentinaScene = document.querySelector('.ind-hero');
+        const argentinaFloat = document.querySelector('.ind-argentina-float');
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const canRepelArgentina = !reduceMotion && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+        if (canRepelArgentina) {
+            let pointerX = 0;
+            let pointerY = 0;
+            let pointerFrame = 0;
+
+            argentinaScene.addEventListener('pointermove', event => {
+                if (event.pointerType !== 'mouse') return;
+                pointerX = event.clientX;
+                pointerY = event.clientY;
+                if (pointerFrame) return;
+
+                pointerFrame = requestAnimationFrame(() => {
+                    pointerFrame = 0;
+                    const rect = argentinaFloat.getBoundingClientRect();
+                    const deltaX = rect.left + rect.width / 2 - pointerX;
+                    const deltaY = rect.top + rect.height / 2 - pointerY;
+                    const distance = Math.hypot(deltaX, deltaY);
+                    const strength = Math.max(0, 1 - distance / 120);
+                    const amount = distance ? (strength * 28) / distance : 0;
+                    argentinaFloat.style.setProperty('--pointer-shift-x', `${deltaX * amount}px`);
+                    argentinaFloat.style.setProperty('--pointer-shift-y', `${deltaY * amount}px`);
+                });
+            });
+
+            argentinaScene.addEventListener('pointerleave', () => {
+                if (pointerFrame) cancelAnimationFrame(pointerFrame);
+                pointerFrame = 0;
+                argentinaFloat.style.setProperty('--pointer-shift-x', '0px');
+                argentinaFloat.style.setProperty('--pointer-shift-y', '0px');
+            });
+        }
+    </script>
+
+</body>
+</html>

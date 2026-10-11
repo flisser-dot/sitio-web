@@ -289,6 +289,20 @@
             window.setTimeout(() => { window.location.href = quizLink.href; }, 320);
         });
 
+        window.addEventListener('load', () => {
+            let target;
+            try {
+                target = sessionStorage.getItem('guide-scroll-target');
+                sessionStorage.removeItem('guide-scroll-target');
+            } catch (error) {
+                return;
+            }
+            if (target !== 'estilos-de-juego') return;
+            document.fonts.ready.then(() => {
+                document.getElementById(target).scrollIntoView({ behavior: 'instant', block: 'start' });
+            });
+        }, { once: true });
+
     </script>
     <script src="sparkles.js"></script>
 </body>

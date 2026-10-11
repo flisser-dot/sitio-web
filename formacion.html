@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formación | Fem Respawn</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+    <style>
+        .formation-page .guide-main { padding-top: 32px; }
+        .formation-portal { display: grid; grid-template-columns: minmax(0, 1fr); align-items: center; gap: 20px; }
+        .formation-intro { margin-bottom: 0; }
+        .formation-heading { display: flex; align-items: center; gap: 16px; margin: 16px 0; }
+        .formation-heading img { width: 120px; height: 120px; object-fit: contain; flex-shrink: 0; }
+        .formation-page .formation-heading h1 { margin: 0; font-size: 44px; line-height: 1.12; letter-spacing: 0; }
+        .formation-intro p { max-width: 760px; margin: 0; color: var(--gray); font-size: 18px; line-height: 1.6; }
+        .formation-computer { position: relative; isolation: isolate; justify-self: center; margin: 0; width: min(100%, 820px); aspect-ratio: 1.12; animation: formation-computer-appear .65s ease both; }
+        .formation-decoration { position: absolute; z-index: -1; width: min(14%, 112px); height: auto; opacity: .28; pointer-events: none; user-select: none; }
+        .formation-decoration--holographic { left: 1%; top: 18%; transform: rotate(-18deg); }
+        .formation-decoration--keychain { right: 1%; top: 40%; transform: rotate(14deg); }
+        .formation-decoration--star { left: 5%; bottom: 17%; transform: rotate(12deg); }
+        .formation-computer canvas { display: block; width: 100%; height: 100%; }
+        .formation-computer canvas[hidden] { display: none; }
+        .formation-os { position: absolute; left: 22%; top: 17%; width: 56%; height: 49%; display: flex; flex-direction: column; justify-content: flex-start; padding: 14px; overflow: hidden; background: #25144b; border-radius: 12px; color: var(--off-white); }
+        .formation-os::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(transparent 0 3px, rgba(9,9,10,.1) 3px 4px); opacity: .5; }
+        .formation-os-header { display: flex; flex-shrink: 0; align-items: center; gap: 8px; margin: 0 0 10px; padding-bottom: 8px; border-bottom: 1px solid rgba(152,120,255,.35); font-family: "DM Mono", monospace; font-size: 12px; color: var(--purple-light); }
+        .formation-os-header .formation-os-led { margin-left: auto; }
+        .formation-home { min-height: 0; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--purple-light) transparent; }
+        .formation-home h2 { margin: 2px 0 8px; font-family: "DM Mono", monospace; font-size: 17px; font-weight: 500; line-height: 1.3; letter-spacing: 0; }
+        .formation-home p { margin: 0 0 14px; color: #c6b9df; font-family: "DM Mono", monospace; font-size: 12px; line-height: 1.5; }
+        .formation-os-led { width: 5px; height: 5px; background: var(--green); flex-shrink: 0; }
+        .formation-os-heart { width: 12px; height: 12px; flex-shrink: 0; background: var(--purple-light); clip-path: polygon(0 15%, 15% 15%, 15% 0, 40% 0, 40% 15%, 60% 15%, 60% 0, 85% 0, 85% 15%, 100% 15%, 100% 55%, 85% 55%, 85% 70%, 70% 70%, 70% 85%, 55% 85%, 55% 100%, 45% 100%, 45% 85%, 30% 85%, 30% 70%, 15% 70%, 15% 55%, 0 55%); }
+        .formation-nav { display: flex; flex-direction: column; gap: 6px; min-height: 0; }
+        .formation-nav button { position: relative; display: flex; align-items: center; gap: 10px; min-height: 46px; padding: 9px; border: 1px solid rgba(152,120,255,.3); border-radius: 3px; background: rgba(112,64,255,.12); font-family: "DM Mono", monospace; font-size: 14px; line-height: 1.3; color: var(--off-white); cursor: pointer; text-align: left; transition: background .16s, border-color .16s; }
+        .formation-nav button::before { content: ">"; color: var(--purple-light); font-size: 15px; }
+        .formation-nav button:hover, .formation-nav button[aria-selected="true"] { color: var(--off-white); background: #7040ff; border-color: var(--purple-light); }
+        .formation-nav button:hover::before, .formation-nav button[aria-selected="true"]::before { color: var(--green); }
+        .formation-nav button:focus-visible { outline: 2px solid var(--green); outline-offset: -3px; }
+        .formation-return { display: inline-flex; flex-shrink: 0; align-items: center; justify-content: center; gap: 6px; min-height: 32px; margin: 0 0 0 auto; padding: 5px 7px; border: 1px solid rgba(152,120,255,.4); border-radius: 3px; background: transparent; font-family: "DM Mono", monospace; font-size: 11px; color: var(--off-white); cursor: pointer; }
+        .formation-return:hover { color: var(--off-white); }
+        .formation-return:focus-visible, .formation-link:focus-visible { outline: 2px solid var(--green); outline-offset: 4px; }
+        .formation-return[hidden] { display: none; }
+        .formation-home[hidden], .formation-browser[hidden], .formation-loading[hidden] { display: none; }
+        .formation-browser { display: flex; flex: 1; flex-direction: column; min-height: 0; }
+        .formation-browser-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 8px; flex-shrink: 0; }
+        .formation-browser-heading h2 { margin: 0; font: 500 15px/1.3 "DM Mono", monospace; color: var(--off-white); overflow-wrap: anywhere; }
+        .formation-browser-heading span { color: var(--purple-light); font: 11px/1.5 "DM Mono", monospace; white-space: nowrap; }
+        .formation-panels { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: var(--purple-light) transparent; }
+        .formation-panels .formation-section { padding: 0; border: 0; }
+        .formation-panels .formation-section > .guide-step-number, .formation-panels .formation-section > h2 { display: none; }
+        .formation-resource-list { display: grid; gap: 7px; }
+        .formation-resource-list[hidden] { display: none; }
+        .formation-resource { display: flex; align-items: center; gap: 10px; width: 100%; padding: 9px; border: 1px solid rgba(152,120,255,.3); border-radius: 4px; background: rgba(112,64,255,.1); color: var(--off-white); text-align: left; cursor: pointer; }
+        .formation-resource:hover { background: #482780; border-color: var(--green); }
+        .formation-resource:focus-visible, .formation-list-return:focus-visible { outline: 2px solid var(--green); outline-offset: -2px; }
+        .formation-resource img { width: 44px; height: 42px; flex-shrink: 0; border-radius: 3px; object-fit: cover; }
+        .formation-resource span { min-width: 0; font: 13px/1.4 "DM Mono", monospace; overflow-wrap: anywhere; }
+        .formation-resource-detail { color: var(--off-white); }
+        .formation-resource-detail > img { width: 100%; height: 100px; margin: 10px 0; border-radius: 4px; object-fit: cover; }
+        .formation-resource-detail h3 { margin: 10px 0; font-size: 18px; line-height: 1.3; overflow-wrap: anywhere; }
+        .formation-resource-detail p, .formation-resource-detail li { font-size: 14px; line-height: 1.6; }
+        .formation-resource-detail h4 { margin: 18px 0 8px; font: 500 12px "DM Mono", monospace; color: var(--purple-light); }
+        .formation-resource-detail .formation-type { color: var(--purple-light); font: 11px/1.5 "DM Mono", monospace; }
+        .formation-resource-detail .formation-tags { margin-bottom: 12px; }
+        .formation-resource-detail .formation-link { margin: 8px 0; font-size: 12px; }
+        .formation-list-return { display: inline-flex; align-items: center; justify-content: center; min-height: 30px; max-width: 100%; margin-bottom: 6px; padding: 5px 8px; border: 1px solid rgba(152,120,255,.65); border-radius: 4px; background: rgba(112,64,255,.25); color: var(--green); font: 11px/1.4 "DM Mono", monospace; cursor: pointer; transition: background-color .16s, border-color .16s; }
+        .formation-list-return:hover { border-color: var(--green); background: rgba(112,64,255,.5); }
+        .formation-list-return:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+        .formation-loading { flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--purple-light); font: 12px/1.5 "DM Mono", monospace; }
+        .formation-loading::before { content: ""; width: 4px; height: 4px; background: var(--green); box-shadow: 7px 0 var(--purple-light), 14px 0 var(--purple-light); margin-right: 14px; animation: formation-loading-pulse .4s steps(2, end) infinite; }
+        @keyframes formation-loading-pulse { to { opacity: .35; } }
+        .formation-computer[aria-busy="true"] canvas, .formation-computer[aria-busy="true"] .formation-os { visibility: hidden; }
+        .formation-computer-status { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; margin: 0; padding: 24px; text-align: center; color: var(--gray); font: 11px "DM Mono", monospace; pointer-events: none; }
+        .formation-computer-status[hidden] { display: none; }
+        .formation-boot-spinner { position: relative; width: 96px; height: 96px; animation: formation-boot-spin 4s linear infinite; }
+        .formation-boot-star { position: absolute; inset: 0; transform: rotate(var(--angle)); }
+        .formation-boot-star::before { content: ""; position: absolute; top: 2px; left: 39px; width: 18px; height: 18px; background: #7546b8; opacity: .6; clip-path: polygon(50% 0, 61% 35%, 98% 35%, 68% 57%, 79% 94%, 50% 72%, 21% 94%, 32% 57%, 2% 35%, 39% 35%); animation: formation-boot-trail 1.6s ease-in-out infinite; animation-delay: var(--delay); }
+        .formation-boot-star:nth-child(even)::before { background: rgba(255,60,172,.55); }
+        @keyframes formation-boot-spin { to { transform: rotate(360deg); } }
+        @keyframes formation-boot-trail { 0%, 100% { opacity: .12; transform: scale(.6); } 50% { opacity: .6; transform: scale(1.1); } }
+        @media (prefers-reduced-motion: reduce) { .formation-boot-spinner, .formation-boot-star::before { animation: none; } }
+        .formation-back { margin: 16px 0 32px; }
+        .formation-computer[data-render="fallback"] { aspect-ratio: 1.2; animation: none; }
+        .formation-computer[data-render="fallback"] .formation-computer-status { inset: auto 0 1%; }
+        .formation-computer[data-render="fallback"] .formation-os { left: 10%; top: 12%; width: 80%; height: auto; min-height: 72%; padding: 16px; border: 16px solid #d2ccbc; border-radius: 20px; box-shadow: 0 16px 28px rgba(0,0,0,.3); }
+        @keyframes formation-computer-appear { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .formation-section[hidden], .formation-note[hidden] { display: none; }
+        .formation-section { --formation-tone: var(--purple-light); padding: 36px 0; scroll-margin-top: 24px; }
+        .formation-section + .formation-section { border-top: 1px solid var(--dark-gray); }
+        .formation-section[data-kind="instituciones"] { --formation-tone: var(--purple-light); }
+        .formation-section[data-kind="organismos"] { --formation-tone: var(--purple-light); }
+        .formation-section .guide-step-number { color: var(--formation-tone); }
+        .formation-section h2 { margin: 10px 0 22px; font-size: 28px; line-height: 1.15; letter-spacing: 0; }
+        .formation-carousel { display: grid; grid-template-columns: 1.3fr 1fr; align-items: center; column-gap: clamp(30px, 4vw, 56px); row-gap: 8px; }
+        .formation-stage { position: relative; height: clamp(340px, 42vw, 500px); perspective: 1400px; overflow: hidden; cursor: grab; touch-action: pan-y; user-select: none; }
+        .formation-stage.dragging { cursor: grabbing; }
+        .formation-grid { position: absolute; z-index: 1; inset: 0; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 12%, #000 88%, transparent 100%); mask-image: linear-gradient(90deg, transparent 0%, #000 12%, #000 88%, transparent 100%); }
+        .formation-card { position: absolute; top: 50%; left: 50%; width: 56%; margin: calc(-28% * 10 / 16) 0 0 -28%; min-width: 0; aspect-ratio: 16 / 10; padding: 0; overflow: hidden; border: 1px solid color-mix(in srgb, var(--formation-tone) 40%, transparent); border-radius: 14px; background: #101014; color: var(--off-white); cursor: pointer; transition: transform .5s cubic-bezier(.2,.8,.2,1), opacity .42s, filter .42s, box-shadow .42s, border-color .3s; }
+        .formation-stage.dragging .formation-card { transition: none; }
+        .formation-card[aria-pressed="true"] { opacity: 1; border: 2px solid color-mix(in srgb, var(--formation-tone) 72%, white); outline: 2px solid color-mix(in srgb, var(--formation-tone) 64%, transparent); outline-offset: 3px; }
+        .formation-card:hover { opacity: 1; }
+        .formation-card:focus-visible { outline: 2px solid var(--formation-tone); outline-offset: 3px; }
+        .formation-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: var(--photo-position, center); }
+        .formation-card-title { position: absolute; inset: auto 0 0; padding: 20px; background: linear-gradient(transparent, rgba(9, 9, 10, .92)); font-size: 23px; font-weight: 600; text-align: left; line-height: 1.2; }
+        .formation-controls { position: absolute; z-index: 110; inset: 0; pointer-events: none; }
+        .formation-arrow { position: absolute; top: 50%; left: 12px; transform: translateY(-50%); display: grid; place-items: center; width: 42px; height: 42px; padding: 0; border: 1px solid var(--formation-tone); border-radius: 50%; background: rgba(12, 10, 20, .76); backdrop-filter: blur(5px); color: var(--off-white); font-size: 22px; cursor: pointer; pointer-events: auto; }
+        .formation-arrow:last-child { left: auto; right: 12px; }
+        .formation-arrow:disabled { opacity: .3; cursor: default; }
+        .formation-arrow:hover:not(:disabled) { background: var(--formation-tone); color: var(--black); }
+        .formation-arrow:focus-visible { outline: 2px solid var(--formation-tone); outline-offset: 3px; }
+        .formation-counter { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); min-width: 60px; text-align: center; font-family: "DM Mono", monospace; font-size: 12px; color: var(--formation-tone); }
+        .formation-details { padding: 0 0 24px; animation: formation-details-in .3s ease both; }
+        .formation-details h3 { margin: 8px 0 16px; font-size: 32px; line-height: 1.2; overflow-wrap: anywhere; }
+        .formation-details p:not(.formation-type) { max-width: 850px; color: var(--gray); font-size: 17px; line-height: 1.5; }
+        .formation-details h4 { margin: 22px 0 12px; color: var(--formation-tone); font-family: "DM Mono", monospace; font-size: 12px; font-weight: 500; }
+        .formation-offerings { margin: 0 0 20px; padding-left: 20px; color: var(--off-white); font-size: 15px; line-height: 1.6; }
+        .formation-offerings li + li { margin-top: 6px; }
+        @keyframes formation-details-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        @media (prefers-reduced-motion: reduce) { .formation-card, .formation-nav button { transition: none; } .formation-details, .formation-computer, .formation-loading::before { animation: none; } }
+        .formation-type { margin: 0 0 12px; font-family: "DM Mono", monospace; font-size: 11px; color: var(--formation-tone); }
+        .formation-card h3 { margin: 0 0 12px; font-size: 23px; line-height: 1.2; overflow-wrap: anywhere; }
+        .formation-card p:not(.formation-type) { margin: 0 0 18px; color: var(--gray); font-size: 15px; line-height: 1.5; }
+        .formation-tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 22px; padding: 0; list-style: none; }
+        .formation-tags li { padding: 5px 8px; border: 1px solid var(--dark-gray); border-radius: 4px; color: var(--off-white); font-family: "DM Mono", monospace; font-size: 11px; }
+        .formation-link { min-height: 44px; max-width: 100%; padding: 10px 14px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; border: 1px solid rgba(152,120,255,.62); border-radius: 8px; background: linear-gradient(135deg, rgba(112,64,255,.22), rgba(33,22,65,.52)); box-shadow: inset 0 0 10px rgba(152,120,255,.05); color: var(--off-white); font-family: "DM Mono", monospace; font-size: 13px; font-weight: 600; text-decoration: none; transition: background .22s ease, color .22s ease, border-color .22s ease, box-shadow .22s ease, transform .22s ease; }
+        .formation-link:hover, .formation-link:focus-visible { border-color: var(--green); background: var(--green); box-shadow: 0 6px 20px rgba(202,255,25,.18); color: var(--black); transform: translateY(-2px); outline: none; }
+        .formation-link span { font-size: 16px; line-height: 1; transition: transform .2s ease; }
+        .formation-link:hover span, .formation-link:focus-visible span { transform: translate(2px,-2px); }
+        .formation-link:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
+        .formation-os .formation-os-header,
+        .formation-os .formation-home h2,
+        .formation-os .formation-browser-heading h2,
+        .formation-os .formation-resource-detail h4,
+        .formation-os .formation-resource-detail .formation-type,
+        .formation-os .formation-list-return,
+        .formation-os .formation-return,
+        .formation-os .formation-return:hover { color: var(--green); }
+        .formation-os .formation-nav button,
+        .formation-os .formation-nav button:hover,
+        .formation-os .formation-nav button[aria-selected="true"],
+        .formation-os .formation-resource-name,
+        .formation-os .formation-resource-detail h3 { color: var(--off-white); }
+        .formation-note { margin: 0; padding: 24px 0; border-top: 1px solid var(--dark-gray); color: var(--gray); font-family: "DM Mono", monospace; font-size: 12px; line-height: 1.6; }
+        @media (max-width: 800px) {
+            .formation-portal { grid-template-columns: 1fr; gap: 12px; }
+            .formation-computer { width: 100%; }
+            .formation-carousel { grid-template-columns: 1fr; }
+            .formation-stage { height: clamp(300px, 68vw, 420px); }
+            .formation-card { width: 60%; margin: calc(-30% * 10 / 16) 0 0 -30%; }
+        }
+        @media (max-width: 700px) {
+            .formation-page .formation-heading h1 { font-size: 36px; }
+            .formation-heading img { width: 72px; height: 72px; }
+            .formation-intro p { font-size: 18px; }
+            .formation-os { padding: 6px; border-radius: 8px; }
+            .formation-os-header { font-size: 11px; gap: 5px; margin-bottom: 6px; padding-bottom: 4px; }
+            .formation-os-header .formation-os-heart, .formation-return span { display: none; }
+            .formation-home h2 { font-size: 14px; }
+            .formation-home p { font-size: 12px; margin-bottom: 10px; }
+            .formation-nav { gap: 3px; }
+            .formation-nav button { min-height: 42px; font-size: 13px; padding: 7px; gap: 5px; }
+            .formation-browser-heading { flex-direction: column; gap: 2px; }
+            .formation-browser-heading h2 { font-size: 13px; }
+            .formation-resource { padding: 7px; gap: 7px; }
+            .formation-resource img { width: 30px; height: 34px; }
+            .formation-resource span { font-size: 13px; }
+            .formation-card-title { padding: 14px; font-size: 20px; }
+            .formation-details h3 { font-size: 26px; }
+        }
+        @media (max-width: 360px) {
+            .formation-page .guide-header { flex-wrap: wrap; gap: 16px; height: auto; padding: 18px 0; }
+            .formation-heading { flex-wrap: wrap; }
+        }
+    </style>
+</head>
+<body class="guide-page guide-start-page formation-page">
+    <header class="guide-header">
+        <a href="index.html" class="logo" aria-label="Fem Respawn, volver al inicio">
+            <span class="logo-main">Fem</span>
+            <span class="logo-sub">Respawn</span>
+        </a>
+        <a class="guide-back" href="index.html#trabaja">← VOLVER A TRABAJÁ</a>
+    </header>
+
+    <main class="guide-main">
+        <div class="formation-portal">
+        <section class="formation-intro" aria-labelledby="formation-title">
+            <span class="section-label">// 02 / TRABAJÁ / FORMACIÓN</span>
+            <div class="formation-heading">
+                <h1 id="formation-title">Tu próximo nivel empieza acá.</h1>
+            </div>
+            <p>Carreras, cursos y talleres en Argentina para aprender sobre videojuegos, tecnología y disciplinas creativas.</p>
+        </section>
+
+        <figure class="formation-computer" id="formation-computer" aria-label="Computadora retro con el menú de Formación" aria-busy="true">
+        <img class="formation-decoration formation-decoration--holographic" src="holographic star 3d-Photoroom.png" alt="" aria-hidden="true" draggable="false">
+        <img class="formation-decoration formation-decoration--keychain" src="llavero.png" alt="" aria-hidden="true" draggable="false">
+        <img class="formation-decoration formation-decoration--star" src="staar-Photoroom.png" alt="" aria-hidden="true" draggable="false">
+        <canvas id="formation-computer-canvas" aria-hidden="true"></canvas>
+        <div class="formation-os" id="formation-os">
+        <div class="formation-os-header"><span class="formation-os-heart" aria-hidden="true"></span><span>FORMACION.SYS</span><span class="formation-os-led" aria-hidden="true"></span><button type="button" class="formation-return" id="formation-return" aria-label="Volver al menú principal" title="Volver al menú principal" hidden>← <span>MENÚ</span></button></div>
+        <div class="formation-home" id="formation-home">
+        <h2>CENTRO DE FORMACIÓN</h2>
+        <p>Universidades, cursos y espacios para aprender.</p>
+        <nav class="formation-nav" role="tablist" aria-label="Tipos de instituciones de formación">
+            <button type="button" role="tab" id="tab-universidades" aria-controls="universidades" aria-selected="false" data-category="universidades">UNIVERSIDADES</button>
+            <button type="button" role="tab" id="tab-instituciones" aria-controls="instituciones" aria-selected="false" data-category="instituciones">INSTITUCIONES</button>
+            <button type="button" role="tab" id="tab-organismos" aria-controls="organismos" aria-selected="false" data-category="organismos">ORGANISMOS Y ESPACIOS</button>
+        </nav>
+        </div>
+        <div class="formation-loading" id="formation-loading" role="status" hidden></div>
+        <div class="formation-browser" id="formation-browser" hidden>
+            <div class="formation-browser-heading"><h2 id="formation-current" tabindex="-1"></h2><span id="formation-count"></span></div>
+            <div class="formation-panels" id="formation-panels"></div>
+        </div>
+        </div>
+        <div class="formation-computer-status" id="formation-computer-status" role="status">
+            <span class="formation-boot-spinner" aria-hidden="true">
+                <span class="formation-boot-star" style="--angle: 0deg; --delay: 0s;"></span>
+                <span class="formation-boot-star" style="--angle: 45deg; --delay: -.2s;"></span>
+                <span class="formation-boot-star" style="--angle: 90deg; --delay: -.4s;"></span>
+                <span class="formation-boot-star" style="--angle: 135deg; --delay: -.6s;"></span>
+                <span class="formation-boot-star" style="--angle: 180deg; --delay: -.8s;"></span>
+                <span class="formation-boot-star" style="--angle: 225deg; --delay: -1s;"></span>
+                <span class="formation-boot-star" style="--angle: 270deg; --delay: -1.2s;"></span>
+                <span class="formation-boot-star" style="--angle: 315deg; --delay: -1.4s;"></span>
+            </span>
+            <span class="sr-only">Cargando computadora...</span>
+        </div>
+        </figure>
+        </div>
+
+        <section class="formation-section" id="universidades" role="tabpanel" aria-labelledby="tab-universidades" hidden>
+            <span class="guide-step-number">01 / UNIVERSIDADES</span>
+            <h2 id="universities-title">Formación universitaria</h2>
+            <div class="formation-grid">
+                <article class="formation-card">
+                    <p class="formation-type">CURSOS · DIPLOMATURAS</p>
+                    <h3>UBA / Universidad de Buenos Aires</h3>
+                    <p>Diplomatura en Videojuegos con formación en narrativa, diseño de sistemas lúdicos, análisis cultural y producción de proyectos.</p>
+                    <ul class="formation-tags"><li>Videojuegos</li><li>Cultura</li><li>Narrativa</li></ul>
+                    <a class="formation-link" href="https://www.sociales.uba.ar/extension/diplomaturas/videojuegos/" target="_blank" rel="noopener noreferrer" aria-label="Explorar cursos de UBA / Universidad de Buenos Aires, abre en otra pestaña">EXPLORAR CURSOS <span aria-hidden="true">↗</span></a>
+                </article>
+                 <article class="formation-card">
+                    <p class="formation-type">CURSOS · DIPLOMATURAS</p>
+                    <h3>UNC / Universidad Nacional de Córdoba</h3>
+                    <p>Formación práctica en creación de videojuegos con Unity, programación en C#, diseño de interfaces, animación y desarrollo de proyectos propios. Está abierta al público general y no requiere conocimientos previos.</p>
+                    <ul class="formation-tags"><li>C#</li><li>UX/UI</li><li>Animación</li></ul>
+                    <a class="formation-link" href="https://artes.unc.edu.ar/maestria-en-direccion-y-produccion-de-animacion-y-videojuegos/" target="_blank" rel="noopener noreferrer" aria-label="Explorar cursos de UTN Buenos Aires, abre en otra pestaña">EXPLORAR CURSOS <span aria-hidden="true">↗</span></a>
+                </article>
+                <article class="formation-card">
+                    <p class="formation-type">CURSOS · DIPLOMATURAS</p>
+                    <h3>UTN / Universidad Tecnológica Nacional</h3>
+                    <p>El Centro de e-Learning ofrece cursos de diseño y prototipado de videojuegos con Unity, interfaces con Figma y otras disciplinas digitales.</p>
+                    <ul class="formation-tags"><li>Videojuegos</li><li>UX/UI</li><li>Programación</li></ul>
+                    <a class="formation-link" href="https://sceu.frba.utn.edu.ar/e-learning/" target="_blank" rel="noopener noreferrer" aria-label="Explorar cursos de UTN Buenos Aires, abre en otra pestaña">EXPLORAR CURSOS <span aria-hidden="true">↗</span></a>
+                </article>
+                  <article class="formation-card">
+                    <p class="formation-type">CARRERAS · TECNOLOGÍA INFORMÁTICA</p>
+                    <h3>UADE / Universidad Argentina de la Empresa</h3>
+                    <p>Carreras especializadas en desarrollo de videojuegos, con formación en programación, esports, diseño, arte y producción.</p>
+                    <ul class="formation-tags"><li>Programación</li><li>Sistemas</li><li>Tecnología</li></ul>
+                    <a class="formation-link" href="https://www.uade.edu.ar/" target="_blank" rel="noopener noreferrer" aria-label="Explorar formación de la UADE, abre en otra pestaña">EXPLORAR FORMACIÓN <span aria-hidden="true">↗</span></a>
+                </article>
+                <article class="formation-card">
+                    <p class="formation-type">TECNICATURAS · CURSOS</p>
+                    <h3>UNA / Universidad Nacional de las Artes</h3>
+                    <p>Formación en arte digital, interfaces interactivas, nuevas tecnologías y videojuegos alternativos, con un enfoque experimental que cruza arte y tecnología.</p>
+                    <ul class="formation-tags"><li>Arte 2D/3D</li><li>Música</li><li>Animación</li></ul>
+                    <a class="formation-link" href="https://multimedia.una.edu.ar/unidades-academicas" target="_blank" rel="noopener noreferrer" aria-label="Explorar formación de UNA, abre en otra pestaña">EXPLORAR FORMACIÓN <span aria-hidden="true">↗</span></a>
+                </article>
+                  <article class="formation-card">
+                    <p class="formation-type">TECNICATURAS · CURSOS</p>
+                    <h3>UNLAM / Universidad Nacional de La Matanza</h3>
+                    <p>Formación a distancia que integra programación, diseño, arte digital, narrativa y experiencia de usuario para crear videojuegos. Incluye motores de desarrollo, diseño de niveles e inteligencia artificial.</p>
+                    <ul class="formation-tags"><li>Arte digital</li><li>Programación</li><li>Narrativa y Experiencia de Usuario</li></ul>
+                    <a class="formation-link" href="https://www.unlam.edu.ar/" target="_blank" rel="noopener noreferrer" aria-label="Explorar formación de UNLAM, abre en otra pestaña">EXPLORAR FORMACIÓN <span aria-hidden="true">↗</span></a>
+                </article>
+            </div>
+        </section>
+
+        <section class="formation-section" id="instituciones" data-kind="instituciones" role="tabpanel" aria-labelledby="tab-instituciones" hidden>
+            <span class="guide-step-number">02 / INSTITUCIONES</span>
+            <h2 id="institutions-title">Arte, diseño y videojuegos</h2>
+            <div class="formation-grid">
+                <article class="formation-card">
+                    <p class="formation-type">CARRERAS TERCIARIAS</p>
+                    <h3>Escuela Da Vinci</h3>
+                    <p>Carreras de Diseño y Programación de Videojuegos, Cine de Animación y Diseño Multimedial, entre otras propuestas presenciales y a distancia.</p>
+                    <ul class="formation-tags"><li>Videojuegos</li><li>Animación</li><li>Diseño</li></ul>
+                    <a class="formation-link" href="https://davinci.edu.ar/carreras" target="_blank" rel="noopener noreferrer" aria-label="Explorar carreras de Escuela Da Vinci, abre en otra pestaña">EXPLORAR CARRERAS <span aria-hidden="true">↗</span></a>
+                </article>
+                <article class="formation-card">
+                    <p class="formation-type">TECNICATURAS · CURSOS</p>
+                    <h3>Image Campus</h3>
+                    <p>Tecnicaturas y programas profesionales en videojuegos, animación, ilustración, modelado 3D y tecnologías inmersivas.</p>
+                    <ul class="formation-tags"><li>Arte 2D/3D</li><li>Videojuegos</li><li>Animación</li></ul>
+                    <a class="formation-link" href="https://www.imagecampus.edu.ar/" target="_blank" rel="noopener noreferrer" aria-label="Explorar formación de Image Campus, abre en otra pestaña">EXPLORAR FORMACIÓN <span aria-hidden="true">↗</span></a>
+                </article>
+                <article class="formation-card">
+                    <p class="formation-type">TECNICATURAS · CURSOS</p>
+                    <h3>Educación IT</h3>
+                    <p>Ofrece opciones de formación enfocadas en el desarrollo de videojuegos y programación gráfica.</p>
+                    <ul class="formation-tags"><li>Unity</li><li>Programació<nav></nav> y desarrollo</li><li>Animación 3D</li></ul>
+                    <a class="formation-link" href="https://educacionit.com/" target="_blank" rel="noopener noreferrer" aria-label="Explorar formación de Educación IT, abre en otra pestaña">EXPLORAR FORMACIÓN <span aria-hidden="true">↗</span></a>
+                </article>
+            </div>
+        </section>
+
+        <section class="formation-section" id="organismos" data-kind="organismos" role="tabpanel" aria-labelledby="tab-organismos" hidden>
+            <span class="guide-step-number">03 / ORGANISMOS Y ESPACIOS</span>
+            <h2 id="organizations-title">Cursos y talleres para seguir aprendiendo</h2>
+            <div class="formation-grid">
+                <article class="formation-card">
+                    <p class="formation-type">CURSOS · TALLERES · UBA</p>
+                    <h3>Centro Cultural Rojas</h3>
+                    <p>Un espacio de la Universidad de Buenos Aires con cursos de escritura, producción musical, arte, comunicación y herramientas digitales.</p>
+                    <ul class="formation-tags"><li>Escritura</li><li>Música</li><li>Arte y tecnología</li></ul>
+                    <a class="formation-link" href="https://www.rojas.uba.ar/cursos" target="_blank" rel="noopener noreferrer" aria-label="Explorar talleres del Centro Cultural Rojas, abre en otra pestaña">EXPLORAR TALLERES <span aria-hidden="true">↗</span></a>
+                </article>
+                <article class="formation-card">
+                    <p class="formation-type">MICROCURSOS · FORMACIÓN COMPLEMENTARIA</p>
+                    <h3>Educ.ar</h3>
+                    <p>Microcursos autoasistidos de acceso libre sobre herramientas y aplicaciones digitales, junto con propuestas para docentes, directivos y familias.</p>
+                    <ul class="formation-tags"><li>Herramientas digitales</li><li>Educación</li><li>Autoaprendizaje</li></ul>
+                    <a class="formation-link" href="https://www.educ.ar/cursos" target="_blank" rel="noopener noreferrer" aria-label="Explorar cursos de Educ.ar, abre en otra pestaña">EXPLORAR CURSOS <span aria-hidden="true">↗</span></a>
+                </article>
+            </div>
+        </section>
+
+        <p class="formation-note" hidden>Las propuestas, modalidades, aranceles, becas y fechas pueden cambiar. Confirmá los requisitos y la oferta vigente en el sitio oficial de cada institución.</p>
+        <a class="guide-back guide-back-bottom formation-back" href="index.html#trabaja">← VOLVER A TRABAJÁ</a>
+    </main>
+    <script>
+        const formationImages = [
+        
+            { source: 'uba univ.jpg', alt: 'Imagen de formación a distancia de UBA / Universidad de Buenos Aires', type: 'UNIVERSIDAD', offerings: ['Diplomatura en Videojuegos con formación en narrativa, diseño de sistemas lúdicos, análisis cultural y producción de proyectos.'] },
+            { source: 'unc.png', alt: 'Imagen de formación a distancia de UNC / Universidad Nacional de Córdoba', type: 'UNIVERSIDAD', offerings: ['Maestría en Dirección y Producción de Animación y Videojuegos', 'Curso de  Diseño y programación de videojuegos con Unity', 'Diplomatura en Desarrollo de Videojuegos con Unity'] },
+            { source: 'utn.png', alt: 'Imagen de formación a distancia de UTN Buenos Aires', type: 'UNIVERSIDAD', offerings: ['Diseño y prototipado de videojuegos con Unity.', 'Desarrollo de interfaces con Figma.', 'Cursos y diplomaturas en disciplinas digitales.'] },
+            { source: 'uade.png', alt: 'Imagen de tecnología informática de la UADE', type: 'UNIVERSIDAD', offerings: ['Tecnicatura Universitaria en Desarrollo y Producción de Videojuegos.', 'Licenciatura en Desarrollo de Videojuegos.', 'Licenciatura en Deportes Electrónicos.'] },
+            { source: 'una.png', alt: 'Imagen de tecnología informática de la UNA / Universidad Nacional de las Artes', type: 'UNIVERSIDAD', offerings: ['Maestría en Dirección y Producción de Animación y Videojuegos.', 'Diplomatura en Música para Videojuegos.'] },
+            { source: 'unlam.jpg', alt: 'Imagen de tecnología informática de la UNLAM / Universidad Nacional de La Matanza', type: 'UNIVERSIDAD', offerings: ['Tecnicatura en Desarrollo de Videojuegos.', 'Licenciatura en en Animación y Arte Digital'] },
+            { source: 'da vinci.png', alt: 'Imagen de la carrera de videojuegos de Escuela Da Vinci', type: 'INSTITUCIÓN', offerings: ['Diseño y Programación de Videojuegos.', 'Cine de Animación.', 'Diseño Multimedial.'] },
+            { source: 'image.png', alt: 'Encuentro de Unity en el auditorio de Image Campus', type: 'INSTITUCIÓN', offerings: ['Tecnicaturas superiores en videojuegos, arte y animación.', 'Programas profesionales de ilustración y modelado 3D.', 'Formación en tecnologías inmersivas.', 'Programa profesional en Game Audio'] },
+            { source: 'edu it.jpg', alt: 'Imagen de formación de Educación IT', type: 'INSTITUCIÓN', offerings: ['Curso de Programación de Videojuegos en OpenGL', 'Curso de C# y Unity.', 'Bootcamp Game Developer:'] },
+            { source: 'ricardo rojas.jpg', alt: 'Imagen del taller de escritura del Centro Cultural Rojas', type: 'ESPACIO UNIVERSITARIO · UBA', offerings: ['Escritura creativa.', 'Producción musical con Ableton Live.', 'Cursos de arte, comunicación y herramientas digitales.'] },
+            { source: 'educ.ar.jpg', alt: 'Imagen de los microcursos digitales de Educ.ar', type: 'ORGANISMO · FORMACIÓN DIGITAL', offerings: ['Microcursos autoasistidos sobre herramientas y aplicaciones digitales.', 'Cursos para docentes, directivos y familias.'] }
+        ];
+
+        const institutionDetails = new Map();
+        document.querySelectorAll('.formation-card').forEach((article, index) => {
+            const institution = formationImages[index];
+            const card = document.createElement('button');
+            card.type = 'button';
+            card.className = 'formation-resource';
+            const photo = document.createElement('img');
+            photo.className = 'formation-resource-image';
+            photo.src = institution.source;
+            photo.alt = institution.alt;
+            photo.loading = 'lazy';
+            photo.decoding = 'async';
+            card.appendChild(photo);
+            const title = article.querySelector('h3');
+            const caption = document.createElement('span');
+            caption.className = 'formation-resource-name';
+            caption.textContent = title.textContent;
+            card.appendChild(caption);
+            photo.alt = '';
+            const content = document.createElement('div');
+            content.className = 'formation-resource-detail';
+            content.append(...article.childNodes);
+            const type = content.querySelector('.formation-type');
+            type.textContent = institution.type + ' · ' + type.textContent;
+            type.after(title);
+            title.after(photo.cloneNode());
+            const offeringsHeading = document.createElement('h4');
+            offeringsHeading.textContent = 'QUÉ SE IMPARTE';
+            const offerings = document.createElement('ul');
+            offerings.className = 'formation-offerings';
+            institution.offerings.forEach((text) => {
+                const item = document.createElement('li');
+                item.textContent = text;
+                offerings.appendChild(item);
+            });
+            content.querySelector('.formation-link').before(offeringsHeading, offerings);
+            const note = document.querySelector('.formation-note').cloneNode(true);
+            note.hidden = false;
+            content.appendChild(note);
+            institutionDetails.set(card, content);
+            article.replaceWith(card);
+        });
+
+        document.querySelectorAll('.formation-section').forEach((section) => {
+            const track = section.querySelector('.formation-grid');
+            track.className = 'formation-resource-list';
+            document.getElementById('formation-panels').appendChild(section);
+            track.querySelectorAll('.formation-resource').forEach((card) => {
+                const content = institutionDetails.get(card);
+                const back = document.createElement('button');
+                back.type = 'button';
+                back.className = 'formation-list-return';
+                back.textContent = '← VOLVER A LA LISTA';
+                content.prepend(back);
+                const title = content.querySelector('h3');
+                title.tabIndex = -1;
+                card.addEventListener('click', () => {
+                    section.querySelectorAll('.formation-resource-detail').forEach((detail) => detail.remove());
+                    track.hidden = true;
+                    section.appendChild(content);
+                    document.getElementById('formation-panels').scrollTop = 0;
+                    back.focus({ preventScroll: true });
+                });
+                back.addEventListener('click', () => {
+                    content.remove();
+                    track.hidden = false;
+                    document.getElementById('formation-panels').scrollTop = 0;
+                    card.focus();
+                });
+            });
+        });
+
+        const tabs = [...document.querySelectorAll('[data-category]')];
+        const returnButton = document.getElementById('formation-return');
+        const home = document.getElementById('formation-home');
+        const browser = document.getElementById('formation-browser');
+        const loading = document.getElementById('formation-loading');
+        const panels = document.getElementById('formation-panels');
+        const currentTitle = document.getElementById('formation-current');
+        let transitionTimer;
+        function selectCategory(tab) {
+            clearTimeout(transitionTimer);
+            home.hidden = true;
+            browser.hidden = true;
+            loading.hidden = false;
+            loading.textContent = 'ABRIENDO ' + tab.textContent + '...';
+            returnButton.hidden = false;
+            browser.setAttribute('aria-busy', 'true');
+            tabs.forEach((button) => {
+                const selected = button === tab;
+                button.setAttribute('aria-selected', String(selected));
+                const section = document.getElementById(button.dataset.category);
+                section.hidden = true;
+                section.querySelector('.formation-resource-list').hidden = false;
+                section.querySelectorAll('.formation-resource-detail').forEach((detail) => detail.remove());
+            });
+            transitionTimer = setTimeout(() => {
+                const section = document.getElementById(tab.dataset.category);
+                currentTitle.textContent = tab.textContent;
+                document.getElementById('formation-count').textContent = section.querySelectorAll('.formation-resource').length + ' recursos';
+                section.hidden = false;
+                loading.hidden = true;
+                browser.hidden = false;
+                browser.setAttribute('aria-busy', 'false');
+                panels.scrollTop = 0;
+                currentTitle.focus({ preventScroll: true });
+            }, matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 200);
+        }
+        function returnToMenu() {
+            clearTimeout(transitionTimer);
+            const selected = tabs.find((tab) => tab.getAttribute('aria-selected') === 'true') || tabs[0];
+            tabs.forEach((tab) => {
+                tab.setAttribute('aria-selected', 'false');
+                document.getElementById(tab.dataset.category).hidden = true;
+            });
+            loading.hidden = true;
+            browser.hidden = true;
+            browser.setAttribute('aria-busy', 'false');
+            home.hidden = false;
+            home.scrollTop = 0;
+            returnButton.hidden = true;
+            selected.focus({ preventScroll: true });
+        }
+        returnButton.addEventListener('click', returnToMenu);
+        document.getElementById('formation-os').addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && home.hidden) {
+                event.preventDefault();
+                returnToMenu();
+            }
+        });
+        tabs.forEach((tab, index) => {
+            tab.addEventListener('click', () => selectCategory(tab));
+            tab.addEventListener('keydown', (event) => {
+                let next = index;
+                if (event.key === 'ArrowRight') next = (index + 1) % tabs.length;
+                else if (event.key === 'ArrowLeft') next = (index + tabs.length - 1) % tabs.length;
+                else if (event.key === 'Home') next = 0;
+                else if (event.key === 'End') next = tabs.length - 1;
+                else return;
+                event.preventDefault();
+                tabs[next].focus();
+                selectCategory(tabs[next]);
+            });
+        });
+        window.addEventListener('error', (event) => {
+            if (!(event.target instanceof HTMLScriptElement) || event.target.id !== 'formation-computer-script') return;
+            document.getElementById('formation-computer').dataset.render = 'fallback';
+            document.getElementById('formation-computer').setAttribute('aria-busy', 'false');
+            document.getElementById('formation-computer-canvas').hidden = true;
+            document.getElementById('formation-os').removeAttribute('style');
+            const status = document.getElementById('formation-computer-status');
+            status.textContent = 'No se pudo cargar la vista 3D.';
+            status.hidden = false;
+        }, true);
+    </script>
+    <script id="formation-computer-script" src="formation-computer.js" defer></script>
+    <script src="sparkles.js"></script>
+</body>
+</html>
