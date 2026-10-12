@@ -137,8 +137,8 @@
         const items = [
             { img: 'wigar.jpg', tag: '// AGRUPACIÓN', name: 'Women in Games Argentina (WIGAr)', sub: 'Organización que promueve la inclusión de mujeres y disidencias en la industria de los videojuegos.', desc: 'Impulsa talleres, eventos y oportunidades de formación y conexión en el gaming.', links: [{ label: 'SITIO OFICIAL', url: 'https://www.womeningamesargentina.org/' }, { label: 'INSTAGRAM', url: 'https://www.instagram.com/womeningamesargentina/?hl=es' }] },
             { img: 'bichoraro.jpg', tag: '// COOPERATIVA', name: 'Bicho Raro Games', sub: 'Cooperativa argentina de desarrollo de videojuegos fundada por mujeres.', desc: 'Crea juegos educativos y experiencias con narrativas personales y sociales, y también ofrece servicios de desarrollo y capacitación. Ideal para quienes quieren conocer el lado profesional y creativo del gaming.', links: [{ label: 'ITCHI.IO', url: 'https://bicho-raro.itch.io/' }, { label: 'LINKEDIN', url: 'https://www.linkedin.com/company/bichorarocoop' }, { label: 'Instagram', url: 'https://www.instagram.com/bichoraro.games/' }  ] },
-            { img: 'cienciagamer.png', tag: '// INVESTIGACIÓN', name: 'Ciencia Gamer Ok', sub: 'Proyecto de investigación dedeicado a la ciencia y videojuegos.', desc: 'Acerca los conocimientos científicos actuales sobre el uso de videojuegos, encargandose de "traducir" documentos académicos y artículos científicos. ', links: [{ label: 'SITIO OFICIAL', url: 'https://cienciagamer.com/index.html' }, { label: 'INSTAGRAM', url: 'https://www.instagram.com/cienciagamerok/' }, { label: 'LINKEDIN', url: 'https://www.linkedin.com/company/ciencia-gamer/' }] },
-            { img: 'sheroesingames.jpg', tag: '// INICIATIVA', name: 'Sheroes in games', sub: 'Iniciativa de programación de videojuegos para mujeres y niñas.', desc: 'Un proyecto educativo y comunitario que busca reducir la brecha de género en la industria de los videojuegos, fomentando la participación de mujeres y disidencias desde edades temprana.', links: [{ label: 'INSTAGRAM', url: 'https://www.instagram.com/sheroesingames/' }] },
+            { img: 'cienciagamer.png', fit: 'contain', imageBackground: '#fff', tag: '// INVESTIGACIÓN', name: 'Ciencia Gamer Ok', sub: 'Proyecto de investigación dedeicado a la ciencia y videojuegos.', desc: 'Acerca los conocimientos científicos actuales sobre el uso de videojuegos, encargandose de "traducir" documentos académicos y artículos científicos. ', links: [{ label: 'SITIO OFICIAL', url: 'https://cienciagamer.com/index.html' }, { label: 'INSTAGRAM', url: 'https://www.instagram.com/cienciagamerok/' }, { label: 'LINKEDIN', url: 'https://www.linkedin.com/company/ciencia-gamer/' }] },
+            { img: 'sheroes.jpg',  fit: 'contain', imageBackground: '#fff', tag: '// INICIATIVA', name: 'Sheroes in games', sub: 'Iniciativa de programación de videojuegos para mujeres y niñas.', desc: 'Un proyecto educativo y comunitario que busca reducir la brecha de género en la industria de los videojuegos, fomentando la participación de mujeres y disidencias desde edades temprana.', links: [{ label: 'INSTAGRAM', url: 'https://www.instagram.com/sheroesingames/' }] },
         ];
 
         const stage = document.getElementById('stage');
@@ -155,6 +155,8 @@
             const img = s.firstChild;
             img.src = it.img;
             if (it.pos) img.style.objectPosition = it.pos;
+            if (it.fit) img.style.objectFit = it.fit;
+            if (it.imageBackground) img.style.backgroundColor = it.imageBackground;
             img.onerror = () => img.remove();
             slideTrack.appendChild(s);
             s.addEventListener('click', () => { if (!drag?.moved) go(i); });

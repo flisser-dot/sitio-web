@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="theme-color" content="#09090a">
+	<title>Calendario de torneos 2026 | Fem Respawn</title>
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="styles.css">
+
+	<style>
+		.tournament-page {
+			--cal-paper: rgba(9, 9, 10, .68);
+			--cal-white: rgba(18, 18, 21, .76);
+			--cal-ink: var(--off-white);
+			--cal-muted: var(--gray);
+			--cal-rule: rgba(154, 153, 150, .24);
+			--cal-pink: var(--pink);
+			--cal-yellow: var(--green);
+			--cal-blue: #9edcf0;
+		}
+
+		.tournament-page .guide-main { padding: 54px 0 80px; }
+		.tor-intro { display: flex; align-items: end; justify-content: space-between; gap: 32px; margin-bottom: 32px; }
+		.tor-intro-copy { max-width: 780px; }
+		.tor-eyebrow { color: var(--gray); font-family: "DM Mono", monospace; font-size: 12px; }
+		.tor-eyebrow span { color: var(--green); }
+		.tor-title { margin: 18px 0 14px; font-size: 58px; line-height: .98; }
+		.tor-title span { color: var(--green); }
+		.tor-lede { max-width: 660px; margin: 0; color: var(--gray); font-size: 16px; line-height: 1.55; }
+		.tor-period { flex: 0 0 auto; padding: 12px 14px; border: 2px solid rgba(255, 135, 204, .96); border-radius: 999px; color: var(--off-white); font-family: "DM Mono", monospace; font-size: 12px; line-height: 1.6; }
+		.tor-period strong { display: block; color: var(--green); font-size: 14px; font-weight: 500; }
+
+		.tor-controls { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 12px; }
+		.tor-control-group { display: flex; align-items: center; gap: 10px; }
+		.tor-view-switch { display: inline-flex; padding: 4px; border: 1px solid var(--dark-gray); border-radius: 999px; background: rgba(9, 9, 10, .82); }
+		.tor-view-switch:focus-within { border-color: var(--green); }
+		.tor-view-button { min-height: 38px; padding: 0 16px; border: 0; border-radius: 999px; background: transparent; color: var(--off-white); font: 600 14px "Space Grotesk", sans-serif; cursor: pointer; transition: background .2s, color .2s; }
+		.tor-view-button[aria-pressed="true"] { background: var(--green); color: var(--black); }
+		.tor-select-wrap { position: relative; display: inline-grid; min-width: 190px; }
+		.tor-select-wrap--participation, .tor-select-wrap--participation .tor-select { min-width: 310px; }
+		.tor-select { grid-area: 1 / 1; min-height: 46px; min-width: 190px; padding: 0 48px 0 14px; align-items: center; line-height: 1.3; appearance: none; -webkit-appearance: none; border: 1px solid #45364f; border-radius: 12px; background: #17111f; color: var(--off-white); font: 500 14px "Space Grotesk", sans-serif; }
+		.tor-select-wrap::after { content: ""; grid-area: 1 / 1; align-self: center; justify-self: end; width: 8px; height: 8px; margin: -4px 18px 0 0; border-right: 1.5px solid var(--gray); border-bottom: 1.5px solid var(--gray); transform: rotate(45deg); pointer-events: none; }
+		.tor-select-wrap:has(.tor-select:focus-visible)::after, .tor-select-wrap:has(.tor-select:open)::after { border-color: var(--green); }
+		.tor-select:focus-visible { border-color: var(--green); outline: none; }
+		.tor-select:open { border-color: var(--green); }
+		.tor-select option { padding: 8px 14px; background: #17111f; color: var(--off-white); }
+		.tor-select option:checked { background: #b8ff00; color: #17121d; }
+		@supports (appearance: base-select) {
+			.tor-select, .tor-select::picker(select) { appearance: base-select; }
+			.tor-select::picker-icon { display: none; }
+			.tor-select::picker(select) { inline-size: anchor-size(width); min-inline-size: anchor-size(width); max-inline-size: anchor-size(width); max-block-size: 320px; margin-block-start: 8px; padding: 6px; overflow-y: auto; border: 1px solid #45364f; border-radius: 12px; background: #17111f; color: var(--off-white); box-shadow: 0 14px 32px rgba(0, 0, 0, .48); }
+			.tor-select option { min-block-size: 38px; margin-block: 2px; padding: 9px 14px; border-radius: 8px; background: transparent; color: var(--off-white); }
+			.tor-select option:hover:not(:checked) { background: #281f33; color: var(--off-white); }
+			.tor-select option:checked { background: #b8ff00; color: #17121d; }
+		}
+		.tor-view-button:focus-visible, .tor-arrow:focus-visible, .tor-month-select:focus-visible, .tor-event-card:focus-visible, .tor-calendar-event:focus-visible, .tor-international-open:focus-visible { outline: 3px solid var(--green); outline-offset: 3px; }
+
+		.tor-board { overflow: hidden; border: 1px solid var(--cal-rule); border-radius: 8px; background: var(--cal-paper); color: var(--cal-ink); box-shadow: 0 24px 70px rgba(0,0,0,.34); backdrop-filter: blur(8px); }
+		.tor-board-head { min-height: 80px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; gap: 18px; border-bottom: 1px solid var(--cal-rule); }
+		.tor-board-kicker { margin: 0 0 5px; color: var(--cal-muted); font: 500 10px "DM Mono", monospace; letter-spacing: .06em; }
+		.tor-board-title { margin: 0; font-size: 24px; line-height: 1; }
+		.tor-board-tools { display: flex; align-items: center; gap: 12px; }
+		.tor-legend { display: flex; align-items: center; gap: 18px; color: var(--gray); font-size: 12px; }
+		.tor-legend span { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; }
+		.tor-legend i { width: 13px; height: 13px; display: inline-block; border-radius: 50%; }
+		.tor-legend .legend-open { background: var(--cal-blue); }
+		.tor-legend .legend-mixed { background: var(--cal-yellow); }
+		.tor-legend .legend-women { background: var(--cal-pink); }
+		.tor-legend .legend-check { background: var(--purple-light); }
+		.tor-arrows { display: flex; gap: 6px; }
+		.tor-arrow { width: 36px; height: 36px; display: grid; place-items: center; border: 0; border-radius: 50%; background: var(--black); color: var(--off-white); font-size: 21px; line-height: 1; cursor: pointer; transition: background .2s, color .2s, transform .2s; }
+		.tor-arrow:hover:not(:disabled) { transform: scale(1.05); background: var(--green); color: var(--black); }
+		.tor-arrow:disabled { opacity: .3; cursor: not-allowed; }
+
+		.tor-month-rail { display: grid; grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 500px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-color: var(--gray) var(--dark-gray); scrollbar-width: thin; }
+		.tor-month-column { height: 600px; min-height: 0; padding: 0; overflow-y: auto; border-right: 1px solid var(--cal-rule); background: rgba(255, 255, 255, .012); scrollbar-color: var(--gray) var(--dark-gray); scrollbar-width: thin; scroll-snap-align: start; }
+		.tor-month-column:last-child { border-right: 0; }
+		.tor-month-top { position: sticky; top: 0; z-index: 2; margin: 0; padding: 16px; display: flex; align-items: baseline; justify-content: space-between; gap: 12px; border-bottom: 1px solid var(--cal-rule); background: rgba(9, 9, 10, .98); }
+		.tor-month-select { padding: 0; border: 0; background: transparent; color: var(--cal-ink); text-align: left; cursor: pointer; }
+		.tor-month-select span { display: block; color: var(--cal-muted); font: 500 10px "DM Mono", monospace; }
+		.tor-month-select strong { display: block; margin-top: 4px; font-size: 26px; font-weight: 500; }
+		.tor-month-count { color: var(--cal-muted); font: 11px "DM Mono", monospace; white-space: nowrap; }
+		.tor-month-events { padding: 14px 16px 16px; display: grid; align-content: start; gap: 10px; }
+
+		.tor-event-card { width: 100%; min-height: 98px; padding: 12px; display: grid; grid-template-columns: 46px minmax(0, 1fr); gap: 12px; border: 1px solid rgba(154, 153, 150, .16); border-top: 1px solid var(--event-color, var(--cal-blue)); border-left: 4px solid var(--event-color, var(--cal-blue)); border-radius: 5px; background: var(--cal-white); color: var(--cal-ink); text-align: left; cursor: pointer; transition: border-color .18s, background-color .18s, transform .18s; }
+		.tor-event-card:hover, .tor-event-card[aria-pressed="true"] { border-color: var(--event-color, var(--green)); background: rgba(255, 255, 255, .045); transform: translateY(-3px); }
+		.tor-event-date { align-self: start; display: grid; justify-items: center; padding: 5px 2px; border-right: 1px solid var(--cal-rule); }
+		.tor-event-date strong { font-size: 24px; line-height: 1; font-weight: 600; }
+		.tor-event-date span { margin-top: 4px; color: var(--cal-muted); font: 9px "DM Mono", monospace; text-transform: uppercase; }
+		.tor-event-body { min-width: 0; }
+		.tor-event-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 6px; }
+		.tor-tag { padding: 3px 6px; border-radius: 3px; background: rgba(255, 255, 255, .07); color: var(--off-white); font: 9px "DM Mono", monospace; line-height: 1.2; text-transform: uppercase; }
+		.tor-tag.status-confirmed, .tor-tag.participation-mixed { background: rgba(202, 255, 25, .12); color: var(--green); }
+		.tor-tag.status-open, .tor-tag.participation-open { background: rgba(158, 220, 240, .12); color: var(--cal-blue); }
+		.tor-tag.status-closed { background: rgba(255, 255, 255, .1); color: var(--off-white); }
+		.tor-tag.status-pending, .tor-tag.participation-verify { background: rgba(152, 120, 255, .14); color: #c7b6ff; }
+		.tor-tag.participation-women { background: rgba(255, 60, 172, .13); color: #ff83ce; }
+		.tor-event-name { display: block; margin: 0; font-size: 16px; line-height: 1.15; font-weight: 600; }
+		.tor-event-game { display: block; margin-top: 6px; color: #686963; font-size: 11px; line-height: 1.35; }
+		.tor-event-phase { display: block; margin-top: 7px; color: #c7b6ff; font: 9px "DM Mono", monospace; line-height: 1.4; text-transform: uppercase; }
+		.tor-event-quick { margin-top: 9px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 12px; color: var(--gray); font-size: 10px; line-height: 1.35; }
+		.tor-event-quick span { min-width: 0; overflow-wrap: anywhere; }
+		.tor-event-quick strong { display: block; margin-bottom: 2px; color: #d6d4cc; font: 9px "DM Mono", monospace; text-transform: uppercase; }
+		.tor-no-events { padding: 22px 14px; border: 1px dashed var(--cal-rule); color: var(--cal-muted); font-size: 13px; line-height: 1.45; }
+		.tor-rail-empty { padding: 26px; color: var(--cal-muted); font-size: 14px; }
+
+		.tor-month-view { padding: 18px; }
+		.tor-calendar-scroll { overflow-x: auto; }
+		.tor-calendar { min-width: 700px; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); border-top: 1px solid var(--cal-rule); border-left: 1px solid var(--cal-rule); }
+		.tor-weekday { min-height: 38px; padding: 10px 8px; border-right: 1px solid var(--cal-rule); border-bottom: 1px solid var(--cal-rule); color: var(--cal-muted); font: 10px "DM Mono", monospace; text-align: center; text-transform: uppercase; }
+		.tor-day-cell { min-height: 108px; padding: 8px; border-right: 1px solid var(--cal-rule); border-bottom: 1px solid var(--cal-rule); background: rgba(255, 255, 255, .018); }
+		.tor-day-cell.is-outside { background: rgba(255, 255, 255, .008); color: #696a65; }
+		.tor-day-number { width: 24px; height: 24px; display: grid; place-items: center; border-radius: 50%; font-size: 12px; }
+		.tor-day-cell.is-today .tor-day-number { background: var(--green); color: var(--black); }
+		.tor-day-events { display: grid; gap: 4px; margin-top: 5px; }
+		.tor-calendar-event { width: 100%; padding: 5px 6px; overflow: hidden; border: 0; border-left: 3px solid var(--event-color, var(--cal-blue)); border-radius: 3px; background: rgba(255, 255, 255, .055); color: var(--off-white); font: 10px "Space Grotesk", sans-serif; text-align: left; text-overflow: ellipsis; white-space: nowrap; cursor: pointer; }
+		.tor-calendar-event:hover, .tor-calendar-event[aria-pressed="true"] { background: rgba(255, 255, 255, .12); }
+		.tor-calendar-event.participation-open { --event-color: var(--cal-blue); }
+		.tor-calendar-event.participation-mixed { --event-color: var(--cal-yellow); }
+		.tor-calendar-event.participation-women { --event-color: var(--cal-pink); }
+		.tor-calendar-event.participation-verify { --event-color: var(--purple-light); }
+
+		.tor-event-dialog { --dialog-accent: var(--purple-light); position: fixed; inset: 0; width: min(940px, calc(100% - 32px)); max-width: none; max-height: min(88vh, 900px); margin: auto; padding: 0; overflow: auto; border: 1px solid rgba(154, 153, 150, .32); border-top: 3px solid var(--dialog-accent); border-radius: 8px; background: rgba(9, 9, 10, .97); color: var(--off-white); box-shadow: 0 24px 100px rgba(0, 0, 0, .68); }
+		.tor-event-dialog[data-participation="open"] { --dialog-accent: var(--cal-blue); }
+		.tor-event-dialog[data-participation="mixed"] { --dialog-accent: var(--green); }
+		.tor-event-dialog[data-participation="women"] { --dialog-accent: var(--pink); }
+		.tor-event-dialog[data-participation="verify"] { --dialog-accent: var(--purple-light); }
+		.tor-event-dialog::backdrop { background: rgba(0, 0, 0, .72); backdrop-filter: blur(5px); }
+		.tor-dialog-head { min-height: 58px; padding: 10px 16px 10px 22px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--cal-rule); }
+		.tor-dialog-label { margin: 0; color: var(--dialog-accent); font: 10px "DM Mono", monospace; text-transform: uppercase; }
+		.tor-dialog-close { width: 36px; height: 36px; display: grid; place-items: center; border: 1px solid var(--dialog-accent); border-radius: 50%; background: transparent; color: var(--off-white); font-size: 22px; line-height: 1; cursor: pointer; }
+		.tor-dialog-close:hover, .tor-dialog-close:focus-visible { border-color: var(--green); background: var(--green); color: var(--black); outline: none; }
+		.tor-dialog-content { padding: 22px; display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(220px, .8fr); gap: 24px; }
+		.tor-detail-kicker { margin: 0 0 6px; color: var(--dialog-accent); font: 10px "DM Mono", monospace; text-transform: uppercase; }
+		.tor-detail-title { margin: 0 0 8px; font-size: 22px; line-height: 1.15; }
+		.tor-detail-copy { max-width: 700px; margin: 0; color: var(--gray); font-size: 13px; line-height: 1.5; }
+		.tor-detail-meta { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 12px; }
+		.tor-detail-meta span { padding: 5px 8px; border: 1px solid var(--cal-rule); border-radius: 999px; color: var(--off-white); font-size: 11px; }
+		.tor-detail-facts { margin-top: 18px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 18px; }
+		.tor-detail-field { min-width: 0; padding: 9px 0; border-top: 1px solid var(--cal-rule); }
+		.tor-detail-field dt { margin-bottom: 4px; color: var(--cal-muted); font: 9px "DM Mono", monospace; text-transform: uppercase; }
+		.tor-detail-field dd { margin: 0; color: var(--off-white); font-size: 12px; line-height: 1.4; overflow-wrap: anywhere; }
+		.tor-source-list a, .tor-detail-field a { min-height: 44px; padding: 10px 14px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; border: 1px solid rgba(152, 120, 255, .62); border-radius: 8px; background: linear-gradient(135deg, rgba(112, 64, 255, .22), rgba(33, 22, 65, .52)); box-shadow: inset 0 0 10px rgba(152, 100, 255, .05); color: var(--off-white); font: 600 12px "DM Mono", monospace; line-height: 1.35; text-decoration: none; transition: background .12s ease, color .12s ease, border-color .12s ease, box-shadow .12s ease, transform .12s ease; }
+		.tor-detail-stages { display: grid; gap: 5px; }
+		.tor-detail-stages span { display: block; }
+		.tor-source-list { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 8px; }
+		.tor-source-list > span { color: var(--purple-light); font: 700 10px "DM Mono", monospace; text-shadow: 0 0 8px rgba(152, 120, 255, .42); text-transform: uppercase; }
+		.tor-source-list a { width: 100%; justify-content: flex-start; overflow-wrap: anywhere; }
+		.tor-source-list a:hover, .tor-source-list a:focus-visible, .tor-detail-field a:hover, .tor-detail-field a:focus-visible { border-color: var(--green); background: var(--green); box-shadow: 0 6px 20px rgba(202, 255, 25, .18); color: var(--black); transform: translateY(-2px); outline: none; }
+		.tor-source-list a:focus-visible, .tor-detail-field a:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
+
+		.tor-note { margin-top: 16px; padding: 18px 20px; display: grid; grid-template-columns: auto 1fr; align-items: start; gap: 14px; border: 1px solid rgba(202,255,25,.25); background: rgba(202,255,25,.045); }
+		.tor-note-mark { width: 28px; height: 28px; display: grid; place-items: center; border: 1px solid var(--green); border-radius: 50%; color: var(--green); font: 500 14px "DM Mono", monospace; }
+		.tor-note h2 { margin: 0 0 5px; font-size: 16px; }
+		.tor-note p { max-width: 900px; margin: 0; color: var(--gray); font-size: 13px; line-height: 1.5; }
+		.tor-note strong { color: var(--off-white); }
+		.tor-method-note { margin: 18px 0 0; color: #767570; font-size: 11px; line-height: 1.5; }
+		.tor-empty-filter { padding: 34px 18px; color: var(--cal-muted); text-align: center; }
+		.tor-empty-filter strong { display: block; margin-bottom: 7px; color: var(--off-white); font-size: 18px; }
+		.tor-international { margin-top: 18px; padding: 20px; display: grid; grid-template-columns: 112px minmax(0, 1fr) auto; align-items: center; gap: 22px; border: 1px solid rgba(154, 153, 150, .2); border-top-color: var(--green); border-radius: 5px; background: rgba(255, 255, 255, .025); }
+		.tor-international-date { padding-right: 18px; border-right: 1px solid var(--dark-gray); font-family: "DM Mono", monospace; }
+		.tor-international-date span { display: block; color: var(--gray); font-size: 9px; }
+		.tor-international-date strong { display: block; margin: 5px 0 2px; color: var(--green); font: 500 29px "Space Grotesk", sans-serif; line-height: 1; }
+		.tor-international-copy .tor-eyebrow { margin: 0 0 7px; }
+		.tor-international-copy h2 { margin: 0 0 6px; font-size: 22px; }
+		.tor-international-copy p:last-child { max-width: 760px; margin: 0; color: var(--gray); font-size: 13px; line-height: 1.5; }
+		.tor-international-link { padding: 10px 0; color: var(--off-white); font: 10px "DM Mono", monospace; text-decoration-color: var(--green); text-underline-offset: 5px; white-space: nowrap; }
+		.tor-international-link:hover, .tor-international-link:focus-visible { color: var(--green); }
+		.tor-international-actions { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+		.tor-international-open { padding: 0; border: 0; background: transparent; color: var(--off-white); font: 10px "DM Mono", monospace; text-decoration: underline; text-decoration-color: var(--green); text-underline-offset: 5px; cursor: pointer; }
+		.tor-international-open:hover, .tor-international-open[aria-pressed="true"] { color: var(--green); }
+		[hidden] { display: none !important; }
+
+		@media (max-width: 850px) {
+			.tor-intro { align-items: start; flex-direction: column; gap: 18px; }
+			.tor-controls { align-items: stretch; flex-direction: column; }
+			.tor-control-group { flex-wrap: wrap; }
+			.tor-legend { display: none; }
+			.tor-month-rail { grid-template-columns: none; grid-auto-columns: 82vw; }
+			.tor-dialog-content { grid-template-columns: 1fr; gap: 18px; }
+			.tor-source-list { padding-top: 14px; border-top: 1px solid var(--cal-rule); }
+		}
+
+		@media (max-width: 600px) {
+			.tournament-page .guide-main { padding-top: 36px; }
+			.tor-title { max-width: 450px; font-size: 42px; }
+			.tor-lede { font-size: 14px; }
+			.tor-controls { gap: 10px; }
+			.tor-control-group { align-items: stretch; flex-direction: column; }
+			.tor-view-switch { width: max-content; }
+			.tor-select { width: 100%; }
+			.tor-select-wrap--participation, .tor-select-wrap--participation .tor-select { width: 100%; min-width: 0; }
+			.tor-select-wrap--participation .tor-select { padding-right: 32px; }
+			.tor-select-wrap--participation::after { margin-right: 14px; }
+			.tor-board-head { min-height: 72px; padding: 13px; }
+			.tor-board-title { font-size: 19px; }
+			.tor-board-tools { gap: 8px; }
+			.tor-legend { display: none; }
+			.tor-month-rail { grid-template-columns: none; grid-auto-columns: 88vw; }
+			.tor-month-column { height: 340px; min-height: 0; padding: 0; }
+			.tor-month-top { padding: 12px; }
+			.tor-month-events { padding: 12px; }
+			.tor-month-view { padding: 10px; }
+			.tor-day-cell { min-height: 82px; padding: 5px; }
+			.tor-calendar-event { padding: 4px; font-size: 9px; }
+			.tor-dialog-content { padding: 16px; }
+			.tor-detail-title { font-size: 19px; }
+			.tor-note { padding: 14px; }
+			.tor-international-actions { grid-column: 2; }
+			.tor-detail-facts { grid-template-columns: 1fr; }
+			.tor-international { grid-template-columns: 76px minmax(0, 1fr); gap: 14px; padding: 15px; }
+			.tor-international-date { padding-right: 10px; }
+			.tor-international-link { grid-column: 2; justify-self: start; }
+		}
+
+		@media (max-width: 360px) {
+			.tor-select-wrap--participation .tor-select { padding-right: 28px; }
+			.tor-select-wrap--participation::after { margin-right: 12px; }
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			.tor-view-button, .tor-arrow, .tor-event-card { transition: none; }
+		}
+	</style>
+</head>
+
+<body class="guide-page tournament-page">
+	<header class="guide-header">
+		<a href="index.html" class="logo" aria-label="Fem Respawn, volver al inicio">
+			<span class="logo-main">Fem</span>
+			<span class="logo-sub">Respawn</span>
+		</a>
+		<a class="guide-back" href="index.html#competi">← VOLVER A COMPETÍ</a>
+	</header>
+
+	<main class="guide-main">
+		<section class="tor-intro" aria-labelledby="tor-title">
+			<div class="tor-intro-copy">
+				<div class="tor-eyebrow"><span>//</span> COMPETÍ · CALENDARIO ARGENTINO</div>
+				<h1 class="tor-title" id="tor-title">Fechas para <span>competir</span></h1>
+				<p class="tor-lede"> Explorá los torneos y convocatorias de esports disponibles. Encontrá próximas competencias, descubrí cómo participar y consultá las condiciones de cada evento antes de anotarte.</p>
+			</div>
+			<div class="tor-period"><strong>ARGENTINA / 2026</strong>SEPTIEMBRE — DICIEMBRE</div>
+		</section>
+
+		<section aria-label="Calendario de torneos">
+			<div class="tor-controls">
+				<div class="tor-control-group">
+					<div class="tor-view-switch" role="group" aria-label="Modo de calendario">
+						<button class="tor-view-button" type="button" data-view="day" aria-pressed="true">Vista mensual</button>
+						<button class="tor-view-button" type="button" data-view="month" aria-pressed="false">Vista diaria</button>
+					</div>
+					<span class="tor-select-wrap">
+						<select class="tor-select" id="game-filter" aria-label="Filtrar por juego">
+							<option value="all">Todos los juegos</option>
+							<option value="Counter-Strike 2">Counter-Strike 2</option>
+							<option value="EA SPORTS FC">EA SPORTS FC</option>
+							<option value="Clash Royale">Clash Royale</option>
+							<option value="Fortnite">Fortnite</option>
+							<option value="Mortal Kombat 11">Mortal Kombat 11</option>
+							<option value="League of Legends">League of Legends</option>
+						</select>
+					</span>
+					<span class="tor-select-wrap tor-select-wrap--participation">
+						<select class="tor-select" id="participation-filter" aria-label="Filtrar por participación">
+							<option value="all">Todos los tipos de participación</option>
+							<option value="mixed">Mixto</option>
+							<option value="women">Exclusivamente Femenino</option>
+							<option value="verify">Por verificar</option>
+						</select>
+					</span>
+				</div>
+			</div>
+
+			<div class="tor-board">
+				<div class="tor-board-head">
+					<div>
+						<p class="tor-board-kicker">AGENDA COMPETITIVA / AR</p>
+						<h2 class="tor-board-title" id="board-title">Septiembre — diciembre 2026</h2>
+					</div>
+					<div class="tor-board-tools">
+						<div class="tor-legend" aria-label="Leyenda de formatos">
+							<span><i class="legend-mixed"></i>Mixto </span>
+							<span><i class="legend-women"></i> Exclusivamente Femenino</span>
+							<span><i class="legend-check"></i>Por verificar</span>
+						</div>
+						<div class="tor-arrows">
+							<button class="tor-arrow" id="month-prev" type="button" aria-label="Mes anterior">‹</button>
+							<button class="tor-arrow" id="month-next" type="button" aria-label="Mes siguiente">›</button>
+						</div>
+					</div>
+				</div>
+				<div class="tor-month-rail" id="day-view" aria-label="Torneos organizados por mes"></div>
+				<div class="tor-month-view" id="month-view" hidden></div>
+				<dialog class="tor-event-dialog" id="event-detail" aria-labelledby="event-dialog-label">
+					<div class="tor-dialog-head">
+						<h2 class="tor-dialog-label" id="event-dialog-label">Ficha de competencia</h2>
+						<button class="tor-dialog-close" id="event-dialog-close" type="button" aria-label="Cerrar ficha">×</button>
+					</div>
+					<div class="tor-dialog-content" id="event-dialog-content"></div>
+				</dialog>
+			</div>
+		</section>
+
+		<aside class="tor-international" aria-labelledby="enc-title">
+			<div class="tor-international-date"><span>PRÓXIMA EDICIÓN</span><strong>NOV</strong><span>2027</span></div>
+			<div class="tor-international-copy">
+				<p class="tor-eyebrow"><span>//</span> SEGUIMIENTO INTERNACIONAL</p>
+				<h2 id="enc-title">Esports Nations Cup</h2>
+				<p>Competencia mundial bienal de selecciones nacionales. La edición inaugural se pospuso a noviembre de 2027 y está anunciada para Riad, Arabia Saudita. Los días exactos, los juegos y el calendario de clasificación todavía no fueron publicados.</p>
+			</div>
+			<div class="tor-international-actions">
+				<a class="tor-international-link" href="https://esportsnationscup.com/en/press-releases/ef-postpones-enc-to-november-2027" target="_blank" rel="noopener noreferrer">COMUNICADO OFICIAL ↗</a>
+				<button class="tor-international-open" type="button" data-event-id="enc-2027" aria-pressed="false">ABRIR FICHA COMPLETA</button>
+			</div>
+		</aside>
+
+		<a class="guide-back guide-back-bottom" href="index.html#competi">← VOLVER A COMPETÍ</a>
+	</main>
+
+	<script>
+		const tournamentEvents = [
+			{
+				id: 'firesports',
+				title: 'FiReSPORTS Last Chance 2026',
+				shortTitle: 'FiReSPORTS',
+				start: '2026-10-29',
+				end: '2026-11-01',
+				range: '29 oct — 1 nov',
+				status: 'Inscripción anunciada; verificar si quedan cupos',
+				statusType: 'confirmed',
+				participation: 'Sí, con equipo.',
+				participationType: 'verify',
+				modality: 'Presencial (LAN)',
+				age: 'No especificada',
+				genderRequirements: 'Competencia profesional abierta a equipos de distintos géneros, según las condiciones publicadas; sin categoría femenina anunciada',
+				residency: 'Internacional: equipos de distintas regiones VRS',
+				competitionFormat: '16 equipos; grupos y playoffs',
+				teamSize: 'Por confirmar en las reglas oficiales',
+				deadline: '1 de Noviembre',
+				registration: [
+                    { label: "SITIO OFICIAL", url: "https://firesports.gg/" }
+                ],
+				bases: 'Por confirmar',
+				games: ['Counter-Strike 2'],
+				venue: 'Buenos Aires, Argentina',
+				description: 'Torneo profesional de CS2. La información consultada anuncia una bolsa de premios de US$75.000; no se pudo confirmar una categoría femenina específica para esta edición.',
+				sources: [
+					{ label: 'Visit Esports · calendario Argentina', url: 'https://visitesports.com/locations/ar' },
+					{ label: 'EGamersWorld · calendario de CS2', url: 'https://es.egamersworld.com/counterstrike/events/region/ar' }
+				],
+				markers: [
+					{ date: '2026-10-29', label: 'Comienza · FiReSPORTS' },
+					{ date: '2026-11-01', label: 'Finaliza · FiReSPORTS' }
+				]
+			},
+			{
+				id: 'evita',
+				title: 'Juegos Deportivos Nacionales Evita 2026',
+				shortTitle: 'Juegos Evita',
+				start: '2026-11-02',
+				end: '2026-11-07',
+				range: '2 — 7 nov',
+				status: 'Fecha confirmada',
+				statusType: 'confirmed',
+				participation: 'Mixto confirmado',
+				participationType: 'mixed',
+				modality: 'Por confirmar',
+				age: 'Sub-17',
+				genderRequirements: 'Mixto confirmado',
+				residency: 'Requiere participar en el proceso clasificatorio de tu provincia',
+				competitionFormat: 'Individual',
+				teamSize: 'Individual (1 participante).',
+				deadline: 'Consultar con la organización deportiva provincial',
+				registration: 'A través del proceso clasificatorio provincial',
+				bases:  [
+					{ label: 'Documentación oficial de los Juegos Evita', url: 'https://www.argentina.gob.ar/juegosevita/juegos-deportivos-nacionales-evita-documentacion' }
+				],
+				games: ['EA SPORTS FC 26', 'Clash Royale'],
+				venue: 'Mar del Plata, Buenos Aires',
+				description: 'Competencia individual y mixta, categoría Sub-17. Cada provincia podrá clasificar representantes por juego.',
+				sources: [
+					{ label: '3200 · De las pantallas a los Juegos Evita', url: 'https://3200.ar/de-las-pantallas-a-los-juegos-evita/' }
+				],
+				markers: [
+					{ date: '2026-11-02', label: 'Comienzan · Juegos Evita' },
+					{ date: '2026-11-07', label: 'Finalizan · Juegos Evita' }
+				]
+			},
+			{
+				id: 'zingaro-cs2',
+				title: 'CS2 · Zíngaro Gaming Fest 2026',
+				shortTitle: 'Zíngaro · CS2',
+				start: '2026-09-26',
+				end: '2026-11-07',
+				range: '26 sep — 7 nov',
+				status: 'Fecha confirmada',
+				statusType: 'confirmed',
+				participation: 'Abierto a jugadores de todos los niveles; requiere equipo.',
+				participationType: 'mixed',
+				modality: 'Online por FACEIT; semifinales y finales presenciales.',
+				age: 'No especificada en el reglamento compartido.',
+				genderRequirements: 'No se indican restricciones de género en el reglamento compartido.',
+				residency: 'No especificada en el reglamento compartido.',
+				competitionFormat: 'Fase de grupos todos contra todos (BO1); playoffs de eliminación directa. Semifinales y finales BO3.',
+				teamSize: '5 titulares y hasta 2 suplentes. Cada equipo designa un capitán.',
+				deadline: 'No especificada; consultar con la organización.',
+				registration: 'Formulario oficial y entrada al festival para cada titular y suplente; sin costo adicional de inscripción al torneo.',
+				bases: 'Consultar el reglamento oficial de Counter-Strike 2 de Zíngaro Gaming.',
+				prizes: 'Pozo total: $1.500.000. Copa de Oro: $600.000 al primer puesto y $400.000 al segundo. Copa de Plata: $300.000 al primer puesto y $200.000 al segundo.',
+				equipment: 'Por confirmar en el reglamento.',
+				games: ['Counter-Strike 2'],
+				venue: 'Complejo La Aventura, Posadas, Misiones.',
+				description: 'Torneo de CS2 dentro del Zíngaro Gaming Fest 2026. La fase de grupos se juega por FACEIT y continúa con Copas de Oro y Plata.',
+				sources: [{ label: 'Zíngaro Gaming Fest · sitio oficial', url: 'https://info.zingarogaming.com.ar/' }],
+				markers: [
+					{ date: '2026-09-26', label: 'Fase de grupos · inicio online' },
+					{ date: '2026-10-10', label: 'Fase de grupos · cierre online' },
+					{ date: '2026-10-31', label: 'Semifinales · Copa de Plata' },
+					{ date: '2026-11-01', label: 'Semifinales · Copa de Oro' },
+					{ date: '2026-11-07', label: 'Finales presenciales · Copas de Oro y Plata' }
+				]
+			},
+			{
+				id: 'zingaro-fortnite',
+				title: 'Fortnite Realistic 2 vs. 2 · Zíngaro Gaming Fest 2026',
+				shortTitle: 'Zíngaro · Fortnite',
+				start: '2026-10-25',
+				end: '2026-11-07',
+				range: '25 oct — 7 nov',
+				status: 'Fecha confirmada',
+				statusType: 'confirmed',
+				participation: 'Abierto a jugadores de todos los niveles; requiere dupla.',
+				participationType: 'mixed',
+				modality: '100 % presencial · Realistic 2 vs. 2.',
+				age: 'No especificada en el reglamento compartido.',
+				genderRequirements: 'No se indican restricciones de género en el reglamento compartido.',
+				residency: 'No especificada en el reglamento compartido.',
+				competitionFormat: 'Fase de grupos y playoffs. Las cuatro mejores duplas avanzan a semifinales; final BO3.',
+				teamSize: '2 jugadores por dupla. No se puede participar en más de una dupla.',
+				deadline: 'No especificada en el reglamento; consultar con la organización.',
+				registration: 'Cada integrante necesita entrada al festival y la dupla debe completar el formulario oficial.',
+				bases: 'Consultar el reglamento oficial de Fortnite Realistic 2 vs. 2 de Zíngaro Gaming.',
+				prizes: 'Pozo total: $600.000 por dupla. Primer puesto: $400.000; segundo puesto: $200.000. Pago por transferencia desde 7 días después del festival.',
+				equipment: 'La organización provee PC y monitores. Se permite teclado y mouse o mando propios, auriculares y mousepad.',
+				games: ['Fortnite'],
+				venue: 'Complejo La Aventura, Posadas, Misiones.',
+				description: 'Torneo presencial Realistic 2 vs. 2 dentro del Zíngaro Gaming Fest 2026.',
+				sources: [{ label: 'Zíngaro Gaming Fest · sitio oficial', url: 'https://info.zingarogaming.com.ar/' }],
+				markers: [
+					{ date: '2026-10-25', label: 'Clasificatoria y playoffs presenciales' },
+					{ date: '2026-11-07', label: 'Semifinales y gran final presenciales' }
+				]
+			},
+			{
+				id: 'zingaro-mk11',
+				title: 'Mortal Kombat 11 · Zíngaro Gaming Fest 2026',
+				shortTitle: 'Zíngaro · MK11',
+				start: '2026-11-07',
+				end: '2026-11-07',
+				range: '7 nov',
+				status: 'Fecha confirmada',
+				statusType: 'confirmed',
+				participation: 'Inscripción incluida con la entrada general del festival.',
+				participationType: 'mixed',
+				modality: 'Presencial · PC, PlayStation 4 y PlayStation 5.',
+				age: 'No especificada en el reglamento compartido.',
+				genderRequirements: 'No especificada en el reglamento compartido.',
+				residency: 'No especificada en el reglamento compartido.',
+				competitionFormat: 'Doble eliminación. Rondas eliminatorias BO3 y finales BO5.',
+				teamSize: 'Individual · 1 participante.',
+				deadline: 'No especificada; consultar con la organización.',
+				registration: 'Incluida con la entrada general del festival; consultar formulario y registro con la organización.',
+				bases: 'Consultar el reglamento oficial de Mortal Kombat 11 de Zíngaro Gaming.',
+				prizes: 'Pozo anunciado: $600.000 ARS. Distribución por puesto no especificada en el reglamento compartido.',
+				equipment: 'PC, PlayStation 4 y PlayStation 5; configuración detallada en el reglamento.',
+				rules: '90 segundos por ronda; se requieren dos rondas ganadas. Variaciones oficiales de torneo y personalizadas según reglamento.',
+				games: ['Mortal Kombat 11'],
+				venue: 'Complejo La Aventura, Posadas, Misiones.',
+				description: 'Torneo presencial de doble eliminación en el Zíngaro Gaming Fest 2026.',
+				sources: [{ label: 'Zíngaro Gaming Fest · sitio oficial', url: 'https://info.zingarogaming.com.ar/' }],
+				markers: [
+					{ date: '2026-11-07', label: 'Check-in · 13:00' },
+					{ date: '2026-11-07', label: 'Inicio del torneo · 13:30' },
+					{ date: '2026-11-07', label: 'Finales en escenario gamer · 17:00' }
+				]
+			},
+			{
+				id: 'zingaro-eafc26',
+				title: 'EA SPORTS FC 26 · Zíngaro Gaming Fest 2026',
+				shortTitle: 'Zíngaro · FC 26',
+				start: '2026-10-18',
+				end: '2026-11-07',
+				range: '18 oct — 7 nov',
+				status: 'Fecha confirmada',
+				statusType: 'confirmed',
+				participation: 'Competencia individual; requiere formulario y entrada al festival.',
+				participationType: 'mixed',
+				modality: 'Presencial · 1 vs. 1 · PC · mandos DualSense provistos.',
+				age: 'No especificada en el reglamento compartido.',
+				genderRequirements: 'No se indican restricciones de género en el reglamento compartido.',
+				residency: 'No especificada en el reglamento compartido.',
+				competitionFormat: 'Clasificación; los cuatro mejores avanzan a semifinales y final. Partido único, dos tiempos de 4 minutos; empate: tiempo extra y penales.',
+				teamSize: 'Individual · 1 jugador por participante.',
+				deadline: 'No especificada en el reglamento; consultar con la organización.',
+				registration: 'Formulario oficial y entrada válida al festival; sin costo adicional de inscripción al torneo.',
+				bases: 'Consultar el reglamento oficial de EA SPORTS FC 26 de Zíngaro Gaming.',
+				prizes: 'Pozo total: $500.000 ARS. Primer puesto: $300.000; segundo puesto: $200.000. Pago por transferencia desde 7 días después del festival.',
+				equipment: 'La organización provee PC, monitores, cuentas y mandos DualSense. No se permiten Ultimate Team, plantillas modificadas ni contenido que otorgue ventajas.',
+				games: ['EA SPORTS FC 26'],
+				venue: 'Complejo La Aventura, Posadas, Misiones.',
+				description: 'Torneo presencial individual de EA SPORTS FC 26 dentro del Zíngaro Gaming Fest 2026.',
+				sources: [{ label: 'Zíngaro Gaming Fest · sitio oficial', url: 'https://info.zingarogaming.com.ar/' }],
+				markers: [
+					{ date: '2026-10-18', label: 'Clasificatoria presencial' },
+					{ date: '2026-11-07', label: 'Semifinales y final · escenario principal' }
+				]
+			},
+			{
+				id: 'wings-cup',
+				title: 'Red Bull Wings Cup Argentina 2026',
+				shortTitle: 'Wings Cup',
+				start: '2026-09-28',
+				end: '2026-11-07',
+				range: '28 sep — 7 nov',
+				status: 'Inscripciones abiertas, sujeto a disponibilidad de clasificatorias',
+				statusType: 'confirmed',
+				participation: 'Mixto',
+				participationType: 'mixed',
+				modality: 'Online',
+				age: '18+ (requisito general)',
+				genderRequirements: 'Mixto',
+				residency: 'Por confirmar',
+				competitionFormat: 'Open League y Liga Universitaria',
+				teamSize: 'La Open League se juega 1 vs 1; la Liga Universitaria utiliza el modo Rush.',
+				deadline: 'Cierra como máximo el 30 de octubre, pero hay que comprobar el plazo de cada clasificatoria en Argentina.',
+				registration: 'Inscripciones abiertas',
+				bases: 'Consultar preguntas frecuentes oficiales',
+				games: ['EA SPORTS FC 27'],
+				venue: 'Clasificatorias online · Argentina',
+				description: 'Competencia abierta a participantes de distintos géneros, con edad mínima general de 18 años según las preguntas frecuentes. Revisá el calendario de finales y las condiciones de cada liga: algunas instancias podrían haber cerrado.',
+				sources: [
+					{ label: 'Red Bull · Wings Cup Argentina 2026', url: 'https://www.redbull.com/ar-es/events/red-bull-wings-cup-argentina-2026/red-bull-wings-cup-chile-preguntas-frecuentes' }
+				],
+				markers: [
+					{ date: '2026-10-01', label: 'En curso · Wings Cup' },
+					{ date: '2026-11-07', label: 'Cierre anunciado · Wings Cup' }
+				]
+			},
+			{
+				id: 'copa-santafesina',
+				title: 'Copa Santafesina de League of Legends',
+				shortTitle: 'Copa Santafesina',
+				start: '2026-11-26',
+				end: '2026-12-08',
+				range: 'Inscripciones: 26 nov — 8 dic',
+				status: 'Convocatoria pendiente',
+				statusType: 'pending',
+				participation: 'Mixto',
+				participationType: 'verify',
+				modality: 'Por confirmar',
+				age: 'Por confirmar',
+				genderRequirements: 'Por confirmar',
+				residency: 'Santa Fe; requisitos de residencia: Por confirmar',
+				competitionFormat: 'Por confirmar',
+				teamSize: 'Por confirmar',
+				deadline: '8 dic 2026 (inscripciones del 26 nov al 8 dic)',
+				registration: 'Por confirmar',
+				bases: 'Por confirmar',
+				games: ['League of Legends'],
+				venue: 'Rosario / Santa Fe',
+				description: 'ASDE anunció la primera Copa Santafesina. Las fechas indicadas son para inscribirse, no para disputar los partidos; el calendario completo y las reglas de género están por confirmarse.',
+				sources: [
+					{ label: 'ASDE · Asociación Santafesina de Deportes Electrónicos', url: 'https://asde.com.ar/' }
+				],
+				markers: [
+					{ date: '2026-11-26', label: 'Abren inscripciones · ASDE' },
+					{ date: '2026-12-08', label: 'Cierra inscripción · ASDE' }
+				]
+			}
+		];
+
+		const internationalEvent = {
+			id: 'enc-2027',
+			title: 'Esports Nations Cup',
+			range: 'Noviembre de 2027',
+			status: 'Fecha confirmada',
+			statusType: 'confirmed',
+			participation: 'Mixto',
+			participationType: 'verify',
+			games: [],
+			modality: 'Sede en Riad; modalidad por confirmar',
+			age: 'Por confirmar',
+			genderRequirements: 'Por confirmar',
+			residency: 'Selecciones nacionales; requisitos por confirmar',
+			competitionFormat: 'Selecciones nacionales',
+			teamSize: 'Por confirmar',
+			deadline: 'Por confirmar',
+			registration: 'Por confirmar',
+			bases: 'Por confirmar',
+			venue: 'Riad, Arabia Saudita',
+			description: 'Competencia mundial bienal. La edición inaugural se pospuso a noviembre de 2027; los días exactos, los juegos y el calendario de clasificación todavía no fueron publicados.',
+			sources: [
+				{ label: 'Esports Foundation · comunicado oficial', url: 'https://esportsnationscup.com/en/press-releases/ef-postpones-enc-to-november-2027' }
+			]
+		};
+
+		const months = [
+			{ year: 2026, month: 8, name: 'Septiembre', short: 'SEP' },
+			{ year: 2026, month: 9, name: 'Octubre', short: 'OCT' },
+			{ year: 2026, month: 10, name: 'Noviembre', short: 'NOV' },
+			{ year: 2026, month: 11, name: 'Diciembre', short: 'DIC' }
+		];
+		const weekdayNames = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+		const dayView = document.getElementById('day-view');
+		const monthView = document.getElementById('month-view');
+		const boardTitle = document.getElementById('board-title');
+		const detailPanel = document.getElementById('event-detail');
+		const detailContent = document.getElementById('event-dialog-content');
+		const gameFilter = document.getElementById('game-filter');
+		const participationFilter = document.getElementById('participation-filter');
+		let currentView = 'day';
+		let selectedMonth = 0;
+		let selectedEventId = 'firesports';
+
+		function getFilteredEvents() {
+			return tournamentEvents.filter(event => {
+				const gameMatches = gameFilter.value === 'all' || event.games.some(game => game.startsWith(gameFilter.value));
+				const participationMatches = participationFilter.value === 'all' || event.participationType === participationFilter.value;
+				return gameMatches && participationMatches;
+			});
+		}
+
+		function formatDateParts(dateString) {
+			const [year, month, day] = dateString.split('-').map(Number);
+			return { year, month: month - 1, day };
+		}
+
+		function monthIndexForDate(dateString) {
+			return formatDateParts(dateString).month;
+		}
+
+		function participationClass(type) {
+			return `participation-${type}`;
+		}
+
+		function renderEventCard(event, marker) {
+			const date = formatDateParts(marker.date);
+			const monthName = months.find(month => month.month === date.month)?.short || 'SEP';
+			const pressed = selectedEventId === event.id;
+			const registrationSummary = Array.isArray(event.registration)
+				? event.registration.map(item => typeof item === 'object' ? item.label : item).join(' · ')
+				: event.registration || 'Por confirmar';
+			return `
+				<button class="tor-event-card" type="button" data-event-id="${event.id}" aria-pressed="${pressed}" style="--event-color: ${event.participationType === 'open' ? 'var(--cal-blue)' : event.participationType === 'mixed' ? 'var(--cal-yellow)' : event.participationType === 'women' ? 'var(--cal-pink)' : 'var(--purple-light)'};">
+					<span class="tor-event-date"><strong>${date.day}</strong><span>${monthName}</span></span>
+					<span class="tor-event-body">
+						<span class="tor-event-tags"><span class="tor-tag status-${event.statusType}">${event.status}</span><span class="tor-tag ${participationClass(event.participationType)}">${event.participation}</span></span>
+						<span class="tor-event-name">${event.title}</span>
+						<span class="tor-event-phase">${marker.label}</span>
+						<span class="tor-event-game">JUEGO · ${event.games.join(' / ') || 'Por confirmar'}</span>
+						<span class="tor-event-quick">
+							<span><strong>Modalidad</strong>${event.modality}</span>
+							<span><strong>Equipo</strong>${event.teamSize}</span>
+							<span><strong>Inscripción hasta</strong>${event.deadline}</span>
+							<span><strong>Dónde anotarme</strong>${registrationSummary}</span>
+						</span>
+					</span>
+				</button>`;
+		}
+
+		function renderDayView() {
+			const visibleEvents = getFilteredEvents();
+			const filteredIds = new Set(visibleEvents.map(event => event.id));
+			const monthMarkup = months.map((month, monthPosition) => {
+				const occurrences = visibleEvents.flatMap(event => event.markers
+					.filter(marker => monthIndexForDate(marker.date) === month.month)
+					.map(marker => ({ event, marker })))
+					.sort((a, b) => a.marker.date.localeCompare(b.marker.date));
+				const content = occurrences.length
+					? occurrences.map(({ event, marker }) => renderEventCard(event, marker)).join('')
+					: `<p class="tor-no-events">${participationFilter.value === 'women' ? 'No hay torneos exclusivamente femeninos con fecha confirmada en este período.' : 'No hay fechas publicadas para esta selección.'}</p>`;
+				const countLabel = `${occurrences.length} ${occurrences.length === 1 ? 'fecha' : 'fechas'}`;
+				return `
+					<section class="tor-month-column" aria-label="${month.name} de ${month.year}">
+						<div class="tor-month-top">
+							<button class="tor-month-select" type="button" data-month-position="${monthPosition}" aria-label="Abrir vista mensual de ${month.name}">
+								<strong>${month.name}</strong>
+							</button>
+							<span class="tor-month-count">${countLabel}</span>
+						</div>
+						<div class="tor-month-events">${content}</div>
+					</section>`;
+			}).join('');
+			dayView.innerHTML = monthMarkup;
+			if (!filteredIds.has(selectedEventId)) selectedEventId = visibleEvents[0]?.id || '';
+			dayView.querySelectorAll('[data-event-id]').forEach(button => {
+				button.setAttribute('aria-pressed', String(button.dataset.eventId === selectedEventId));
+				button.addEventListener('click', () => selectEvent(button.dataset.eventId));
+			});
+			dayView.querySelectorAll('[data-month-position]').forEach(button => {
+				button.addEventListener('click', () => {
+					selectedMonth = Number(button.dataset.monthPosition);
+					setView('month');
+				});
+			});
+			renderDetails();
+			syncDayArrows();
+		}
+
+		function syncDayArrows() {
+			if (currentView !== 'day') return;
+			const previous = document.getElementById('month-prev');
+			const next = document.getElementById('month-next');
+			const hasOverflow = dayView.scrollWidth > dayView.clientWidth + 2;
+			previous.disabled = !hasOverflow || dayView.scrollLeft <= 2;
+			next.disabled = !hasOverflow || dayView.scrollLeft + dayView.clientWidth >= dayView.scrollWidth - 2;
+		}
+
+		function makeMonthlyGrid() {
+			const month = months[selectedMonth];
+			const firstWeekday = (new Date(month.year, month.month, 1).getDay() + 6) % 7;
+			const daysInMonth = new Date(month.year, month.month + 1, 0).getDate();
+			const cellsNeeded = Math.ceil((firstWeekday + daysInMonth) / 7) * 7;
+			const markers = getFilteredEvents().flatMap(event => event.markers
+				.filter(marker => {
+					const date = formatDateParts(marker.date);
+					return date.year === month.year && date.month === month.month;
+				})
+				.map(marker => ({ event, marker, day: formatDateParts(marker.date).day })));
+			const today = new Date();
+			let cells = '';
+
+			for (let cell = 0; cell < cellsNeeded; cell++) {
+				const day = cell - firstWeekday + 1;
+				const inMonth = day > 0 && day <= daysInMonth;
+				const cellDate = inMonth ? `${month.year}-${String(month.month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}` : '';
+				const isToday = inMonth && today.getFullYear() === month.year && today.getMonth() === month.month && today.getDate() === day;
+				const dayMarkers = markers.filter(item => item.day === day);
+				const eventMarkup = dayMarkers.map(({ event, marker }) => `
+					<button class="tor-calendar-event ${participationClass(event.participationType)}" type="button" data-event-id="${event.id}" aria-pressed="${selectedEventId === event.id}" aria-label="${marker.label}: ${event.title}" title="${marker.label}: ${event.title}">${event.shortTitle}</button>`).join('');
+				cells += `<div class="tor-day-cell${inMonth ? '' : ' is-outside'}${isToday ? ' is-today' : ''}"${cellDate ? ` data-date="${cellDate}"` : ''}><span class="tor-day-number">${inMonth ? day : ''}</span><div class="tor-day-events">${eventMarkup}</div></div>`;
+			}
+
+			return `
+				<div class="tor-calendar-scroll" aria-label="Calendario mensual desplazable">
+					<div class="tor-calendar" role="grid" aria-label="${month.name} ${month.year}">
+						${weekdayNames.map(day => `<div class="tor-weekday" role="columnheader">${day}</div>`).join('')}
+						${cells}
+					</div>
+				</div>`;
+		}
+
+		function renderMonthView() {
+			const month = months[selectedMonth];
+			const visibleEvents = getFilteredEvents().filter(event => event.markers.some(marker => monthIndexForDate(marker.date) === month.month));
+			if (!visibleEvents.some(event => event.id === selectedEventId)) selectedEventId = visibleEvents[0]?.id || '';
+			boardTitle.textContent = `${month.name} ${month.year}`;
+			monthView.innerHTML = makeMonthlyGrid();
+			monthView.querySelectorAll('[data-event-id]').forEach(button => {
+				button.addEventListener('click', () => selectEvent(button.dataset.eventId));
+			});
+			document.getElementById('month-prev').disabled = selectedMonth === 0;
+			document.getElementById('month-next').disabled = selectedMonth === months.length - 1;
+			renderDetails();
+		}
+
+		function renderDetails() {
+			const event = tournamentEvents.find(item => item.id === selectedEventId)
+				|| (selectedEventId === internationalEvent.id ? internationalEvent : null);
+			if (!event) {
+				const emptyMessage = participationFilter.value === 'women'
+					? 'No hay torneos femeninos con fecha confirmada en este período.'
+					: 'Probá con otro juego o formato para ver las competencias disponibles.';
+				detailContent.innerHTML = `<div class="tor-empty-filter"><strong>Sin torneos para mostrar</strong>${emptyMessage}</div>`;
+				return;
+			}
+			const gameValue = event.games.length ? event.games.join(' · ') : 'Por confirmar';
+			const renderValue = value => Array.isArray(value)
+				? value.map(item => typeof item === 'object' && item.url
+					? `<a href="${item.url}" target="_blank" rel="noopener noreferrer">${item.label || 'Enlace oficial'} ↗</a>`
+					: typeof item === 'object' ? item.label || 'Por confirmar' : item).join('<br>')
+				: value || 'Por confirmar';
+			const registrationValue = event.registrationUrl
+				? `<a href="${event.registrationUrl}" target="_blank" rel="noopener noreferrer">${event.registrationLabel || 'Formulario oficial'} ↗</a>`
+				: renderValue(event.registration);
+			const basesValue = event.basesUrl
+				? `<a href="${event.basesUrl}" target="_blank" rel="noopener noreferrer">Consultar bases oficiales ↗</a>`
+				: renderValue(event.bases);
+			const stageValue = (event.markers || []).map(marker => {
+				const date = formatDateParts(marker.date);
+				const monthName = months.find(month => month.month === date.month)?.name || 'fecha';
+				return `<span>${date.day} ${monthName} · ${marker.label}</span>`;
+			}).join('') || event.range;
+			const facts = [
+				['¿Puedo participar?', event.participation],
+				['Juego', gameValue],
+				['Modalidad', event.modality],
+				['Edad mínima', event.age],
+				['Género', event.genderRequirements],
+				['Residencia', event.residency],
+				['Formato', event.competitionFormat],
+				['Tamaño de equipo', event.teamSize],
+				['Estado', event.status],
+				['Fecha límite para anotarme', event.deadline],
+				['¿Dónde me inscribo?', registrationValue],
+				['Bases', basesValue],
+				['Premios', event.prizes],
+				['Equipamiento', event.equipment],
+				['Reglas adicionales', event.rules],
+				['Etapas y fechas', `<span class="tor-detail-stages">${stageValue}</span>`],
+				['Sede', event.venue]
+			];
+
+			detailContent.innerHTML = `
+				<div>
+					<p class="tor-detail-kicker">${event.status} · ${event.range}</p>
+					<h3 class="tor-detail-title">${event.title}</h3>
+					<p class="tor-detail-copy">${event.description}</p>
+					<dl class="tor-detail-facts">${facts.map(([label, value]) => `<div class="tor-detail-field"><dt>${label}</dt><dd>${value || 'Por confirmar'}</dd></div>`).join('')}</dl>
+				</div>
+				<nav class="tor-source-list" aria-label="Fuentes de ${event.title}">
+					<span>Fuentes y enlaces oficiales</span>
+					${event.sources.map(source => `<a href="${source.url}" target="_blank" rel="noopener noreferrer">${source.label} ↗</a>`).join('')}
+				</nav>`;
+		}
+
+		function selectEvent(eventId) {
+			selectedEventId = eventId;
+			const selectedEvent = tournamentEvents.find(item => item.id === eventId)
+				|| (eventId === internationalEvent.id ? internationalEvent : null);
+			detailPanel.dataset.participation = selectedEvent?.participationType || 'verify';
+			document.querySelectorAll('[data-event-id]').forEach(button => {
+				button.setAttribute('aria-pressed', String(button.dataset.eventId === selectedEventId));
+			});
+			renderDetails();
+			if (!detailPanel.open) detailPanel.showModal();
+		}
+
+		function setView(view) {
+			currentView = view;
+			document.querySelectorAll('.tor-view-button').forEach(button => {
+				button.setAttribute('aria-pressed', String(button.dataset.view === view));
+			});
+			dayView.hidden = view !== 'day';
+			monthView.hidden = view !== 'month';
+			document.getElementById('month-prev').setAttribute('aria-label', view === 'day' ? 'Desplazar meses hacia atrás' : 'Mes anterior');
+			document.getElementById('month-next').setAttribute('aria-label', view === 'day' ? 'Desplazar meses hacia adelante' : 'Mes siguiente');
+			if (view === 'day') {
+				boardTitle.textContent = 'Septiembre — diciembre 2026';
+				document.getElementById('month-prev').disabled = false;
+				document.getElementById('month-next').disabled = false;
+				renderDayView();
+			} else {
+				renderMonthView();
+			}
+		}
+
+		document.querySelectorAll('.tor-view-button').forEach(button => {
+			button.addEventListener('click', () => setView(button.dataset.view));
+		});
+		gameFilter.addEventListener('change', () => currentView === 'day' ? renderDayView() : renderMonthView());
+		participationFilter.addEventListener('change', () => currentView === 'day' ? renderDayView() : renderMonthView());
+		document.querySelector('.tor-international-open').addEventListener('click', () => {
+			selectEvent(internationalEvent.id);
+		});
+		document.getElementById('event-dialog-close').addEventListener('click', () => detailPanel.close());
+		detailPanel.addEventListener('cancel', event => {
+			event.preventDefault();
+			detailPanel.close();
+		});
+		document.addEventListener('keydown', event => {
+			if (event.key === 'Escape' && detailPanel.open) {
+				event.preventDefault();
+				detailPanel.close();
+			}
+		});
+		detailPanel.addEventListener('click', event => {
+			if (event.target === detailPanel) detailPanel.close();
+		});
+		document.getElementById('month-prev').addEventListener('click', () => {
+			if (currentView === 'day') dayView.scrollBy({ left: -dayView.clientWidth, behavior: 'smooth' });
+			else if (selectedMonth > 0) { selectedMonth--; renderMonthView(); }
+		});
+		document.getElementById('month-next').addEventListener('click', () => {
+			if (currentView === 'day') dayView.scrollBy({ left: dayView.clientWidth, behavior: 'smooth' });
+			else if (selectedMonth < months.length - 1) { selectedMonth++; renderMonthView(); }
+		});
+		dayView.addEventListener('scroll', syncDayArrows, { passive: true });
+		window.addEventListener('resize', syncDayArrows);
+
+		renderDayView();
+	</script>
+</body>
+</html>

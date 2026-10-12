@@ -1,15 +1,19 @@
 const areas = [
     {
         id: 'diseno', group: 'crear', number: '01', icon: '◈', title: 'Diseño de juego', skills: ['Creatividad', 'Lógica', 'Observación'],
+        image: 'design-icon.png',
+        tools: ['GDevelop', 'Godot', 'Machinations'],
         summary: 'Define las reglas, los retos y el ritmo de cada partida.',
         what: 'Diseñar es decidir cómo se juega: qué puede hacer cada persona, qué desafíos encuentra y cómo evoluciona la experiencia.',
         tasks: ['Crear mecánicas y reglas.', 'Diseñar niveles, objetivos y progresión.', 'Probar ideas y ajustar el equilibrio.'],
         fits: 'Te gusta inventar sistemas, resolver problemas y pensar qué hace que una experiencia sea interesante.',
         start: 'Diseñá un juego de cartas sencillo o cambiá las reglas de uno que ya conozcas. Probalo con otras personas y anotá qué funciona.',
-        teams: ['Arte y animación', 'Programación', 'UX y accesibilidad'], interests: ['crear', 'resolver', 'historias', 'equipo']
+        teams: ['Arte y animación', 'Programación', 'UX/UI y accesibilidad'], interests: ['crear', 'resolver', 'historias', 'equipo']
     },
     {
         id: 'arte', group: 'crear', number: '02', icon: '✧', title: 'Arte y animación', skills: ['Color y composición', 'Dibujo', 'Herramientas 2D/3D'],
+        image: 'art-icon.png',
+        tools: ['Krita', 'Blender', 'Aseprite'],
         summary: 'Da forma a personajes, escenarios, objetos y movimiento.',
         what: 'El área visual construye la identidad del juego y convierte conceptos en imágenes que se pueden explorar e interpretar.',
         tasks: ['Explorar ideas visuales y referencias.', 'Crear arte 2D, modelos 3D, texturas o escenarios.', 'Preparar personajes y objetos para animación.'],
@@ -19,6 +23,8 @@ const areas = [
     },
     {
         id: 'narrativa', group: 'crear', number: '03', icon: '✎', title: 'Narrativa y escritura', skills: ['Escritura', 'Estructura', 'Empatía'],
+        image: 'narrativeandwriting.png',
+        tools: ['Twine', 'Ink', 'Ren\'Py'],
         summary: 'Crea personajes, diálogos y mundos con historias propias.',
         what: 'La narrativa diseña cómo aparecen las historias dentro del juego: quiénes las cuentan, qué decisiones las cambian y cómo se relacionan con lo que se juega.',
         tasks: ['Escribir diálogos, escenas y trasfondos.', 'Diseñar historias ramificadas.', 'Coordinar textos con niveles y mecánicas.'],
@@ -28,6 +34,8 @@ const areas = [
     },
     {
         id: 'musica', group: 'crear', number: '04', icon: '♫', title: 'Composición musical', skills: ['Ritmo', 'Composición', 'Escucha'],
+        image: 'comp.png',
+        tools: ['LMMS', 'REAPER', 'MuseScore Studio'],
         summary: 'Compone música que acompaña el tono y el ritmo del juego.',
         what: 'La música ayuda a construir atmósferas y acompaña momentos, espacios y cambios de la experiencia.',
         tasks: ['Componer temas y variaciones.', 'Adaptar la música a distintas situaciones.', 'Preparar piezas para su implementación.'],
@@ -37,6 +45,8 @@ const areas = [
     },
     {
         id: 'audio-narrativa', group: 'crear', number: '05', icon: '◖', title: 'Diseño de sonido', skills: ['Escucha', 'Grabación', 'Edición de audio'],
+        image: 'sound-design-icon.png',
+        tools: ['Audacity', 'FMOD Studio', 'Wwise'],
         summary: 'Construye sonidos y ambientes que responden a lo que pasa.',
         what: 'El diseño de sonido crea e integra efectos, ambientes y voces para que el mundo del juego se sienta vivo y legible.',
         tasks: ['Grabar o crear efectos sonoros.', 'Editar voces y ambientes.', 'Integrar sonidos que reaccionan a las acciones.'],
@@ -46,6 +56,8 @@ const areas = [
     },
     {
         id: 'programacion', group: 'construir', number: '06', icon: '⌘', title: 'Programación', skills: ['Lógica', 'Resolución de problemas', 'Depuración'],
+        image: 'programming-icon.png',
+        tools: ['Godot', 'Unity', 'Visual Studio Code'],
         summary: 'Convierte ideas y diseños en sistemas que funcionan.',
         what: 'El desarrollo implementa mecánicas y herramientas, conecta los sistemas del juego y los adapta a distintas plataformas.',
         tasks: ['Programar controles y comportamiento.', 'Conectar sistemas y herramientas.', 'Encontrar errores y optimizar rendimiento.'],
@@ -54,7 +66,9 @@ const areas = [
         teams: ['Diseño de juego', 'Arte', 'UX', 'Calidad'], interests: ['resolver', 'equipo']
     },
     {
-        id: 'ux', group: 'construir', number: '07', icon: '◎', title: 'UX y accesibilidad', skills: ['Empatía', 'Prototipado', 'Accesibilidad'],
+        id: 'ux', group: 'construir', number: '07', icon: '◎', title: 'UX/UI y accesibilidad', skills: ['Empatía', 'Prototipado', 'Accesibilidad'],
+        image: 'ux-icon.png',
+        tools: ['Figma', 'Penpot', 'Stark'],
         summary: 'Hace que jugar sea claro, cómodo y accesible.',
         what: 'UX observa cómo se entiende y se usa el juego. La interfaz y la accesibilidad ayudan a que más personas puedan jugar a su manera.',
         tasks: ['Diseñar menús e información en pantalla.', 'Probar flujos y detectar confusiones.', 'Proponer opciones de acceso y personalización.'],
@@ -64,6 +78,8 @@ const areas = [
     },
     {
         id: 'calidad', group: 'construir', number: '08', icon: '⌕', title: 'Calidad y testing', skills: ['Atención al detalle', 'Curiosidad', 'Comunicación clara'],
+        image: 'testing-icon.png',
+        tools: ['GitHub Issues', 'TestRail', 'OBS Studio'],
         summary: 'Prueba el juego y ayuda a detectar qué puede mejorar.',
         what: 'QA verifica versiones, documenta problemas de forma clara y comprueba que los cambios solucionen lo detectado.',
         tasks: ['Probar escenarios y dispositivos.', 'Registrar pasos para reproducir errores.', 'Volver a probar las correcciones.'],
@@ -73,6 +89,8 @@ const areas = [
     },
     {
         id: 'datos', group: 'construir', number: '09', icon: '▦', title: 'Datos y analítica', skills: ['Análisis', 'Hojas de cálculo', 'Comunicación'],
+        image: 'data-icon.png',
+        tools: ['Google Sheets', 'SQLite', 'Power BI'],
         summary: 'Usa datos para entender patrones y tomar decisiones.',
         what: 'El análisis de datos ayuda a interpretar cómo se juega, encontrar tendencias y evaluar cambios sin reemplazar la observación cualitativa.',
         tasks: ['Organizar y revisar datos.', 'Buscar patrones de uso y progreso.', 'Comunicar hallazgos al equipo.'],
@@ -82,42 +100,52 @@ const areas = [
     },
     {
         id: 'produccion', group: 'conectar', number: '10', icon: '◷', title: 'Producción', skills: ['Organización', 'Priorización', 'Comunicación'],
+        image: 'production-icon.png',
+        tools: ['Trello', 'Notion', 'Jira'],
         summary: 'Coordina tiempos, prioridades y comunicación entre áreas.',
         what: 'Producción facilita el trabajo del equipo y ayuda a que los proyectos avancen con acuerdos claros y expectativas realistas.',
         tasks: ['Organizar etapas y prioridades.', 'Acompañar la comunicación del equipo.', 'Identificar riesgos y dependencias.'],
         fits: 'Te interesa organizar proyectos, facilitar acuerdos y ayudar a que un grupo trabaje en conjunto.',
-        start: 'Organizá una actividad pequeña con otras personas, definí tareas y revisá cómo podrían coordinarse mejor.',
+        start: 'Simulá la planificación de un videojuego: armá una lista de tareas, asigná responsables y ordená las prioridades para llegar a un objetivo común.',
         teams: ['Todas las áreas'], interests: ['equipo', 'resolver']
     },
     {
         id: 'comunidad', group: 'conectar', number: '11', icon: '◌', title: 'Comunidad', skills: ['Escucha', 'Moderación', 'Comunicación'],
+        image: 'comunidadd.png',
+        tools: ['Discord', 'Discourse', 'Buffer'],
         summary: 'Escucha y acompaña a quienes juegan.',
         what: 'El trabajo de comunidad crea espacios de conversación, comparte información y ayuda a que el equipo comprenda a su público.',
         tasks: ['Moderar y cuidar espacios.', 'Escuchar preguntas y comentarios.', 'Compartir novedades y acercar respuestas.'],
         fits: 'Te gusta conversar, escuchar distintos puntos de vista y construir espacios de pertenencia.',
-        start: 'Pensá reglas breves para una comunidad segura y cómo responderías a una consulta frecuente.',
+        start: 'Pensá reglas breves para una comunidad de videojuegos segura e inclusiva y definí cómo responderías una consulta frecuente o una situación de conflicto.',
         teams: ['Marketing', 'Producción', 'Narrativa', 'Esports'], interests: ['equipo', 'historias']
     },
     {
         id: 'marketing', group: 'conectar', number: '12', icon: '↗', title: 'Marketing y comunicación', skills: ['Escritura', 'Estrategia', 'Creatividad'],
+        image: 'marketing-icon.png',
+        tools: ['Canva', 'Buffer', 'Google Analytics'],
         summary: 'Cuenta qué hace especial al juego y conecta con su público.',
         what: 'Marketing y comunicación definen cómo presentar un proyecto, a quién puede interesarle y qué información necesita conocer.',
         tasks: ['Preparar mensajes y contenidos.', 'Planificar campañas y materiales.', 'Coordinar anuncios con el equipo.'],
         fits: 'Te interesa comunicar ideas, crear contenidos o pensar cómo llegar a distintas audiencias.',
-        start: 'Prepará una presentación breve de un juego que te guste para alguien que todavía no lo conoce.',
+        start: 'Elegí un videojuego, pensá a quién podría interesarle y prepará una propuesta breve para darlo a conocer.',
         teams: ['Comunidad', 'Producción', 'Arte', 'Publishing'], interests: ['crear', 'equipo', 'historias']
     },
     {
         id: 'traduccion', group: 'conectar', number: '13', icon: '文', title: 'Traducción y localización', skills: ['Idiomas', 'Escritura', 'Sensibilidad cultural'],
+        image: 'trad y loc.png',
+        tools: ['OmegaT', 'Poedit', 'Weblate'],
         summary: 'Adapta textos y experiencias a otros idiomas y contextos.',
         what: 'La localización adapta textos, referencias, formatos y elementos de interfaz para que el juego funcione en distintos lugares.',
         tasks: ['Traducir diálogos e interfaz.', 'Revisar tono y consistencia.', 'Probar textos dentro del juego.'],
         fits: 'Te gustan los idiomas, los matices culturales y encontrar la forma más clara de expresar una idea.',
-        start: 'Compará dos versiones de un mismo texto de juego y anotá qué cambia en tono, humor o claridad.',
+        start: 'Compará dos versiones de un mismo texto de videojuego y anotá qué cambia en el tono, el humor y la claridad, y cómo esas diferencias afectan la experiencia de quien juega.',
         teams: ['Narrativa', 'Calidad', 'Marketing', 'Producción'], interests: ['historias', 'equipo']
     },
     {
         id: 'esports', group: 'jugar', number: '14', icon: '⌁', title: 'Esports y competición', skills: ['Estrategia', 'Análisis', 'Coordinación'],
+        image: 'compe.png',
+        tools: ['start.gg', 'Challonge', 'OBS Studio'],
         summary: 'Organiza y desarrolla experiencias competitivas alrededor de los juegos.',
         what: 'El ecosistema competitivo incluye torneos, equipos, producción de eventos, análisis, comunicación y apoyo a quienes compiten.',
         tasks: ['Coordinar torneos y calendarios.', 'Analizar partidas y estrategias.', 'Producir transmisiones y eventos.'],
@@ -127,6 +155,8 @@ const areas = [
     },
     {
         id: 'coach', group: 'jugar', number: '15', icon: '♟', title: 'Coach de esports', skills: ['Comunicación', 'Análisis táctico', 'Liderazgo'],
+        image: 'coach-icon.png',
+        tools: ['OBS Studio', 'Miro', 'Google Sheets'],
         summary: 'Acompaña al equipo y prepara estrategias para competir.',
         what: 'La persona coach ayuda a un equipo a entrenar, analizar sus partidas y coordinar estrategias para mejorar su rendimiento.',
         tasks: ['Planificar entrenamientos y objetivos.', 'Revisar partidas y detectar oportunidades.', 'Dar devoluciones y adaptar estrategias con el equipo.'],
@@ -136,6 +166,8 @@ const areas = [
     },
     {
         id: 'arbitraje', group: 'jugar', number: '16', icon: '⚖', title: 'Árbitra de esports', skills: ['Reglamentos', 'Imparcialidad', 'Atención al detalle'],
+        image: 'referee-icon.png',
+        tools: ['Battlefy', 'Challonge', 'Google Sheets'],
         summary: 'Aplica las reglas y cuida que la competencia sea justa.',
         what: 'La árbitra supervisa las partidas, interpreta el reglamento y resuelve situaciones para que todas las personas compitan en las mismas condiciones.',
         tasks: ['Verificar que se cumplan las reglas.', 'Resolver consultas y disputas durante el torneo.', 'Registrar decisiones y comunicar sanciones con claridad.'],
@@ -265,7 +297,15 @@ function renderAreas() {
             const icon = document.createElement('span');
             icon.className = 'areas-card-icon';
             icon.setAttribute('aria-hidden', 'true');
-            icon.textContent = area.icon;
+            if (area.image) {
+                const image = document.createElement('img');
+                image.src = area.image;
+                image.alt = '';
+                image.decoding = 'async';
+                icon.appendChild(image);
+            } else {
+                icon.textContent = area.icon;
+            }
             const title = document.createElement('span');
             title.className = 'areas-card-title';
             title.textContent = area.title;
@@ -284,6 +324,16 @@ function renderAreas() {
                 tag.textContent = skill;
                 tags.appendChild(tag);
             });
+            const toolsLabel = document.createElement('span');
+            toolsLabel.className = 'areas-card-fit-label areas-card-tools-label';
+            toolsLabel.textContent = 'HERRAMIENTAS PARA EXPLORAR';
+            const tools = document.createElement('span');
+            tools.className = 'areas-card-tags areas-card-tools';
+            area.tools.forEach((tool) => {
+                const tag = document.createElement('span');
+                tag.textContent = tool;
+                tools.appendChild(tag);
+            });
             const link = document.createElement('span');
             link.className = 'areas-card-link';
             link.append('Ver tareas y cómo empezar');
@@ -292,7 +342,7 @@ function renderAreas() {
             arrow.setAttribute('aria-hidden', 'true');
             arrow.textContent = '↗';
             link.appendChild(arrow);
-            card.append(meta, icon, title, summary, divider, fitLabel, tags, link);
+            card.append(meta, icon, title, summary, divider, fitLabel, tags, toolsLabel, tools, link);
             grid.appendChild(card);
         });
         section.append(heading, grid);
@@ -335,6 +385,7 @@ function openArea(areaId) {
     const sections = [
         ['¿Qué tareas podrías hacer?', area.tasks],
         ['Habilidades que suman', area.skills],
+        ['Herramientas para explorar', area.tools],
         ['Quizás te interese si...', area.fits],
         ['Una forma de empezar', area.start],
         ['Suele colaborar con', area.teams]

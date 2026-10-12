@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="styles.css">
     <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
     <style>
+        .formation-page { --formation-mouse-cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 32 32'%3E%3Cpath d='M16 3C9.8 3 6 7.6 6 13.2v6.6C6 26 10.1 29 16 29s10-3 10-9.2v-6.6C26 7.6 22.2 3 16 3Z' fill='%23f2f0e9' stroke='%237040ff' stroke-width='2'/%3E%3Cpath d='M16 4v8' stroke='%237040ff' stroke-width='2' stroke-linecap='round'/%3E%3Crect x='14' y='6' width='4' height='6' rx='2' fill='%23caff19'/%3E%3C/svg%3E") 24 9, auto; cursor: var(--formation-mouse-cursor); }
         .formation-page .guide-main { padding-top: 32px; }
         .formation-portal { display: grid; grid-template-columns: minmax(0, 1fr); align-items: center; gap: 20px; }
         .formation-intro { margin-bottom: 0; }
@@ -17,21 +18,23 @@
         .formation-heading img { width: 120px; height: 120px; object-fit: contain; flex-shrink: 0; }
         .formation-page .formation-heading h1 { margin: 0; font-size: 44px; line-height: 1.12; letter-spacing: 0; }
         .formation-intro p { max-width: 760px; margin: 0; color: var(--gray); font-size: 18px; line-height: 1.6; }
-        .formation-computer { position: relative; isolation: isolate; justify-self: center; margin: 0; width: min(100%, 820px); aspect-ratio: 1.12; animation: formation-computer-appear .65s ease both; }
+        .formation-computer { position: relative; isolation: isolate; justify-self: center; margin: 0; width: min(100%, 920px); aspect-ratio: 1.12; animation: formation-computer-appear .65s ease both; }
+        .formation-computer::before, .formation-computer::after { content: ""; position: absolute; pointer-events: none; }
+        .formation-computer::before { z-index: -2; inset: 5% 4% 1%; background: radial-gradient(ellipse at 55% 42%, rgba(112,64,255,.1), transparent 66%), radial-gradient(ellipse at 62% 96%, rgba(45,22,70,.3), transparent 62%); filter: blur(24px); }
+        .formation-computer::after { z-index: -1; left: 14%; bottom: 2%; width: 72%; height: 9%; border-radius: 50%; background: radial-gradient(ellipse, rgba(23,13,36,.34) 0%, rgba(66,37,96,.16) 48%, transparent 78%); filter: blur(13px); }
         .formation-decoration { position: absolute; z-index: -1; width: min(14%, 112px); height: auto; opacity: .28; pointer-events: none; user-select: none; }
         .formation-decoration--holographic { left: 1%; top: 18%; transform: rotate(-18deg); }
         .formation-decoration--keychain { right: 1%; top: 40%; transform: rotate(14deg); }
         .formation-decoration--star { left: 5%; bottom: 17%; transform: rotate(12deg); }
         .formation-computer canvas { display: block; width: 100%; height: 100%; }
         .formation-computer canvas[hidden] { display: none; }
-        .formation-os { position: absolute; left: 22%; top: 17%; width: 56%; height: 49%; display: flex; flex-direction: column; justify-content: flex-start; padding: 14px; overflow: hidden; background: #25144b; border-radius: 12px; color: var(--off-white); }
-        .formation-os::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(transparent 0 3px, rgba(9,9,10,.1) 3px 4px); opacity: .5; }
+        .formation-os { position: absolute; left: 22%; top: 17%; width: 56%; height: 49%; display: flex; flex-direction: column; justify-content: flex-start; padding: 14px; overflow: hidden; background: #25144b; border-radius: 12px; box-shadow: inset 0 0 0 2px rgba(9,7,14,.72), inset 0 0 0 3px rgba(152,120,255,.22), 0 0 8px rgba(112,64,255,.06); color: var(--off-white); }
+        .formation-os::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(118deg, rgba(255,255,255,.024), rgba(255,255,255,.006) 18%, transparent 42%); }
+        .formation-os::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(transparent 0 5px, rgba(9,9,10,.07) 5px 6px); opacity: .12; }
         .formation-os-header { display: flex; flex-shrink: 0; align-items: center; gap: 8px; margin: 0 0 10px; padding-bottom: 8px; border-bottom: 1px solid rgba(152,120,255,.35); font-family: "DM Mono", monospace; font-size: 12px; color: var(--purple-light); }
-        .formation-os-header .formation-os-led { margin-left: auto; }
         .formation-home { min-height: 0; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--purple-light) transparent; }
         .formation-home h2 { margin: 2px 0 8px; font-family: "DM Mono", monospace; font-size: 17px; font-weight: 500; line-height: 1.3; letter-spacing: 0; }
-        .formation-home p { margin: 0 0 14px; color: #c6b9df; font-family: "DM Mono", monospace; font-size: 12px; line-height: 1.5; }
-        .formation-os-led { width: 5px; height: 5px; background: var(--green); flex-shrink: 0; }
+        .formation-home p { margin: 0 0 14px; color: #ddd4ec; font-family: "DM Mono", monospace; font-size: 12px; line-height: 1.5; }
         .formation-os-heart { width: 12px; height: 12px; flex-shrink: 0; background: var(--purple-light); clip-path: polygon(0 15%, 15% 15%, 15% 0, 40% 0, 40% 15%, 60% 15%, 60% 0, 85% 0, 85% 15%, 100% 15%, 100% 55%, 85% 55%, 85% 70%, 70% 70%, 70% 85%, 55% 85%, 55% 100%, 45% 100%, 45% 85%, 30% 85%, 30% 70%, 15% 70%, 15% 55%, 0 55%); }
         .formation-nav { display: flex; flex-direction: column; gap: 6px; min-height: 0; }
         .formation-nav button { position: relative; display: flex; align-items: center; gap: 10px; min-height: 46px; padding: 9px; border: 1px solid rgba(152,120,255,.3); border-radius: 3px; background: rgba(112,64,255,.12); font-family: "DM Mono", monospace; font-size: 14px; line-height: 1.3; color: var(--off-white); cursor: pointer; text-align: left; transition: background .16s, border-color .16s; }
@@ -39,8 +42,8 @@
         .formation-nav button:hover, .formation-nav button[aria-selected="true"] { color: var(--off-white); background: #7040ff; border-color: var(--purple-light); }
         .formation-nav button:hover::before, .formation-nav button[aria-selected="true"]::before { color: var(--green); }
         .formation-nav button:focus-visible { outline: 2px solid var(--green); outline-offset: -3px; }
-        .formation-return { display: inline-flex; flex-shrink: 0; align-items: center; justify-content: center; gap: 6px; min-height: 32px; margin: 0 0 0 auto; padding: 5px 7px; border: 1px solid rgba(152,120,255,.4); border-radius: 3px; background: transparent; font-family: "DM Mono", monospace; font-size: 11px; color: var(--off-white); cursor: pointer; }
-        .formation-return:hover { color: var(--off-white); }
+        .formation-return { display: inline-flex; flex-shrink: 0; align-items: center; justify-content: center; gap: 6px; min-height: 32px; margin: 0 0 0 auto; padding: 5px 7px; border: 1px solid rgba(152,120,255,.4); border-radius: 3px; background: transparent; font-family: "DM Mono", monospace; font-size: 11px; color: var(--off-white); cursor: pointer; transition: color .16s, background .16s, border-color .16s, box-shadow .16s; }
+        .formation-os #formation-return:hover, .formation-os #formation-return:focus-visible { border-color: var(--green); background: rgba(112,64,255,.38); color: var(--green); box-shadow: 0 0 8px rgba(152,120,255,.2); }
         .formation-return:focus-visible, .formation-link:focus-visible { outline: 2px solid var(--green); outline-offset: 4px; }
         .formation-return[hidden] { display: none; }
         .formation-home[hidden], .formation-browser[hidden], .formation-loading[hidden] { display: none; }
@@ -136,8 +139,9 @@
         .formation-os .formation-resource-detail h4,
         .formation-os .formation-resource-detail .formation-type,
         .formation-os .formation-list-return,
-        .formation-os .formation-return,
-        .formation-os .formation-return:hover { color: var(--green); }
+        .formation-os .formation-return { color: var(--green); }
+        .formation-os .formation-return:hover,
+        .formation-os .formation-return:focus-visible { border-color: var(--green); background: rgba(112,64,255,.38); color: var(--green); box-shadow: 0 0 8px rgba(152,120,255,.2); }
         .formation-os .formation-nav button,
         .formation-os .formation-nav button:hover,
         .formation-os .formation-nav button[aria-selected="true"],
@@ -146,7 +150,8 @@
         .formation-note { margin: 0; padding: 24px 0; border-top: 1px solid var(--dark-gray); color: var(--gray); font-family: "DM Mono", monospace; font-size: 12px; line-height: 1.6; }
         @media (max-width: 800px) {
             .formation-portal { grid-template-columns: 1fr; gap: 12px; }
-            .formation-computer { width: 100%; }
+            .formation-computer { width: 100%; aspect-ratio: 1; }
+            .formation-computer[data-render="fallback"] { aspect-ratio: 1; }
             .formation-carousel { grid-template-columns: 1fr; }
             .formation-stage { height: clamp(300px, 68vw, 420px); }
             .formation-card { width: 60%; margin: calc(-30% * 10 / 16) 0 0 -30%; }
@@ -174,6 +179,9 @@
             .formation-page .guide-header { flex-wrap: wrap; gap: 16px; height: auto; padding: 18px 0; }
             .formation-heading { flex-wrap: wrap; }
         }
+
+        .formation-page a,
+        .formation-page button { cursor: var(--formation-mouse-cursor); }
     </style>
 </head>
 <body class="guide-page guide-start-page formation-page">
@@ -201,7 +209,7 @@
         <img class="formation-decoration formation-decoration--star" src="staar-Photoroom.png" alt="" aria-hidden="true" draggable="false">
         <canvas id="formation-computer-canvas" aria-hidden="true"></canvas>
         <div class="formation-os" id="formation-os">
-        <div class="formation-os-header"><span class="formation-os-heart" aria-hidden="true"></span><span>FORMACION.SYS</span><span class="formation-os-led" aria-hidden="true"></span><button type="button" class="formation-return" id="formation-return" aria-label="Volver al menú principal" title="Volver al menú principal" hidden>← <span>MENÚ</span></button></div>
+        <div class="formation-os-header"><span class="formation-os-heart" aria-hidden="true"></span><span>FORMACION.SYS</span><button type="button" class="formation-return" id="formation-return" aria-label="Volver al menú principal" title="Volver al menú principal" hidden>← <span>MENÚ</span></button></div>
         <div class="formation-home" id="formation-home">
         <h2>CENTRO DE FORMACIÓN</h2>
         <p>Universidades, cursos y espacios para aprender.</p>
@@ -304,7 +312,7 @@
                     <p class="formation-type">TECNICATURAS · CURSOS</p>
                     <h3>Educación IT</h3>
                     <p>Ofrece opciones de formación enfocadas en el desarrollo de videojuegos y programación gráfica.</p>
-                    <ul class="formation-tags"><li>Unity</li><li>Programació<nav></nav> y desarrollo</li><li>Animación 3D</li></ul>
+                    <ul class="formation-tags"><li>Unity</li><li>Programación<nav></nav> y desarrollo</li><li>Animación 3D</li></ul>
                     <a class="formation-link" href="https://educacionit.com/" target="_blank" rel="noopener noreferrer" aria-label="Explorar formación de Educación IT, abre en otra pestaña">EXPLORAR FORMACIÓN <span aria-hidden="true">↗</span></a>
                 </article>
             </div>
