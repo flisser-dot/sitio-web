@@ -1,0 +1,1693 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#09090a">
+    <title>Circuitos y Path to Pro | Fem Respawn</title>
+
+    <!-- Tipografías -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Pixelify+Sans:wght@400..700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        /* ==================================================
+           CIRCUITOS / PATH TO PRO — ESTILOS DEDICADOS
+           Paleta: Negro (#09090a), Violeta (#7040ff / #9878ff),
+           Rosa (#FF3CAC), Verde Lima (#caff19), Blanco (#f2f0e9)
+           ================================================== */
+
+        .circuitos-page {
+            --circ-card-bg: rgba(14, 11, 24, 0.48);
+            --circ-card-border: rgba(152, 120, 255, 0.24);
+            --circ-card-hover: rgba(182, 157, 255, 0.45);
+            --circ-glow-purple: rgba(112, 64, 255, 0.22);
+            --circ-glow-pink: rgba(255, 60, 172, 0.2);
+            --circ-glow-green: rgba(202, 255, 25, 0.22);
+        }
+
+        .circuitos-page .guide-main {
+            padding: 36px 0 80px;
+        }
+
+        /* ----- CONTENEDORES MODULARES (Jerarquía visual) ----- */
+        .circ-module {
+            margin-bottom: 24px;
+            padding: clamp(20px, 3vw, 32px);
+            border-radius: 18px;
+            background: var(--circ-card-bg);
+            border: 1px solid var(--circ-card-border);
+            box-shadow: 0 14px 36px rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            position: relative;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .circ-module:hover {
+            border-color: var(--circ-card-hover);
+        }
+
+        /* Encabezado del bloque */
+        .circ-module-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .circ-tag {
+            font-family: "DM Mono", monospace;
+            font-size: 11.5px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            color: #d8ccff;
+            text-transform: uppercase;
+        }
+
+        .circ-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            font-family: "DM Mono", monospace;
+            font-size: 11px;
+            color: #f0edf7;
+        }
+
+        .circ-module-title {
+            margin: 0 0 10px;
+            font-family: "Space Grotesk", sans-serif;
+            font-size: clamp(1.6rem, 3.2vw, 2.4rem);
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+            color: var(--off-white);
+        }
+
+        .circ-module-title span {
+            color: var(--green);
+        }
+
+        .circ-module-highlight {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--green);
+            margin: 0 0 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 999px;
+            background: rgba(202, 255, 25, 0.08);
+            border: 1px solid rgba(202, 255, 25, 0.32);
+        }
+
+        .circ-module-lede {
+            max-width: 720px;
+            margin: 0 0 24px;
+            font-size: clamp(0.95rem, 1.2vw, 1.05rem);
+            line-height: 1.55;
+            color: #e2dfec;
+        }
+
+        /* ==================================================
+           01 / CIRCUITO COMPETITIVO INTERACTIVO (3 NIVELES)
+           ================================================== */
+        .circ-flow-box {
+            padding: 20px;
+            border-radius: 14px;
+            background: rgba(10, 8, 16, 0.45);
+            border: 1px solid rgba(152, 120, 255, 0.2);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .circ-flow-kicker {
+            font-family: "DM Mono", monospace;
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            color: #ff8ad0;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Cuadrícula de los 3 niveles */
+        .circ-levels-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .circ-level-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 18px 12px;
+            border-radius: 12px;
+            border: 1.5px solid rgba(152, 120, 255, 0.35);
+            background: linear-gradient(145deg, rgba(32, 22, 54, 0.65), rgba(18, 14, 28, 0.85));
+            color: var(--off-white);
+            cursor: pointer;
+            transition: all 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+            text-align: center;
+            position: relative;
+        }
+
+        .circ-level-btn:hover {
+            border-color: rgba(202, 255, 25, 0.7);
+            background: linear-gradient(145deg, rgba(58, 38, 98, 0.8), rgba(28, 20, 48, 0.95));
+            box-shadow: 0 8px 24px rgba(112, 64, 255, 0.28);
+            transform: translateY(-3px);
+        }
+
+        .circ-level-btn:focus-visible {
+            outline: 2px solid var(--green);
+            outline-offset: 3px;
+        }
+
+        .circ-level-btn[aria-selected="true"] {
+            border-color: var(--green);
+            background: linear-gradient(145deg, rgba(46, 28, 80, 0.95), rgba(16, 12, 26, 0.98));
+            box-shadow: 0 0 20px rgba(202, 255, 25, 0.25), inset 0 0 12px rgba(202, 255, 25, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .circ-level-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 4px;
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-family: "DM Mono", monospace;
+            font-size: 11px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            color: #d6d3de;
+            transition: all 0.2s ease;
+        }
+
+        .circ-status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #a9a6b3;
+            display: inline-block;
+            transition: all 0.2s ease;
+        }
+
+        .circ-level-btn:hover .circ-level-status {
+            border-color: rgba(202, 255, 25, 0.5);
+            color: #ffffff;
+        }
+
+        .circ-level-btn[aria-selected="true"] .circ-level-status {
+            background: rgba(202, 255, 25, 0.15);
+            border-color: rgba(202, 255, 25, 0.45);
+            color: var(--green);
+            font-weight: 700;
+        }
+
+        .circ-level-btn[aria-selected="true"] .circ-status-dot {
+            background: var(--green);
+            box-shadow: 0 0 8px var(--green);
+        }
+
+        .circ-level-icon {
+            font-size: 24px;
+            line-height: 1;
+            margin-bottom: 2px;
+        }
+
+        .circ-level-num {
+            font-family: "Pixelify Sans", sans-serif;
+            font-size: 26px;
+            line-height: 1;
+            color: var(--off-white);
+        }
+
+        .circ-level-btn[aria-selected="true"] .circ-level-num {
+            color: var(--green);
+        }
+
+        .circ-level-name {
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--off-white);
+        }
+
+        .circ-level-sub {
+            font-family: "DM Mono", monospace;
+            font-size: 11px;
+            color: #dedbe6;
+            text-transform: uppercase;
+        }
+
+        .circ-level-btn[aria-selected="true"] .circ-level-sub {
+            color: #d8ff4d;
+        }
+
+        .circ-flow-hint {
+            font-family: "DM Mono", monospace;
+            font-size: 11.5px;
+            color: #dcd8e6;
+            text-align: center;
+            margin-bottom: 18px;
+        }
+
+        /* Panel de detalle del nivel seleccionado */
+        .circ-detail-panel {
+            padding: 22px;
+            border-radius: 12px;
+            background: rgba(18, 14, 28, 0.55);
+            border: 1px solid rgba(152, 120, 255, 0.35);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            animation: circFadeIn 0.25s ease-out;
+        }
+
+        @keyframes circFadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .circ-detail-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+        }
+
+        .circ-detail-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            background: rgba(202, 255, 25, 0.12);
+            border: 1px solid rgba(202, 255, 25, 0.35);
+            font-family: "DM Mono", monospace;
+            font-size: 11px;
+            color: var(--green);
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .circ-detail-quote {
+            padding: 12px 14px;
+            border-radius: 8px;
+            background: rgba(255, 60, 172, 0.08);
+            border-left: 3px solid var(--pink);
+            font-size: 13.5px;
+            font-style: italic;
+            color: #ffe6f4;
+            margin-bottom: 18px;
+            line-height: 1.45;
+        }
+
+        .circ-detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 18px;
+            margin-bottom: 20px;
+        }
+
+        .circ-detail-col h4 {
+            margin: 0 0 8px;
+            font-family: "DM Mono", monospace;
+            font-size: 12px;
+            color: var(--green);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .circ-detail-col p {
+            margin: 0;
+            font-size: 13.5px;
+            line-height: 1.5;
+            color: #ece9f3;
+        }
+
+        .circ-detail-list {
+            margin: 0;
+            padding-left: 18px;
+            font-size: 13.5px;
+            line-height: 1.55;
+            color: #ece9f3;
+        }
+
+        .circ-detail-list li {
+            margin-bottom: 4px;
+        }
+
+        .circ-detail-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            flex-wrap: wrap;
+        }
+
+        .circ-detail-note {
+            font-family: "DM Mono", monospace;
+            font-size: 11.5px;
+            color: #dedbe6;
+            max-width: 580px;
+            line-height: 1.45;
+        }
+
+        .btn-circ-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            min-height: 40px;
+            padding: 0 16px;
+            border-radius: 10px;
+            border: 1px solid var(--green);
+            background: rgba(202, 255, 25, 0.12);
+            color: var(--green);
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 13.5px;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-circ-action:hover {
+            background: var(--green);
+            color: var(--black);
+            box-shadow: 0 4px 16px var(--circ-glow-green);
+            transform: translateY(-2px);
+        }
+
+        /* ==================================================
+           02 / PREPARACIÓN — PASO A PASO (Acordeón interactivo)
+           ================================================== */
+        .circ-steps-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .circ-step-item {
+            border-radius: 12px;
+            border: 1px solid rgba(152, 120, 255, 0.25);
+            background: rgba(12, 10, 20, 0.45);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .circ-step-item:hover {
+            border-color: rgba(182, 157, 255, 0.6);
+            background: rgba(22, 18, 36, 0.65);
+            transform: translateX(3px);
+        }
+
+        .circ-step-item[open] {
+            border-color: var(--purple-light);
+            background: rgba(20, 16, 32, 0.65);
+        }
+
+        .circ-step-header {
+            display: grid;
+            grid-template-columns: 44px minmax(0, 1fr) 28px;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 18px;
+            cursor: pointer;
+            list-style: none;
+            user-select: none;
+        }
+
+        .circ-step-header::-webkit-details-marker {
+            display: none;
+        }
+
+        .circ-step-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            font-size: 18px;
+            background: rgba(152, 120, 255, 0.12);
+            border: 1px solid rgba(152, 120, 255, 0.3);
+            color: var(--pink);
+        }
+
+        .circ-step-info {
+            min-width: 0;
+        }
+
+        .circ-step-title {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--off-white);
+            line-height: 1.25;
+        }
+
+        .circ-step-sub {
+            margin: 3px 0 0;
+            font-family: "DM Mono", monospace;
+            font-size: 12px;
+            color: #dedbe6;
+        }
+
+        .circ-step-chevron {
+            font-size: 18px;
+            color: #c7b6ff;
+            transition: transform 0.2s ease, color 0.2s ease;
+            text-align: center;
+        }
+
+        .circ-step-item[open] .circ-step-chevron {
+            transform: rotate(90deg);
+            color: var(--green);
+        }
+
+        .circ-step-body {
+            padding: 0 18px 18px 70px;
+            font-size: 13.5px;
+            line-height: 1.55;
+            color: #ece9f3;
+        }
+
+        .circ-step-body p {
+            margin: 0 0 10px;
+        }
+
+        .circ-step-body p:last-child {
+            margin-bottom: 0;
+        }
+
+        .circ-security-callout {
+            margin-top: 12px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            background: rgba(255, 60, 172, 0.08);
+            border: 1px solid rgba(255, 60, 172, 0.28);
+            font-size: 12.5px;
+            color: #ffd6ee;
+        }
+
+        /* ==================================================
+           03 / ACOMPAÑAMIENTO (3 pilares de bienestar)
+           ================================================== */
+        .circ-mindset-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+        }
+
+        .circ-mindset-card {
+            padding: 20px 18px;
+            border-radius: 14px;
+            border: 1px solid rgba(152, 120, 255, 0.25);
+            background: rgba(12, 10, 20, 0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .circ-mindset-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--purple-light);
+            box-shadow: 0 8px 24px rgba(112, 64, 255, 0.2);
+            background: rgba(22, 18, 36, 0.7);
+        }
+
+        .circ-mindset-icon {
+            font-size: 26px;
+            margin-bottom: 4px;
+            line-height: 1;
+        }
+
+        .circ-mindset-title {
+            margin: 0;
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--off-white);
+        }
+
+        .circ-mindset-sub {
+            font-family: "DM Mono", monospace;
+            font-size: 12px;
+            color: var(--pink);
+        }
+
+        .circ-mindset-desc {
+            margin: 4px 0 0;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #e4e0ec;
+        }
+
+        /* ==================================================
+           04 / OTRAS OPORTUNIDADES (Más allá del joystick)
+           ================================================== */
+        .circ-roles-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .circ-role-card {
+            padding: 18px 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(152, 120, 255, 0.25);
+            background: rgba(12, 10, 20, 0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .circ-role-card:hover {
+            border-color: var(--green);
+            background: rgba(26, 20, 42, 0.7);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(202, 255, 25, 0.18);
+        }
+
+        .circ-role-icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+            line-height: 1;
+        }
+
+        .circ-role-title {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--off-white);
+        }
+
+        .circ-role-sub {
+            font-family: "DM Mono", monospace;
+            font-size: 12px;
+            color: var(--green);
+        }
+
+        .circ-role-desc {
+            margin: 4px 0 0;
+            font-size: 12.5px;
+            line-height: 1.45;
+            color: #e4e0ec;
+        }
+
+        /* ==================================================
+           05 / TU KIT PARA COMPETIR (Herramientas útiles)
+           ================================================== */
+        .circ-kit-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+
+        .circ-kit-card {
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(152, 120, 255, 0.25);
+            background: rgba(12, 10, 20, 0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .circ-kit-card:hover {
+            border-color: var(--pink);
+            background: rgba(24, 18, 38, 0.7);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 60, 172, 0.18);
+        }
+
+        .circ-kit-top {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .circ-kit-icon {
+            font-size: 20px;
+        }
+
+        .circ-kit-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--off-white);
+        }
+
+        .circ-kit-desc {
+            margin: 0;
+            font-size: 12.5px;
+            line-height: 1.45;
+            color: #e4e0ec;
+        }
+
+        .circ-kit-pill {
+            align-self: flex-start;
+            padding: 3px 8px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-family: "DM Mono", monospace;
+            font-size: 10.5px;
+            color: #d8ccff;
+        }
+
+        /* ==================================================
+           06 / CIERRE Y LLAMADA A LA ACCIÓN
+           ================================================== */
+        .circ-cta-module {
+            text-align: center;
+            padding: clamp(32px, 5vw, 48px) 24px;
+            background: linear-gradient(145deg, rgba(33, 20, 58, 0.9), rgba(14, 10, 24, 0.95));
+            border: 1px solid rgba(152, 120, 255, 0.45);
+            box-shadow: 0 16px 44px rgba(0, 0, 0, 0.6), 0 0 24px var(--circ-glow-purple);
+        }
+
+        .circ-cta-title {
+            margin: 0 0 12px;
+            font-size: clamp(1.8rem, 3.6vw, 2.6rem);
+            color: var(--off-white);
+        }
+
+        .circ-cta-title span {
+            color: var(--green);
+        }
+
+        .circ-cta-text {
+            max-width: 600px;
+            margin: 0 auto 28px;
+            font-size: 15px;
+            line-height: 1.55;
+            color: #ece9f3;
+        }
+
+        .circ-cta-actions {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn-cta {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            min-height: 48px;
+            padding: 0 24px;
+            border-radius: 12px;
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .btn-cta--primary {
+            border: 1px solid var(--green);
+            background: var(--green);
+            color: var(--black);
+            box-shadow: 0 4px 18px var(--circ-glow-green);
+        }
+
+        .btn-cta--primary:hover {
+            background: #d8ff4d;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(202, 255, 25, 0.38);
+        }
+
+        .btn-cta--secondary {
+            border: 1px solid rgba(152, 120, 255, 0.6);
+            background: linear-gradient(135deg, rgba(112, 64, 255, 0.25), rgba(33, 22, 65, 0.55));
+            color: var(--off-white);
+        }
+
+        .btn-cta--secondary:hover {
+            border-color: var(--pink);
+            background: linear-gradient(135deg, rgba(255, 60, 172, 0.25), rgba(112, 64, 255, 0.35));
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 18px var(--circ-glow-pink);
+        }
+
+        /* ==================================================
+           SISTEMA DE DESBLOQUEO PROGRESIVO CON FLECHAS
+           ================================================== */
+        .circ-module.is-locked {
+            display: none !important;
+        }
+
+        .circ-module.is-unlocked {
+            display: block !important;
+            animation: circModuleReveal 0.48s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+        }
+
+        @keyframes circModuleReveal {
+            from {
+                opacity: 0;
+                transform: translateY(24px) scale(0.99);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .circ-unlock-zone {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 20px auto 32px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .circ-unlock-line {
+            width: 2px;
+            height: 26px;
+            background: linear-gradient(180deg, rgba(152, 120, 255, 0.7), rgba(202, 255, 25, 0.85));
+            margin-bottom: 8px;
+            opacity: 0.85;
+        }
+
+        .circ-unlock-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 11px 24px;
+            border-radius: 999px;
+            border: 1.5px solid rgba(152, 120, 255, 0.45);
+            background: linear-gradient(135deg, rgba(30, 22, 54, 0.95), rgba(12, 10, 22, 0.98));
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), 0 0 16px var(--circ-glow-purple);
+            color: var(--off-white);
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 13.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .circ-unlock-btn:hover {
+            border-color: var(--green);
+            background: linear-gradient(135deg, rgba(48, 30, 84, 0.98), rgba(20, 16, 32, 0.98));
+            color: var(--green);
+            box-shadow: 0 10px 28px var(--circ-glow-green);
+            transform: translateY(2px);
+        }
+
+        .circ-unlock-btn:focus-visible {
+            outline: 2px solid var(--green);
+            outline-offset: 3px;
+        }
+
+        .circ-unlock-arrow {
+            display: inline-grid;
+            place-items: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(202, 255, 25, 0.16);
+            color: var(--green);
+            font-size: 15px;
+            font-weight: 900;
+            transition: transform 0.2s ease, background 0.2s ease;
+            animation: circBounceDown 1.6s infinite ease-in-out;
+        }
+
+        .circ-unlock-btn:hover .circ-unlock-arrow {
+            background: var(--green);
+            color: var(--black);
+            transform: translateY(3px);
+            animation: none;
+        }
+
+        @keyframes circBounceDown {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(4px); }
+        }
+
+        .circ-unlock-zone.is-completed {
+            margin: 8px auto 18px;
+        }
+
+        .circ-unlock-zone.is-completed .circ-unlock-line {
+            height: 16px;
+            background: rgba(152, 120, 255, 0.25);
+        }
+
+        .circ-unlock-zone.is-completed .circ-unlock-btn {
+            padding: 6px 16px;
+            font-size: 12px;
+            border-color: rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.04);
+            color: #d6d3de;
+            box-shadow: none;
+            cursor: default;
+            pointer-events: none;
+        }
+
+        .circ-unlock-zone.is-completed .circ-unlock-arrow {
+            width: 20px;
+            height: 20px;
+            font-size: 11px;
+            background: rgba(202, 255, 25, 0.18);
+            color: var(--green);
+            animation: none;
+        }
+
+        /* Responsive rules */
+        @media (max-width: 900px) {
+            .circ-mindset-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .circ-roles-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 680px) {
+            .circ-levels-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .circ-roles-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .circ-step-body {
+                padding-left: 18px;
+            }
+
+            .circ-step-header {
+                grid-template-columns: 36px minmax(0, 1fr) 20px;
+                gap: 8px;
+            }
+
+            .circ-step-icon {
+                width: 34px;
+                height: 34px;
+                font-size: 16px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .circ-level-btn,
+            .circ-mindset-card,
+            .circ-role-card,
+            .btn-cta,
+            .circ-detail-panel,
+            .circ-module.is-unlocked,
+            .circ-unlock-btn,
+            .circ-unlock-arrow {
+                animation: none;
+                transition: none;
+            }
+        }
+    </style>
+</head>
+
+<body class="guide-page circuitos-page">
+
+    <!-- ================= HEADER ================= -->
+    <header class="guide-header">
+        <a href="index.html" class="logo" aria-label="Fem Respawn, volver al inicio">
+            <span class="logo-main">Fem</span>
+            <span class="logo-sub">Respawn</span>
+        </a>
+        <a class="guide-back" href="index.html#competi">← VOLVER A COMPETÍ</a>
+    </header>
+
+    <!-- ================= MAIN CONTENT ================= -->
+    <main class="guide-main">
+
+        <!-- ================= 01 / INTRODUCCIÓN ================= -->
+        <section class="circ-module" id="circuito" aria-labelledby="intro-title">
+            <div class="circ-module-top">
+                <span class="circ-tag">01 / INTRODUCCIÓN</span>
+                <span class="circ-badge">Ruta formativa</span>
+            </div>
+
+            <h1 class="circ-module-title" id="intro-title">
+                Comprender la escena para competir con <span>confianza.</span>
+            </h1>
+
+            <div class="circ-module-highlight">
+                <span>✦</span> Encontrá tu equipo, aprendé a competir y crecé a tu ritmo
+            </div>
+
+            <p class="circ-module-lede">
+                Desde tu primer torneo comunitario hasta las ligas profesionales. Conocé cómo funcionan los clasificatorios, las reglas de juego limpio y las herramientas para crecer a tu propio ritmo.
+            </p>
+
+            <!-- CIRCUITO COMPETITIVO INTERACTIVO (3 NIVELES) -->
+            <div class="circ-flow-box">
+                <div class="circ-flow-kicker">
+                    <span>✦</span> TU RECORRIDO COMPETITIVO
+                </div>
+
+                <div class="circ-levels-grid" role="tablist" aria-label="Niveles de competencia">
+                    <!-- Nivel 01 -->
+                    <button type="button" class="circ-level-btn" role="tab" id="tab-lvl-1" aria-selected="true" aria-controls="panel-lvl" data-level="1">
+                        <span class="circ-level-icon" aria-hidden="true">👥</span>
+                        <span class="circ-level-num">01</span>
+                        <span class="circ-level-name">Comunidad</span>
+                        <span class="circ-level-sub">Empezá a jugar</span>
+                        <span class="circ-level-status" aria-hidden="true"><i class="circ-status-dot"></i> Etapa activa</span>
+                    </button>
+
+                    <!-- Nivel 02 -->
+                    <button type="button" class="circ-level-btn" role="tab" id="tab-lvl-2" aria-selected="false" aria-controls="panel-lvl" data-level="2">
+                        <span class="circ-level-icon" aria-hidden="true">⚔️</span>
+                        <span class="circ-level-num">02</span>
+                        <span class="circ-level-name">Clasificatorios</span>
+                        <span class="circ-level-sub">Poné a prueba tu equipo</span>
+                        <span class="circ-level-status" aria-hidden="true"><i class="circ-status-dot"></i> Seleccionar etapa</span>
+                    </button>
+
+                    <!-- Nivel 03 -->
+                    <button type="button" class="circ-level-btn" role="tab" id="tab-lvl-3" aria-selected="false" aria-controls="panel-lvl" data-level="3">
+                        <span class="circ-level-icon" aria-hidden="true">🏆</span>
+                        <span class="circ-level-num">03</span>
+                        <span class="circ-level-name">Profesional</span>
+                        <span class="circ-level-sub">Explorá el nivel pro</span>
+                        <span class="circ-level-status" aria-hidden="true"><i class="circ-status-dot"></i> Seleccionar etapa</span>
+                    </button>
+                </div>
+
+                <div class="circ-flow-hint">
+                    Seleccioná una etapa para conocer qué necesitás, qué podés aprender y cómo participar.
+                </div>
+
+                <!-- Detalle dinámico del nivel -->
+                <div class="circ-detail-panel" id="panel-lvl" role="tabpanel" aria-labelledby="tab-lvl-1">
+                    <!-- Renderizado dinámico mediante JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Conector interactivo hacia 02 -->
+        <div class="circ-unlock-zone" id="unlock-zone-preparacion">
+            <div class="circ-unlock-line" aria-hidden="true"></div>
+            <button type="button" class="circ-unlock-btn" onclick="unlockModule('preparacion')">
+                <span class="circ-unlock-arrow" aria-hidden="true">↓</span>
+                <span>Desbloquear 02 / PREPARACIÓN</span>
+            </button>
+        </div>
+
+        <!-- ================= 02 / PREPARACIÓN ================= -->
+        <section class="circ-module is-locked" id="preparacion" aria-labelledby="prep-title">
+            <div class="circ-module-top">
+                <span class="circ-tag">02 / PREPARACIÓN</span>
+                <span class="circ-badge" id="prep-badge">Checklist de ingreso</span>
+            </div>
+
+            <h2 class="circ-module-title" id="prep-title">
+                Tu primera inscripción, <span>paso a paso.</span>
+            </h2>
+
+            <p class="circ-module-lede" id="prep-lede">
+                Guía para encontrar torneos comunitarios, preparar la cuenta y conocer los requisitos básicos.
+            </p>
+
+            <div class="circ-steps-list" id="prep-steps-container">
+                <!-- Se llena dinámicamente según la etapa seleccionada -->
+            </div>
+        </section>
+
+        <!-- Conector interactivo hacia 03 -->
+        <div class="circ-unlock-zone" id="unlock-zone-acompanamiento" style="display: none;">
+            <div class="circ-unlock-line" aria-hidden="true"></div>
+            <button type="button" class="circ-unlock-btn" onclick="unlockModule('acompanamiento')">
+                <span class="circ-unlock-arrow" aria-hidden="true">↓</span>
+                <span>Desbloquear 03 / ACOMPAÑAMIENTO</span>
+            </button>
+        </div>
+
+        <!-- ================= 03 / ACOMPAÑAMIENTO ================= -->
+        <section class="circ-module is-locked" id="acompanamiento" aria-labelledby="mindset-title">
+            <div class="circ-module-top">
+                <span class="circ-tag">03 / ACOMPAÑAMIENTO</span>
+                <span class="circ-badge">Bienestar y mentalidad</span>
+            </div>
+
+            <h2 class="circ-module-title" id="mindset-title">
+                No tenés que demostrarlo <span>todo en una partida.</span>
+            </h2>
+
+            <p class="circ-module-lede" id="mindset-lede">
+                Aprendé a tu ritmo, disfrutá el proceso y entendé que cada partida es una oportunidad para mejorar.
+            </p>
+
+            <div class="circ-mindset-grid" id="mindset-cards-container">
+                <!-- Se llena dinámicamente según la etapa seleccionada -->
+            </div>
+        </section>
+
+        <!-- Conector interactivo hacia 04 -->
+        <div class="circ-unlock-zone" id="unlock-zone-oportunidades" style="display: none;">
+            <div class="circ-unlock-line" aria-hidden="true"></div>
+            <button type="button" class="circ-unlock-btn" onclick="unlockModule('oportunidades')">
+                <span class="circ-unlock-arrow" aria-hidden="true">↓</span>
+                <span>Desbloquear 04 / OTRAS OPORTUNIDADES</span>
+            </button>
+        </div>
+
+        <!-- ================= 04 / OTRAS OPORTUNIDADES ================= -->
+        <section class="circ-module is-locked" id="oportunidades" aria-labelledby="roles-title">
+            <div class="circ-module-top">
+                <span class="circ-tag">04 / OTRAS OPORTUNIDADES</span>
+                <span class="circ-badge">Profesionalización</span>
+            </div>
+
+            <h2 class="circ-module-title" id="roles-title">
+                Tu lugar en los esports puede estar <span>fuera de la partida.</span>
+            </h2>
+
+            <p class="circ-module-lede">
+                Existe todo un universo de roles técnicos, creativos y de gestión indispensables para que las competencias existan.
+            </p>
+
+            <div class="circ-roles-grid">
+                <!-- Casting -->
+                <article class="circ-role-card">
+                    <span class="circ-role-icon" aria-hidden="true">🎙️</span>
+                    <h3 class="circ-role-title">Casting</h3>
+                    <span class="circ-role-sub">Relato y conducción.</span>
+                    <p class="circ-role-desc">
+                        Transmitir la emoción de cada jugada, narrar teamfights, conducir transmisiones en vivo y analizar el juego en las mesas de analistas.
+                    </p>
+                </article>
+
+                <!-- Management -->
+                <article class="circ-role-card">
+                    <span class="circ-role-icon" aria-hidden="true">📅</span>
+                    <h3 class="circ-role-title">Management</h3>
+                    <span class="circ-role-sub">Gestión de equipos.</span>
+                    <p class="circ-role-desc">
+                        Coordinar calendarios, gestionar inscripciones, organizar scrims, resolver la logística y acompañar el bienestar humano de las jugadoras.
+                    </p>
+                </article>
+
+                <!-- Arbitraje -->
+                <article class="circ-role-card">
+                    <span class="circ-role-icon" aria-hidden="true">⚖️</span>
+                    <h3 class="circ-role-title">Arbitraje</h3>
+                    <span class="circ-role-sub">Reglas y mediación.</span>
+                    <p class="circ-role-desc">
+                        Interpretar reglamentos, mediar en disputas técnicas, controlar el juego limpio y garantizar que las partidas se jueguen con transparencia.
+                    </p>
+                </article>
+
+                <!-- Comunicación -->
+                <article class="circ-role-card">
+                    <span class="circ-role-icon" aria-hidden="true">🎬</span>
+                    <h3 class="circ-role-title">Comunicación</h3>
+                    <span class="circ-role-sub">Contenido y cobertura.</span>
+                    <p class="circ-role-desc">
+                        Producción audiovisual, periodismo de esports, redes sociales, diseño gráfico y creación de contenido para conectar a la comunidad con los equipos.
+                    </p>
+                </article>
+            </div>
+        </section>
+
+        <!-- Conector interactivo hacia 05 -->
+        <div class="circ-unlock-zone" id="unlock-zone-kit" style="display: none;">
+            <div class="circ-unlock-line" aria-hidden="true"></div>
+            <button type="button" class="circ-unlock-btn" onclick="unlockModule('kit')">
+                <span class="circ-unlock-arrow" aria-hidden="true">↓</span>
+                <span>Desbloquear 05 / HERRAMIENTAS Y KIT</span>
+            </button>
+        </div>
+
+        <!-- ================= 05 / TU KIT PARA COMPETIR ================= -->
+        <section class="circ-module is-locked" id="kit" aria-labelledby="kit-title">
+            <div class="circ-module-top">
+                <span class="circ-tag">05 / HERRAMIENTAS</span>
+                <span class="circ-badge">Kit esencial</span>
+            </div>
+
+            <h2 class="circ-module-title" id="kit-title">
+                Tu kit para <span>competir.</span>
+            </h2>
+
+            <p class="circ-module-lede">
+                Las herramientas y canales habituales que vas a encontrar al anotarte en cualquier torneo formal.
+            </p>
+
+            <div class="circ-kit-grid">
+                <div class="circ-kit-card">
+                    <div>
+                        <div class="circ-kit-top">
+                            <span class="circ-kit-icon" aria-hidden="true">🏆</span>
+                            <span class="circ-kit-name">Plataformas de brackets</span>
+                        </div>
+                        <p class="circ-kit-desc">
+                            Sistemas como Battlefy, Challengermode y FACEIT automatizan los emparejamientos, las tablas de posiciones y los cuadros de eliminación directa o suiza.
+                        </p>
+                    </div>
+                    <span class="circ-kit-pill">Inscripciones y llaves</span>
+                </div>
+
+                <div class="circ-kit-card">
+                    <div>
+                        <div class="circ-kit-top">
+                            <span class="circ-kit-icon" aria-hidden="true">💬</span>
+                            <span class="circ-kit-name">Discord y coordinación</span>
+                        </div>
+                        <p class="circ-kit-desc">
+                            El canal oficial donde se anuncian cambios de horario, se asignan salas de voz y las capitanas se comunican directamente con los árbitros.
+                        </p>
+                    </div>
+                    <span class="circ-kit-pill">Canal oficial de soporte</span>
+                </div>
+
+                <div class="circ-kit-card">
+                    <div>
+                        <div class="circ-kit-top">
+                            <span class="circ-kit-icon" aria-hidden="true">📜</span>
+                            <span class="circ-kit-name">Formatos de torneo</span>
+                        </div>
+                        <p class="circ-kit-desc">
+                            Conocer formatos clave: Eliminación Simple (sin margen de error), Doble Eliminación (con cuadro de perdedores) o Suizo (partidas por victorias acumuladas).
+                        </p>
+                    </div>
+                    <span class="circ-kit-pill">Estructuras de juego</span>
+                </div>
+
+                <div class="circ-kit-card">
+                    <div>
+                        <div class="circ-kit-top">
+                            <span class="circ-kit-icon" aria-hidden="true">⏰</span>
+                            <span class="circ-kit-name">Check-in y puntualidad</span>
+                        </div>
+                        <p class="circ-kit-desc">
+                            Estar atenta a los plazos límites. La mayoría de los torneos aplica la regla de Walk-Over (W.O.) si un equipo no ingresa a la sala en 10-15 minutos.
+                        </p>
+                    </div>
+                    <span class="circ-kit-pill">Gestión de tiempos</span>
+                </div>
+
+                <div class="circ-kit-card">
+                    <div>
+                        <div class="circ-kit-top">
+                            <span class="circ-kit-icon" aria-hidden="true">⚖️</span>
+                            <span class="circ-kit-name">Canales de arbitraje</span>
+                        </div>
+                        <p class="circ-kit-desc">
+                            Mecanismo formal para abrir tickets por fallas de conexión, pausas técnicas autorizadas o denuncias de comportamiento inadecuado con evidencia.
+                        </p>
+                    </div>
+                    <span class="circ-kit-pill">Reportes y reclamos</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Conector interactivo hacia 06 -->
+        <div class="circ-unlock-zone" id="unlock-zone-cta-module" style="display: none;">
+            <div class="circ-unlock-line" aria-hidden="true"></div>
+            <button type="button" class="circ-unlock-btn" onclick="unlockModule('cta-module')">
+                <span class="circ-unlock-arrow" aria-hidden="true">↓</span>
+                <span>Desbloquear 06 / PRÓXIMO PASO</span>
+            </button>
+        </div>
+
+        <!-- ================= 06 / CIERRE Y LLAMADA A LA ACCIÓN ================= -->
+        <section class="circ-module circ-cta-module is-locked" id="cta-module" aria-labelledby="cta-title">
+            <h2 class="circ-cta-title" id="cta-title">
+                El próximo paso <span>lo elegís vos.</span>
+            </h2>
+
+            <p class="circ-cta-text">
+                Encontrá una competencia, conocé a otras jugadoras o empezá a preparar tu equipo. No hace falta tener todo resuelto para dar el primer paso.
+            </p>
+
+            <div class="circ-cta-actions">
+                <a href="equipos.html" class="btn-cta btn-cta--primary">
+                    <span>👥</span> Buscar compañeras
+                </a>
+                <a href="torneos.html" class="btn-cta btn-cta--secondary">
+                    <span>🏆</span> Explorar competencias
+                </a>
+            </div>
+        </section>
+
+        <a class="guide-back guide-back-bottom" href="index.html#competi">← VOLVER A COMPETÍ</a>
+    </main>
+
+    <!-- ================= JAVASCRIPT ================= -->
+    <script>
+        /* Datos de los tres niveles de competencia (Progresión: 01 Comunidad → 02 Clasificatorios → 03 Profesional) */
+        const levelsData = {
+            1: {
+                levelNumber: '01',
+                levelName: 'Competencia Comunitaria',
+                tag: 'EMPEZÁ A JUGAR',
+                quote: '«Tu primera competencia no tiene que ser perfecta. Tiene que ser una oportunidad para aprender.»',
+                description: 'Torneos abiertos, amistosos y comunitarios organizados por agrupaciones, universidades o comunidades gamer, como Amazonas o WIGAr, según las competencias disponibles. El foco está puesto en la participación, el disfrute compartido y la confianza colectiva.',
+                learningPoints: [
+                    'Familiarizarte con las salas privadas y las partidas en equipo.',
+                    'Practicar la comunicación fluida por canales de voz.',
+                    'Aprender a coordinarte y apoyarte en tus compañeras sin tilt.',
+                    'Ganar experiencia en un entorno cuidado, libre de presiones tóxicas.'
+                ],
+                requirements: 'Un equipo o compañeras con quienes participar, conocer las reglas básicas del juego y revisar los requisitos de inscripción de cada comunidad.',
+                actionLabel: 'Ver cómo anotarte paso a paso ↓',
+                actionTarget: '#preparacion',
+                // Contenidos personalizados para Módulo 02 / PREPARACIÓN
+                prepTitle: 'Tu primera inscripción, <span>paso a paso.</span>',
+                prepLede: 'Guía para encontrar torneos comunitarios, preparar la cuenta y conocer los requisitos básicos.',
+                prepBadge: 'Checklist de ingreso',
+                steps: [
+                    {
+                        icon: '🔍',
+                        title: '01. Encontrá un torneo comunitario',
+                        sub: 'Juego, fechas y requisitos de la comunidad.',
+                        body: 'Revisá convocatorias vigentes en comunidades gamer aliadas (como WIGAr, Amazonas o el calendario de Fem Respawn). Antes de anotarte, comprobá que el torneo coincida con tu juego, que las fechas no se superpongan con tus obligaciones y que cumplas los requisitos de participación (cupo mixto o exclusivo femenino).'
+                    },
+                    {
+                        icon: '👤',
+                        title: '02. Prepará tu perfil de juego',
+                        sub: 'Cuenta y plataformas comunitarias.',
+                        body: 'La mayoría de las competencias comunitarias se gestionan a través de formularios o plataformas como Challengermode o Battlefy. Creá tu usuario con anticipación y vinculá tu Riot ID, SteamID o cuenta de juego correspondiente.<div class="circ-security-callout">🔒 <strong>Seguridad digital:</strong> Ningún organizador legítimo te pedirá contraseñas ni códigos de autenticación. Vinculá tus perfiles únicamente mediante las integraciones oficiales.</div>'
+                    },
+                    {
+                        icon: '📋',
+                        title: '03. Confirmá la participación',
+                        sub: 'Check-in y canal de Discord.',
+                        body: 'Muchos torneos abren una ventana de confirmación (check-in) de 30 a 60 minutos antes de comenzar para confirmar que el equipo está en línea. Luego se publican las llaves (brackets) con el horario exacto y el canal de voz asignado.'
+                    },
+                    {
+                        icon: '🛡️',
+                        title: '04. Jugá con confianza y respeto',
+                        sub: 'Pautas de convivencia y soporte.',
+                        body: 'El foco es divertirse y aprender en equipo. Si surge cualquier problema o conducta tóxica, los servidores cuentan con moderadoras y canales de reporte comunitarios donde podés solicitar asistencia inmediata.'
+                    }
+                ],
+                // Contenidos personalizados para Módulo 03 / ACOMPAÑAMIENTO
+                mindsetTitle: 'No tenés que demostrarlo <span>todo en una partida.</span>',
+                mindsetLede: 'Aprendé a tu ritmo, disfrutá el proceso y entendé que cada partida es una oportunidad para mejorar.',
+                mindsetFocus: 'Enfoque: confianza, aprendizaje, disfrute y pertenencia.',
+                mindsetCards: [
+                    {
+                        icon: '🌱',
+                        title: 'Confianza y ritmo propio',
+                        sub: 'Cada práctica suma.',
+                        desc: 'Las diferencias de experiencia se construyen con tiempo y oportunidades. No conviertas una sola partida ni una mala ronda en una medida definitiva de tu capacidad para jugar en equipo.'
+                    },
+                    {
+                        icon: '💡',
+                        title: 'Aprender y disfrutar',
+                        sub: 'El proceso vale más que el resultado.',
+                        desc: 'Equivocarse en una rotación o fallar una habilidad es parte natural del juego. Las mejores vivencias competitivas nacen de compartir risas, coordinarse y festejar cada avance juntas.'
+                    },
+                    {
+                        icon: '🤝',
+                        title: 'Pertenencia y respeto',
+                        sub: 'Comunidad sin agresiones.',
+                        desc: 'Jugar en equipo no debe implicar tolerar faltas de respeto. Formá parte de espacios donde tus compañeras te alienten y donde las reglas de convivencia se cumplan activamente.'
+                    }
+                ]
+            },
+            2: {
+                levelNumber: '02',
+                levelName: 'Ligas Abiertas y Clasificatorios',
+                tag: 'PONÉ A PRUEBA TU EQUIPO',
+                quote: '«La coordinación también se entrena. Cada partida te prepara para el próximo desafío.»',
+                description: 'Torneos abiertos, clasificatorios regionales y ligas organizadas por federaciones (como competencias auspiciadas por DEVA) o plataformas especializadas. Te permiten medirte contra escuadras con mayor rodaje y evaluar tu nivel táctico.',
+                learningPoints: [
+                    'Cumplir horarios formales de check-in y tiempos de pausa.',
+                    'Interpretar reglamentos oficiales y formatos competitivos estructurados.',
+                    'Coordinar estrategias de selección/bloqueo de mapas y roles.',
+                    'Resolver incidencias técnicas comunicándote con los árbitros.'
+                ],
+                requirements: 'Un equipo organizado, cuentas de juego verificadas cuando se requiera y conocimiento riguroso de las reglas de inscripción y juego limpio.',
+                actionLabel: 'Preparar a tu equipo en la sección Equipos ↗',
+                actionUrl: 'equipos.html',
+                // Contenidos personalizados para Módulo 02 / PREPARACIÓN
+                prepTitle: 'Tu camino a las clasificatorias, <span>paso a paso.</span>',
+                prepLede: 'Guía para comprobar los requisitos, revisar el reglamento, preparar el equipo y completar la inscripción.',
+                prepBadge: 'Ruta clasificatoria',
+                steps: [
+                    {
+                        icon: '📜',
+                        title: '01. Comprobá los requisitos de elegibilidad',
+                        sub: 'Residencia, rangos mínimos y reglamento.',
+                        body: 'En ligas abiertas y clasificatorios suele requerirse un rango mínimo competitivo, mayoría de edad o autorización de tutores, y residencia regional comprobable (por ejemplo, Argentina o Cono Sur). Leé el reglamento oficial completo antes de comprometer al equipo.'
+                    },
+                    {
+                        icon: '👥',
+                        title: '02. Armá y verificá el roster oficial',
+                        sub: 'Titulares, suplentes y capitana/IGL.',
+                        body: 'Registrá al equipo en la plataforma del torneo (FACEIT, Challengermode, etc.) con sus 5 titulares y al menos 1 o 2 suplentes registradas. Designen una capitana o IGL que actuará como enlace formal con la organización y los árbitros.'
+                    },
+                    {
+                        icon: '⏰',
+                        title: '03. Check-in puntual y veto de mapas',
+                        sub: 'Gestión de tiempos y fase de selección.',
+                        body: 'El check-in en clasificatorios es estricto: no presentarse a tiempo deriva en descalificación inmediata (Walk-Over). Practiquen previamente la fase de vetos/picks de mapas y la sincronización con el cliente del juego y antitrampas.'
+                    },
+                    {
+                        icon: '⚖️',
+                        title: '04. Partida oficial y soporte de arbitraje',
+                        sub: 'Grabación de demos y resolución de disputas.',
+                        body: 'Conserven capturas de pantalla de los marcadores finales y activen la grabación de demos si la competición lo exige. Ante desconexiones o dudas reglamentarias, solo la capitana debe abrir ticket con los árbitros oficiales.'
+                    }
+                ],
+                // Contenidos personalizados para Módulo 03 / ACOMPAÑAMIENTO
+                mindsetTitle: 'La presión no tiene que <span>jugar por vos.</span>',
+                mindsetLede: 'Aprendé a gestionar los nervios, recuperar el foco después de un error y mantener una mentalidad competitiva sin descuidarte.',
+                mindsetFocus: 'Enfoque: presión, frustración, concentración y trabajo en equipo.',
+                mindsetCards: [
+                    {
+                        icon: '🎯',
+                        title: 'Gestión de nervios y foco',
+                        sub: 'La mente también se entrena.',
+                        desc: 'Tener pulsaciones altas en partidas decisivas es normal. Respirar hondo entre rondas, mantener la calma en los llamados de voz y confiar en las horas de entrenamiento permite recuperar la claridad táctica.'
+                    },
+                    {
+                        icon: '🔄',
+                        title: 'Afrontar la frustración',
+                        sub: 'Un mapa perdido no es una serie perdida.',
+                        desc: 'En formatos Bo3 o Bo5, quedarse anclada en una ronda fallida arruina el siguiente intento. La clave está en el "reset mental": hablar de lo que viene y no de lo que ya pasó.'
+                    },
+                    {
+                        icon: '⚡',
+                        title: 'Sinergia y apoyo mutuo',
+                        sub: 'El equipo se sostiene entre todas.',
+                        desc: 'El liderazgo positivo marca la diferencia entre una escuadra que se disuelve ante la adversidad y una que remonta partidas imposibles. Fomentar el aliento constante ante los errores.'
+                    }
+                ]
+            },
+            3: {
+                levelNumber: '03',
+                levelName: 'Circuitos Profesionales',
+                tag: 'EXPLORÁ EL NIVEL PRO',
+                quote: '«El nivel profesional es una posibilidad, no la única forma de formar parte de los esports.»',
+                description: 'Ligas y circuitos oficiales (como VCT Game Changers o ESL Impact) que pueden incluir clasificatorios específicos, requisitos de elegibilidad, contratos, premios o cupos internacionales según la competición.',
+                learningPoints: [
+                    'Comprender las estructuras competitivas oficiales de los publishers.',
+                    'Prepararte para competir bajo reglamentos altamente exigentes.',
+                    'Conocer los procesos de selección, scouteo y clasificación regional.',
+                    'Identificar oportunidades de desarrollo deportivo profesional.'
+                ],
+                requirements: 'Cumplir las condiciones particulares de cada circuito. Los contratos, salarios y clasificaciones internacionales dependen del rendimiento y de cada organización, no son beneficios automáticos.',
+                actionLabel: 'Explorar squads de la comunidad ↗',
+                actionUrl: 'equipos.html#showcase-title',
+                // Contenidos personalizados para Módulo 02 / PREPARACIÓN
+                prepTitle: 'Prepará tu próximo <span>paso competitivo.</span>',
+                prepLede: 'Información sobre requisitos de acceso, circuitos competitivos, rendimiento y oportunidades profesionales.',
+                prepBadge: 'Nivel profesional',
+                steps: [
+                    {
+                        icon: '🌐',
+                        title: '01. Requisitos de acceso y elegibilidad',
+                        sub: 'Verificación de identidad y normativas de publisher.',
+                        body: 'Los circuitos oficiales (Game Changers, ESL Impact, etc.) exigen verificación estricta de identidad de jugadoras, historial disciplinario limpio en las cuentas y cumplimiento cabal del código de conducta de los publishers (Riot Games, Valve, etc.).'
+                    },
+                    {
+                        icon: '📊',
+                        title: '02. Estructura de rendimiento y staff',
+                        sub: 'Coaching, analistas y rutinas de entrenamiento.',
+                        body: 'En el plano profesional la práctica va más allá de jugar ranked: implica rutinas fijas de scrims con equipos de nivel parejo o superior, análisis estadístico de VODs, preparación de composiciones y acompañamiento de coaches.'
+                    },
+                    {
+                        icon: '📝',
+                        title: '03. Contratos, derechos y transparencia',
+                        sub: 'Condiciones de fichaje y representación.',
+                        body: 'Si una organización u organización deportiva te ofrece sumarte a un proyecto remunerado o con sponsoreo, asesorate antes de firmar. Los acuerdos deben aclarar compromisos horarios, cesión de imagen, premios y cláusulas de salida de mutuo acuerdo.'
+                    },
+                    {
+                        icon: '🚀',
+                        title: '04. Circuitos regionales y camino internacional',
+                        sub: 'Fases cerradas, playoffs y cupos a mundiales.',
+                        body: 'Comprender cómo se estructuran las divisiones regionales (LATAM Sur, Sudamérica, etc.) y qué torneos otorgan puntos de circuito para clasificar a campeonatos mundiales o finales presenciales en estadios.'
+                    }
+                ],
+                // Contenidos personalizados para Módulo 03 / ACOMPAÑAMIENTO
+                mindsetTitle: 'Competir al máximo también <span>implica cuidarte.</span>',
+                mindsetLede: 'Encontrá un equilibrio entre rendimiento, descanso y bienestar para sostener tu desarrollo competitivo a largo plazo.',
+                mindsetFocus: 'Enfoque: exigencia, constancia, recuperación y equilibrio personal.',
+                mindsetCards: [
+                    {
+                        icon: '⚖️',
+                        title: 'Equilibrio y prevención del burnout',
+                        sub: 'El descanso también es entrenamiento.',
+                        desc: 'El sobreentrenamiento y las jornadas interminables frente a la pantalla reducen los reflejos y disparan la irritabilidad. Dormir adecuadamente, alimentarse bien y despejar la mente optimiza la toma de decisiones.'
+                    },
+                    {
+                        icon: '🧘',
+                        title: 'Constancia y resiliencia profesional',
+                        sub: 'La carrera es de fondo, no de velocidad.',
+                        desc: 'El camino pro está lleno de etapas donde los resultados no acompañan de inmediato. La madurez de una jugadora profesional se demuestra en la capacidad de mantener la disciplina diaria y la ética de trabajo.'
+                    },
+                    {
+                        icon: '🌟',
+                        title: 'Identidad y bienestar personal',
+                        sub: 'Sos más que tu ranking en el juego.',
+                        desc: 'Tener pasatiempos fuera del gaming, círculos de apoyo afectivo y proyectos personales permite encarar la alta competencia con mayor estabilidad emocional y seguridad en vos misma.'
+                    }
+                ]
+            }
+        };
+
+        const panelLvl = document.getElementById('panel-lvl');
+        const levelButtons = document.querySelectorAll('.circ-level-btn');
+
+        // Referencias a los módulos dinámicos 02 y 03
+        const prepTitleEl = document.getElementById('prep-title');
+        const prepLedeEl = document.getElementById('prep-lede');
+        const prepBadgeEl = document.getElementById('prep-badge');
+        const prepStepsContainer = document.getElementById('prep-steps-container');
+
+        const mindsetTitleEl = document.getElementById('mindset-title');
+        const mindsetLedeEl = document.getElementById('mindset-lede');
+        const mindsetCardsContainer = document.getElementById('mindset-cards-container');
+
+        function renderLevel(lvl) {
+            const data = levelsData[lvl];
+            if (!data) return;
+
+            // Update aria-selected on buttons & update status pills
+            levelButtons.forEach(btn => {
+                const isSelected = btn.dataset.level === String(lvl);
+                btn.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+                const statusEl = btn.querySelector('.circ-level-status');
+                if (statusEl) {
+                    statusEl.innerHTML = isSelected 
+                        ? '<i class="circ-status-dot"></i> Etapa activa'
+                        : '<i class="circ-status-dot"></i> Seleccionar etapa';
+                }
+            });
+
+            // 1. Render Detalle Módulo 01 (panel-lvl)
+            panelLvl.setAttribute('aria-labelledby', 'tab-lvl-' + lvl);
+            panelLvl.innerHTML = `
+                <div class="circ-detail-header">
+                    <div>
+                        <span class="circ-detail-badge">NIVEL ${data.levelNumber} · ${data.tag}</span>
+                        <h3 style="margin: 6px 0 0; font-size: 20px; font-weight: 700; color: var(--off-white);">${data.levelName}</h3>
+                    </div>
+                </div>
+
+                <div class="circ-detail-quote">
+                    ${data.quote}
+                </div>
+
+                <div class="circ-detail-grid">
+                    <div class="circ-detail-col">
+                        <h4>¿De qué se trata?</h4>
+                        <p>${data.description}</p>
+                    </div>
+
+                    <div class="circ-detail-col">
+                        <h4>¿Qué vas a aprender?</h4>
+                        <ul class="circ-detail-list">
+                            ${data.learningPoints.map(pt => `<li>${pt}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <h4 style="margin: 0 0 6px; font-family: 'DM Mono', monospace; font-size: 12px; color: var(--green); text-transform: uppercase;">¿Qué necesitás para participar?</h4>
+                    <p style="margin: 0; font-size: 13.5px; line-height: 1.5; color: #ece9f3;">${data.requirements}</p>
+                </div>
+
+                <div class="circ-detail-footer">
+                    <div class="circ-detail-note">
+                        ✦ <strong>Nota orientativa:</strong> Los niveles representan una guía para comprender la escena, no una escalera obligatoria ni universal. Cada jugadora elige su propio objetivo.
+                    </div>
+                    ${data.actionUrl ? `
+                        <a href="${data.actionUrl}" class="btn-circ-action">${data.actionLabel}</a>
+                    ` : `
+                        <button type="button" class="btn-circ-action" onclick="unlockModule('preparacion')">${data.actionLabel}</button>
+                    `}
+                </div>
+            `;
+
+            // 2. Render Contenido Personalizado Módulo 02 / PREPARACIÓN
+            if (prepTitleEl && prepLedeEl && prepStepsContainer) {
+                prepTitleEl.innerHTML = data.prepTitle;
+                prepLedeEl.textContent = data.prepLede;
+                if (prepBadgeEl && data.prepBadge) prepBadgeEl.textContent = data.prepBadge;
+
+                prepStepsContainer.innerHTML = data.steps.map((st, i) => `
+                    <details class="circ-step-item" ${i === 0 ? 'open' : ''}>
+                        <summary class="circ-step-header">
+                            <div class="circ-step-icon" aria-hidden="true">${st.icon}</div>
+                            <div class="circ-step-info">
+                                <h3 class="circ-step-title">${st.title}</h3>
+                                <div class="circ-step-sub">${st.sub}</div>
+                            </div>
+                            <span class="circ-step-chevron" aria-hidden="true">›</span>
+                        </summary>
+                        <div class="circ-step-body">
+                            <p>${st.body}</p>
+                        </div>
+                    </details>
+                `).join('');
+            }
+
+            // 3. Render Contenido Personalizado Módulo 03 / ACOMPAÑAMIENTO
+            if (mindsetTitleEl && mindsetLedeEl && mindsetCardsContainer) {
+                mindsetTitleEl.innerHTML = data.mindsetTitle;
+                mindsetLedeEl.innerHTML = `${data.mindsetLede} <span style="display:block; margin-top:6px; font-family:'DM Mono', monospace; font-size:12px; color:var(--pink);">${data.mindsetFocus}</span>`;
+
+                mindsetCardsContainer.innerHTML = data.mindsetCards.map(c => `
+                    <article class="circ-mindset-card">
+                        <span class="circ-mindset-icon" aria-hidden="true">${c.icon}</span>
+                        <h3 class="circ-mindset-title">${c.title}</h3>
+                        <span class="circ-mindset-sub">${c.sub}</span>
+                        <p class="circ-mindset-desc">${c.desc}</p>
+                    </article>
+                `).join('');
+            }
+        }
+
+        // Event listeners for level tabs
+        levelButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const lvl = btn.dataset.level;
+                resetProgression();
+                renderLevel(lvl);
+            });
+        });
+
+        /* ==================================================
+           LÓGICA DE DESBLOQUEO PROGRESIVO DE ETAPAS
+           ================================================== */
+        const unlockSequence = [
+            { id: 'preparacion', label: '02 / PREPARACIÓN' },
+            { id: 'acompanamiento', label: '03 / ACOMPAÑAMIENTO' },
+            { id: 'oportunidades', label: '04 / OTRAS OPORTUNIDADES' },
+            { id: 'kit', label: '05 / HERRAMIENTAS Y KIT' },
+            { id: 'cta-module', label: '06 / PRÓXIMO PASO' }
+        ];
+
+        function resetProgression() {
+            unlockSequence.forEach((item, index) => {
+                const section = document.getElementById(item.id);
+                if (section) {
+                    section.classList.remove('is-unlocked');
+                    section.classList.add('is-locked');
+                }
+
+                const zone = document.getElementById('unlock-zone-' + item.id);
+                if (zone) {
+                    zone.classList.remove('is-completed');
+                    const btn = zone.querySelector('.circ-unlock-btn');
+                    if (btn) {
+                        btn.innerHTML = `<span class="circ-unlock-arrow" aria-hidden="true">↓</span><span>Desbloquear ${item.label}</span>`;
+                    }
+                    // Solo el primer conector (hacia 02) queda visible al reiniciar
+                    zone.style.display = index === 0 ? 'flex' : 'none';
+                }
+            });
+        }
+
+        window.unlockModule = function(moduleId) {
+            const section = document.getElementById(moduleId);
+            if (!section) return;
+
+            if (section.classList.contains('is-locked')) {
+                section.classList.remove('is-locked');
+                section.classList.add('is-unlocked');
+
+                // Marcar el botón que lo desbloqueó como completado
+                const currentZone = document.getElementById('unlock-zone-' + moduleId);
+                if (currentZone) {
+                    currentZone.classList.add('is-completed');
+                    const btn = currentZone.querySelector('.circ-unlock-btn');
+                    if (btn) {
+                        const tagEl = section.querySelector('.circ-tag');
+                        const label = tagEl ? tagEl.textContent.trim() : 'Etapa';
+                        btn.innerHTML = `<span class="circ-unlock-arrow" aria-hidden="true">✓</span><span>${label} desbloqueada</span>`;
+                    }
+                }
+
+                // Habilitar visualmente el siguiente conector de flecha
+                const idx = unlockSequence.findIndex(item => item.id === moduleId);
+                if (idx !== -1 && idx + 1 < unlockSequence.length) {
+                    const nextModule = unlockSequence[idx + 1];
+                    const nextZone = document.getElementById('unlock-zone-' + nextModule.id);
+                    if (nextZone) {
+                        nextZone.style.display = 'flex';
+                    }
+                }
+            }
+
+            // Desplazamiento suave hacia la sección recién desbloqueada
+            setTimeout(() => {
+                const headerOffset = 90;
+                const elementPosition = section.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }, 80);
+        };
+
+        // Initial render: Level 1 (Comunidad)
+        resetProgression();
+        renderLevel(1);
+    </script>
+    <script src="sparkles.js"></script>
+</body>
+</html>

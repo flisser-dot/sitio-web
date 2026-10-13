@@ -1,0 +1,3946 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#09090a">
+    <title>Equipos y Squads | Fem Respawn</title>
+
+    <!-- Tipografías -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Pixelify+Sans:wght@400..700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        /* ==================================================
+           SECCIÓN EQUIPOS — ESTILOS DEDICADOS
+           Paleta: Negro (#09090a), Violeta (#7040ff / #9878ff),
+           Rosa (#FF3CAC), Verde Lima (#caff19), Blanco (#f2f0e9)
+           ================================================== */
+
+        .teams-page {
+            --teams-bg-card: rgba(16, 14, 24, 0.88);
+            --teams-border: rgba(152, 120, 255, 0.28);
+            --teams-border-focus: var(--green);
+            --teams-purple-glow: rgba(112, 64, 255, 0.24);
+            --teams-pink-glow: rgba(255, 60, 172, 0.22);
+            --teams-green-glow: rgba(202, 255, 25, 0.25);
+        }
+
+        .teams-page .guide-main {
+            padding: 40px 0 80px;
+        }
+
+        /* ----- A. Encabezado principal ----- */
+        .teams-hero {
+            position: relative;
+            isolation: isolate;
+            display: grid;
+            grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.95fr);
+            gap: clamp(24px, 4vw, 48px);
+            align-items: center;
+            margin-bottom: 28px;
+            padding-bottom: 28px;
+            border-bottom: 1px solid rgba(152, 120, 255, 0.2);
+        }
+
+        .teams-hero > :not(.teams-bg-decor) {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Objeto flotante de fondo con animación reactiva al mouse */
+        .teams-bg-decor {
+            position: absolute;
+            inset: 0;
+            overflow: visible;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .teams-float-icon {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            width: clamp(75px, 6.8vw, 115px);
+            height: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 14px 24px rgba(112, 64, 255, 0.42));
+            opacity: 0.92;
+            pointer-events: auto;
+            translate: var(--pointer-shift-x, 0px) var(--pointer-shift-y, 0px);
+            transition: translate .42s cubic-bezier(.2, .75, .25, 1), filter .25s ease;
+            --float-duration: 8s;
+            --float-delay: -1.2s;
+            --float-drift: -13px;
+            --float-angle: 5deg;
+            animation: areas-space-drift var(--float-duration, 8s) ease-in-out var(--float-delay, 0s) infinite alternate;
+            cursor: pointer;
+        }
+
+        @keyframes areas-space-drift {
+            from { transform: translate3d(0, 0, 0) rotate(calc(var(--float-angle, 0deg) - 3deg)); }
+            to { transform: translate3d(0, var(--float-drift, -12px), 0) rotate(calc(var(--float-angle, 0deg) + 3deg)); }
+        }
+
+        .teams-hero-copy {
+            min-width: 0;
+        }
+
+        .teams-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: "DM Mono", monospace;
+            font-size: 13px;
+            color: var(--gray);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .teams-eyebrow span {
+            color: var(--green);
+            font-weight: 700;
+        }
+
+        .teams-title {
+            margin: 12px 0 14px;
+            font-family: "Space Grotesk", sans-serif;
+            font-size: clamp(2.4rem, 5.2vw, 4.4rem);
+            line-height: 1.02;
+            letter-spacing: -0.03em;
+            color: var(--off-white);
+        }
+
+        .teams-title span {
+            color: var(--green);
+            position: relative;
+            display: inline-block;
+        }
+
+        .teams-lede {
+            max-width: 680px;
+            margin: 0 0 24px;
+            font-size: clamp(1rem, 1.25vw, 1.15rem);
+            line-height: 1.55;
+            color: #c8c6c0;
+        }
+
+        .teams-hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        /* Botones principales con identidad gamer */
+        .btn-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            min-height: 48px;
+            padding: 0 22px;
+            border-radius: 12px;
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+            user-select: none;
+        }
+
+        .btn-action--primary {
+            border: 1px solid var(--green);
+            background: var(--green);
+            color: var(--black);
+            box-shadow: 0 4px 20px var(--teams-green-glow);
+        }
+
+        .btn-action--primary:hover,
+        .btn-action--primary:focus-visible {
+            background: #d8ff4d;
+            box-shadow: 0 6px 26px rgba(202, 255, 25, 0.42);
+            transform: translateY(-2px);
+            outline: none;
+        }
+
+        .btn-action--secondary {
+            border: 1px solid rgba(152, 120, 255, 0.65);
+            background: linear-gradient(135deg, rgba(112, 64, 255, 0.22), rgba(33, 22, 65, 0.55));
+            color: var(--off-white);
+            box-shadow: inset 0 0 12px rgba(152, 120, 255, 0.12);
+        }
+
+        .btn-action--secondary:hover,
+        .btn-action--secondary:focus-visible {
+            border-color: var(--pink);
+            background: linear-gradient(135deg, rgba(255, 60, 172, 0.24), rgba(112, 64, 255, 0.3));
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px var(--teams-pink-glow);
+            outline: none;
+        }
+
+        .btn-icon {
+            font-family: "DM Mono", monospace;
+            font-size: 18px;
+            line-height: 1;
+        }
+
+        /* Banner de convivencia */
+        .teams-convivencia-banner {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 14px 18px;
+            border-radius: 12px;
+            border: 1px solid rgba(152, 120, 255, 0.35);
+            background: linear-gradient(135deg, rgba(25, 18, 42, 0.8), rgba(12, 10, 20, 0.85));
+            backdrop-filter: blur(8px);
+        }
+
+        .teams-convivencia-shield {
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: grid;
+            place-items: center;
+            background: rgba(152, 120, 255, 0.18);
+            border: 1px solid rgba(152, 120, 255, 0.4);
+            color: var(--pink);
+            font-size: 16px;
+        }
+
+        .teams-convivencia-text {
+            font-size: 13.5px;
+            line-height: 1.45;
+            color: #d2d0c8;
+        }
+
+        .teams-convivencia-text strong {
+            color: var(--off-white);
+        }
+
+        .btn-link-guidelines {
+            margin-left: 6px;
+            padding: 0;
+            border: 0;
+            background: transparent;
+            color: var(--green);
+            font-family: "DM Mono", monospace;
+            font-size: 12.5px;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            cursor: pointer;
+            transition: color 0.15s ease;
+        }
+
+        .btn-link-guidelines:hover,
+        .btn-link-guidelines:focus-visible {
+            color: #e5ff75;
+            outline: none;
+        }
+
+        /* Hero visual lateral: stats gamer y badge interactivo */
+        .teams-hero-side {
+            display: grid;
+            gap: 14px;
+        }
+
+        .teams-stats-card {
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid rgba(152, 120, 255, 0.3);
+            background: linear-gradient(145deg, rgba(23, 16, 40, 0.75), rgba(10, 9, 14, 0.85));
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+        }
+
+        .teams-stats-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .teams-stats-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(202, 255, 25, 0.12);
+            border: 1px solid rgba(202, 255, 25, 0.35);
+            color: var(--green);
+            font-family: "DM Mono", monospace;
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+
+        .teams-stats-pulse {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--green);
+            box-shadow: 0 0 8px var(--green);
+            animation: pulse-dot 2s infinite ease-in-out;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.85); }
+        }
+
+        .teams-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            text-align: center;
+        }
+
+        .teams-stat-box {
+            padding: 10px 8px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .teams-stat-number {
+            font-family: "Pixelify Sans", sans-serif;
+            font-size: 26px;
+            color: var(--off-white);
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .teams-stat-label {
+            font-family: "DM Mono", monospace;
+            font-size: 10.5px;
+            color: var(--gray);
+            text-transform: uppercase;
+        }
+
+        .teams-safety-tip {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            background: rgba(255, 60, 172, 0.07);
+            border: 1px solid rgba(255, 60, 172, 0.28);
+            font-size: 12.5px;
+            color: #ffd6ee;
+        }
+
+        .teams-safety-tip span.tip-icon {
+            font-size: 18px;
+        }
+
+        /* ----- B. Buscador de jugadoras y equipos ----- */
+        .teams-module {
+            margin-bottom: 64px;
+        }
+
+        /* Pestañas LFT / LFP */
+        .teams-tabs-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .teams-tabs {
+            display: inline-flex;
+            padding: 6px;
+            border-radius: 16px;
+            background: rgba(14, 12, 22, 0.95);
+            border: 1px solid rgba(152, 120, 255, 0.35);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+        }
+
+        .teams-tab {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            min-height: 44px;
+            padding: 0 20px;
+            border: 0;
+            border-radius: 12px;
+            background: transparent;
+            color: var(--gray);
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .teams-tab:hover {
+            color: var(--off-white);
+        }
+
+        .teams-tab[aria-selected="true"] {
+            background: linear-gradient(135deg, var(--purple), #5425d4);
+            color: #ffffff;
+            box-shadow: 0 4px 16px rgba(112, 64, 255, 0.4);
+        }
+
+        .teams-tab-tag {
+            padding: 2px 8px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.12);
+            font-family: "DM Mono", monospace;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .teams-tab[aria-selected="true"] .teams-tab-tag {
+            background: rgba(202, 255, 25, 0.25);
+            color: var(--green);
+        }
+
+        /* Panel de filtros y búsqueda */
+        .teams-filter-panel {
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid rgba(152, 120, 255, 0.28);
+            background: rgba(16, 13, 26, 0.78);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(8px);
+            margin-bottom: 26px;
+        }
+
+        .teams-search-bar {
+            position: relative;
+            margin-bottom: 16px;
+        }
+
+        .teams-search-input {
+            width: 100%;
+            height: 48px;
+            padding: 0 44px 0 16px;
+            border: 1px solid rgba(152, 120, 255, 0.38);
+            border-radius: 12px;
+            background: rgba(9, 8, 14, 0.85);
+            color: var(--off-white);
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .teams-search-input:focus {
+            border-color: var(--green);
+            box-shadow: 0 0 12px rgba(202, 255, 25, 0.25);
+        }
+
+        .teams-search-input::placeholder {
+            color: #7b7882;
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+            font-size: 16px;
+            pointer-events: none;
+        }
+
+        /* Grid de filtros combinables */
+        .teams-filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+        }
+
+        .teams-filter-item {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .teams-filter-label {
+            font-family: "DM Mono", monospace;
+            font-size: 11px;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Dropdowns con estilo exacto de torneos.html */
+        .teams-select-wrap {
+            position: relative;
+            display: grid;
+        }
+
+        .teams-select {
+            grid-area: 1 / 1;
+            height: 46px;
+            min-height: 46px;
+            padding: 12px 42px 12px 14px;
+            box-sizing: border-box;
+            align-items: center;
+            line-height: 20px;
+            appearance: none;
+            -webkit-appearance: none;
+            border: 1px solid #45364f;
+            border-radius: 12px;
+            background: #17111f;
+            color: var(--off-white);
+            font: 500 14px/20px "Space Grotesk", sans-serif;
+            cursor: pointer;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .teams-select-wrap::after {
+            content: "";
+            grid-area: 1 / 1;
+            align-self: center;
+            justify-self: end;
+            width: 8px;
+            height: 8px;
+            margin: -4px 18px 0 0;
+            border-right: 1.5px solid var(--gray);
+            border-bottom: 1.5px solid var(--gray);
+            transform: rotate(45deg);
+            pointer-events: none;
+            transition: border-color 0.2s;
+        }
+
+        .teams-select-wrap:has(.teams-select:focus-visible)::after,
+        .teams-select-wrap:has(.teams-select:open)::after {
+            border-color: var(--green);
+        }
+
+        .teams-select:focus-visible,
+        .teams-select:focus {
+            border-color: var(--green);
+            outline: none;
+        }
+
+        .teams-select:open {
+            border-color: var(--green);
+        }
+
+        .teams-select option {
+            padding: 8px 14px;
+            background: #17111f;
+            color: var(--off-white);
+        }
+
+        .teams-select option:checked {
+            background: #b8ff00;
+            color: #17121d;
+        }
+
+        @supports (appearance: base-select) {
+            .teams-select,
+            .teams-select::picker(select) {
+                appearance: base-select;
+            }
+            .teams-select::picker-icon {
+                display: none;
+            }
+            .teams-select::picker(select) {
+                inline-size: anchor-size(width);
+                min-inline-size: anchor-size(width);
+                max-inline-size: anchor-size(width);
+                max-block-size: 320px;
+                margin-block-start: 8px;
+                padding: 6px;
+                overflow-y: auto;
+                border: 1px solid #45364f;
+                border-radius: 12px;
+                background: #17111f;
+                color: var(--off-white);
+                box-shadow: 0 14px 32px rgba(0, 0, 0, .48);
+            }
+            .teams-select option {
+                min-block-size: 38px;
+                margin-block: 2px;
+                padding: 9px 14px;
+                border-radius: 8px;
+                background: transparent;
+                color: var(--off-white);
+            }
+            .teams-select option:hover:not(:checked) {
+                background: #281f33;
+                color: var(--off-white);
+            }
+            .teams-select option:checked {
+                background: #b8ff00;
+                color: #17121d;
+            }
+        }
+
+        /* Barra de estado y limpiar filtros */
+        .filter-status-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 16px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.07);
+        }
+
+        .results-count {
+            font-family: "DM Mono", monospace;
+            font-size: 13px;
+            color: var(--off-white);
+        }
+
+        .results-count strong {
+            color: var(--green);
+        }
+
+        .btn-clear-filters {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            background: transparent;
+            color: var(--gray);
+            font-family: "DM Mono", monospace;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-clear-filters:hover,
+        .btn-clear-filters:focus-visible {
+            border-color: var(--pink);
+            color: var(--pink);
+            background: rgba(255, 60, 172, 0.08);
+            outline: none;
+        }
+
+        /* ----- C. Tarjetas de búsqueda (LFT y LFP) ----- */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 20px;
+        }
+
+        .team-card {
+            display: flex;
+            flex-direction: column;
+            border-radius: 16px;
+            padding: 20px;
+            background: var(--teams-bg-card);
+            border: 1px solid var(--teams-border);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4);
+            position: relative;
+            transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+        }
+
+        .team-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(182, 157, 255, 0.7);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55), 0 0 20px var(--teams-purple-glow);
+        }
+
+        /* Variante LFT (Jugadora) */
+        .team-card--lft {
+            border-top: 3px solid var(--purple-light);
+        }
+
+        /* Variante LFP (Equipo) */
+        .team-card--lfp {
+            border-top: 3px solid var(--green);
+            background: rgba(14, 18, 26, 0.9);
+        }
+
+        .team-card--lfp:hover {
+            border-color: rgba(202, 255, 25, 0.6);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55), 0 0 20px var(--teams-green-glow);
+        }
+
+        /* Cabecera de tarjeta */
+        .card-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+
+        .card-avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+            flex-shrink: 0;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: linear-gradient(135deg, #4b23b3, #8736d4);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-avatar--lfp {
+            background: linear-gradient(135deg, #1b382b, #1d6e49);
+            border-color: rgba(202, 255, 25, 0.3);
+        }
+
+        .card-title-area {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .card-name-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .card-name {
+            margin: 0;
+            font-size: 19px;
+            font-weight: 700;
+            color: var(--off-white);
+            line-height: 1.2;
+            word-break: break-word;
+        }
+
+        .card-tag {
+            font-family: "DM Mono", monospace;
+            font-size: 12px;
+            color: var(--green);
+        }
+
+        .card-sub {
+            margin: 4px 0 0;
+            font-family: "DM Mono", monospace;
+            font-size: 12px;
+            color: #a9a6b3;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        /* Badges de verificación y estado */
+        .badge-verified {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 7px;
+            border-radius: 4px;
+            background: rgba(202, 255, 25, 0.12);
+            border: 1px solid rgba(202, 255, 25, 0.35);
+            color: var(--green);
+            font-family: "DM Mono", monospace;
+            font-size: 10px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .badge-unverified {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 7px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #b0adb8;
+            font-family: "DM Mono", monospace;
+            font-size: 10px;
+            letter-spacing: 0.04em;
+        }
+
+        .badge-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 8px;
+            border-radius: 999px;
+            font-family: "DM Mono", monospace;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .badge-status--open {
+            background: rgba(202, 255, 25, 0.14);
+            border: 1px solid rgba(202, 255, 25, 0.4);
+            color: var(--green);
+        }
+
+        .badge-status--closed {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            color: var(--gray);
+        }
+
+        /* Modalidades con colores de acento */
+        .modality-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: "DM Mono", monospace;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .modality-chill {
+            background: rgba(84, 212, 255, 0.12);
+            border: 1px solid rgba(84, 212, 255, 0.35);
+            color: #7de0ff;
+        }
+
+        .modality-learning {
+            background: rgba(202, 255, 25, 0.12);
+            border: 1px solid rgba(202, 255, 25, 0.35);
+            color: var(--green);
+        }
+
+        .modality-competi {
+            background: rgba(255, 60, 172, 0.14);
+            border: 1px solid rgba(255, 60, 172, 0.4);
+            color: #ff8ad0;
+        }
+
+        /* Grilla de metadatos de la tarjeta */
+        .card-facts {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px 10px;
+            margin: 12px 0 14px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            background: rgba(9, 8, 14, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .card-fact-item {
+            min-width: 0;
+        }
+
+        .card-fact-label {
+            font-family: "DM Mono", monospace;
+            font-size: 10px;
+            color: var(--gray);
+            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+
+        .card-fact-value {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--off-white);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .card-fact-value strong {
+            color: var(--green);
+        }
+
+        /* Descripción / Bio */
+        .card-desc {
+            margin: 0 0 16px;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #c0bdc9;
+            flex-grow: 1;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Botones de pie de tarjeta */
+        .card-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: auto;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .btn-card {
+            flex: 1;
+            min-height: 38px;
+            padding: 0 12px;
+            border-radius: 8px;
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.18s ease;
+            text-align: center;
+            user-select: none;
+        }
+
+        .btn-card--secondary {
+            border: 1px solid rgba(152, 120, 255, 0.4);
+            background: rgba(152, 120, 255, 0.08);
+            color: var(--off-white);
+        }
+
+        .btn-card--secondary:hover,
+        .btn-card--secondary:focus-visible {
+            border-color: var(--purple-light);
+            background: rgba(152, 120, 255, 0.18);
+            color: #fff;
+            outline: none;
+        }
+
+        .btn-card--primary {
+            border: 1px solid var(--green);
+            background: rgba(202, 255, 25, 0.12);
+            color: var(--green);
+        }
+
+        .btn-card--primary:hover,
+        .btn-card--primary:focus-visible {
+            background: var(--green);
+            color: var(--black);
+            box-shadow: 0 2px 14px var(--teams-green-glow);
+            outline: none;
+        }
+
+        .btn-card--report {
+            flex: 0 0 38px;
+            padding: 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: transparent;
+            color: var(--gray);
+            font-size: 14px;
+            display: grid;
+            place-items: center;
+        }
+
+        .btn-card--report:hover,
+        .btn-card--report:focus-visible {
+            border-color: var(--pink);
+            color: var(--pink);
+            background: rgba(255, 60, 172, 0.1);
+            outline: none;
+        }
+
+        /* Estado vacío */
+        .empty-state {
+            grid-column: 1 / -1;
+            padding: 48px 24px;
+            text-align: center;
+            border-radius: 16px;
+            border: 1px dashed rgba(152, 120, 255, 0.35);
+            background: rgba(14, 12, 22, 0.6);
+        }
+
+        .empty-state-icon {
+            font-size: 40px;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .empty-state-title {
+            font-size: 20px;
+            margin: 0 0 8px;
+            color: var(--off-white);
+        }
+
+        .empty-state-copy {
+            max-width: 480px;
+            margin: 0 auto 20px;
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--gray);
+        }
+
+        /* ----- D. Squads de la comunidad (Equipos destacados) ----- */
+        .showcase-section {
+            margin-top: 72px;
+            padding-top: 36px;
+            border-top: 1px solid rgba(152, 120, 255, 0.25);
+        }
+
+        .showcase-header {
+            margin-bottom: 28px;
+        }
+
+        .showcase-header h2 {
+            font-family: "Space Grotesk", sans-serif;
+            font-size: clamp(1.8rem, 3.4vw, 2.8rem);
+            margin: 8px 0 10px;
+            color: var(--off-white);
+            letter-spacing: -0.02em;
+        }
+
+        .showcase-header h2 span {
+            color: var(--pink);
+        }
+
+        .showcase-header p {
+            max-width: 640px;
+            margin: 0;
+            color: #beb9c9;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        .showcase-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 22px;
+        }
+
+        .showcase-card {
+            border-radius: 16px;
+            border: 1px solid rgba(152, 120, 255, 0.35);
+            background: linear-gradient(145deg, rgba(22, 16, 38, 0.9), rgba(12, 10, 20, 0.95));
+            overflow: hidden;
+            box-shadow: 0 14px 34px rgba(0, 0, 0, 0.45);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+        }
+
+        .showcase-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--pink);
+            box-shadow: 0 18px 42px rgba(0, 0, 0, 0.6), 0 0 24px var(--teams-pink-glow);
+        }
+
+        .showcase-banner {
+            min-height: 48px;
+            background: linear-gradient(135deg, rgba(112, 64, 255, 0.25), rgba(255, 60, 172, 0.15));
+            border-bottom: 1px solid rgba(152, 120, 255, 0.18);
+            position: relative;
+            padding: 10px 18px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .showcase-badge-game {
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(9, 9, 10, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--off-white);
+            font-family: "DM Mono", monospace;
+            font-size: 11px;
+            backdrop-filter: blur(4px);
+        }
+
+        .showcase-body {
+            padding: 16px 20px 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .showcase-crest-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 0;
+            margin-bottom: 14px;
+        }
+
+        .showcase-crest {
+            width: 64px;
+            height: 64px;
+            border-radius: 14px;
+            border: 2px solid #281d45;
+            background: linear-gradient(135deg, #7040ff, #ff3cac);
+            display: grid;
+            place-items: center;
+            font-family: "Pixelify Sans", sans-serif;
+            font-size: 24px;
+            color: #fff;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
+        }
+
+        .showcase-crest img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        .showcase-name-row {
+            margin-bottom: 6px;
+        }
+
+        .showcase-name {
+            margin: 0;
+            font-size: 21px;
+            font-weight: 700;
+            color: var(--off-white);
+        }
+
+        .showcase-tag {
+            color: var(--green);
+            font-family: "DM Mono", monospace;
+            font-size: 13px;
+        }
+
+        .showcase-meta {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+
+        .showcase-pill {
+            padding: 3px 8px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-family: "DM Mono", monospace;
+            font-size: 11px;
+            color: #d0cdd8;
+        }
+
+        .showcase-desc {
+            font-size: 13.5px;
+            line-height: 1.5;
+            color: #b5b2bf;
+            margin: 0 0 16px;
+            flex-grow: 1;
+        }
+
+        .showcase-social-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .social-chip {
+            padding: 4px 9px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: var(--off-white);
+            font-family: "DM Mono", monospace;
+            font-size: 11px;
+            text-decoration: none;
+            transition: all 0.15s ease;
+        }
+
+        .social-chip:hover,
+        .social-chip:focus-visible {
+            background: rgba(202, 255, 25, 0.15);
+            border-color: var(--green);
+            color: var(--green);
+            outline: none;
+        }
+
+        .btn-showcase-view {
+            width: 100%;
+            min-height: 42px;
+            padding: 0 16px;
+            border-radius: 10px;
+            border: 1px solid rgba(152, 120, 255, 0.5);
+            background: linear-gradient(135deg, rgba(112, 64, 255, 0.2), rgba(33, 22, 65, 0.5));
+            color: var(--off-white);
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 13.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-showcase-view:hover,
+        .btn-showcase-view:focus-visible {
+            background: var(--purple);
+            border-color: var(--purple-light);
+            box-shadow: 0 4px 18px var(--teams-purple-glow);
+            transform: translateY(-2px);
+            outline: none;
+        }
+
+        /* ----- DIALOGS / MODALES ----- */
+        .teams-dialog {
+            border: 1px solid rgba(152, 120, 255, 0.45);
+            border-radius: 20px;
+            background: rgba(14, 11, 23, 0.96);
+            color: var(--off-white);
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.8), 0 0 32px rgba(112, 64, 255, 0.3);
+            backdrop-filter: blur(14px);
+            padding: 0;
+            width: min(92vw, 760px);
+            max-height: 90vh;
+            overflow: hidden;
+            margin: auto;
+        }
+
+        .teams-dialog::backdrop {
+            background: rgba(5, 4, 8, 0.82);
+            backdrop-filter: blur(6px);
+        }
+
+        .dialog-inner {
+            display: flex;
+            flex-direction: column;
+            max-height: 90vh;
+        }
+
+        .dialog-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px;
+            border-bottom: 1px solid rgba(152, 120, 255, 0.2);
+            background: rgba(20, 16, 32, 0.7);
+        }
+
+        .dialog-title {
+            margin: 0;
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--off-white);
+        }
+
+        .dialog-title span {
+            color: var(--green);
+        }
+
+        .dialog-close {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--off-white);
+            font-size: 18px;
+            display: grid;
+            place-items: center;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .dialog-close:hover,
+        .dialog-close:focus-visible {
+            background: rgba(255, 60, 172, 0.2);
+            border-color: var(--pink);
+            color: var(--pink);
+            outline: none;
+        }
+
+        .dialog-body {
+            padding: 24px;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        .dialog-footer {
+            padding: 16px 24px;
+            border-top: 1px solid rgba(152, 120, 255, 0.2);
+            background: rgba(14, 11, 23, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        /* Estilos de formulario por bloques */
+        .form-stepper {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .step-pill {
+            padding: 8px 10px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            font-family: "DM Mono", monospace;
+            font-size: 11px;
+            color: var(--gray);
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .step-pill.is-active {
+            border-color: var(--green);
+            background: rgba(202, 255, 25, 0.1);
+            color: var(--green);
+            font-weight: 700;
+        }
+
+        .form-section {
+            margin-bottom: 24px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .form-section:last-of-type {
+            border-bottom: 0;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .form-section-title {
+            font-family: "DM Mono", monospace;
+            font-size: 12.5px;
+            color: var(--green);
+            text-transform: uppercase;
+            margin: 0 0 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+
+        .form-field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-label {
+            font-family: "DM Mono", monospace;
+            font-size: 12px;
+            color: var(--off-white);
+        }
+
+        .form-label .req {
+            color: var(--pink);
+            margin-left: 2px;
+        }
+
+        .form-input {
+            width: 100%;
+            height: 46px;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1px solid #45364f;
+            background: #17111f;
+            color: var(--off-white);
+            font: 500 14px/20px "Space Grotesk", sans-serif;
+            outline: none;
+            box-sizing: border-box;
+            transition: border-color 0.18s, box-shadow 0.18s;
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1px solid #45364f;
+            background: #17111f;
+            color: var(--off-white);
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+            outline: none;
+            box-sizing: border-box;
+            transition: border-color 0.18s, box-shadow 0.18s;
+        }
+
+        .form-select {
+            width: 100%;
+            height: 46px;
+            min-height: 46px;
+            padding: 12px 42px 12px 14px;
+            box-sizing: border-box;
+            border-radius: 12px;
+            border: 1px solid #45364f;
+            background: #17111f;
+            color: var(--off-white);
+            font: 500 14px/20px "Space Grotesk", sans-serif;
+            outline: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239a9996' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus,
+        .form-select:focus-visible,
+        .form-select:open {
+            border-color: var(--green);
+            box-shadow: 0 0 10px rgba(202, 255, 25, 0.25);
+            outline: none;
+        }
+
+        .form-select option {
+            padding: 8px 14px;
+            background: #17111f;
+            color: var(--off-white);
+        }
+
+        .form-select option:checked {
+            background: #b8ff00;
+            color: #17121d;
+        }
+
+        @supports (appearance: base-select) {
+            .form-select,
+            .form-select::picker(select) {
+                appearance: base-select;
+            }
+            .form-select::picker-icon {
+                display: none;
+            }
+            .form-select::picker(select) {
+                inline-size: anchor-size(width);
+                min-inline-size: anchor-size(width);
+                max-inline-size: anchor-size(width);
+                max-block-size: 300px;
+                margin-block-start: 8px;
+                padding: 6px;
+                overflow-y: auto;
+                border: 1px solid #45364f;
+                border-radius: 12px;
+                background: #17111f;
+                color: var(--off-white);
+                box-shadow: 0 14px 32px rgba(0, 0, 0, .48);
+            }
+            .form-select option {
+                min-block-size: 38px;
+                margin-block: 2px;
+                padding: 9px 14px;
+                border-radius: 8px;
+                background: transparent;
+                color: var(--off-white);
+            }
+            .form-select option:hover:not(:checked) {
+                background: #281f33;
+                color: var(--off-white);
+            }
+            .form-select option:checked {
+                background: #b8ff00;
+                color: #17121d;
+            }
+        }
+
+        .form-hint {
+            font-size: 11.5px;
+            color: #9f9da8;
+            line-height: 1.4;
+        }
+
+        .form-hint.privacy-note {
+            color: #ffb8e4;
+            background: rgba(255, 60, 172, 0.08);
+            border: 1px solid rgba(255, 60, 172, 0.28);
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-top: 4px;
+        }
+
+        /* Checkbox estilizado */
+        .form-checkbox-label {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 13px;
+            line-height: 1.45;
+            color: #d6d3de;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .form-checkbox {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 5px;
+            border: 1.5px solid rgba(152, 120, 255, 0.5);
+            background: #110e1c;
+            margin-top: 2px;
+            cursor: pointer;
+            display: grid;
+            place-content: center;
+            flex-shrink: 0;
+            transition: all 0.15s;
+        }
+
+        .form-checkbox:checked {
+            background: var(--green);
+            border-color: var(--green);
+        }
+
+        .form-checkbox:checked::after {
+            content: "✓";
+            color: var(--black);
+            font-size: 13px;
+            font-weight: 900;
+        }
+
+        /* Selector de modalidad en formulario */
+        .modality-options-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .modality-opt-label {
+            display: block;
+            cursor: pointer;
+        }
+
+        .modality-opt-input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .modality-opt-card {
+            padding: 12px 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(152, 120, 255, 0.3);
+            background: rgba(255, 255, 255, 0.03);
+            text-align: center;
+            transition: all 0.18s;
+        }
+
+        .modality-opt-card strong {
+            display: block;
+            font-size: 13px;
+            margin-bottom: 3px;
+            color: var(--off-white);
+        }
+
+        .modality-opt-card small {
+            display: block;
+            font-size: 11px;
+            color: var(--gray);
+            line-height: 1.3;
+        }
+
+        .modality-opt-input:checked + .modality-opt-card {
+            border-color: var(--green);
+            background: rgba(202, 255, 25, 0.12);
+            box-shadow: 0 0 12px rgba(202, 255, 25, 0.2);
+        }
+
+        .modality-opt-input:checked + .modality-opt-card strong {
+            color: var(--green);
+        }
+
+        /* Gestión dinámica de integrantes (Roster Builder) */
+        .roster-builder-list {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .roster-member-row {
+            display: grid;
+            grid-template-columns: minmax(130px, 1.4fr) minmax(110px, 1.2fr) minmax(90px, 0.8fr) 36px;
+            gap: 8px;
+            align-items: center;
+            padding: 8px 12px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .btn-remove-member {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 60, 172, 0.3);
+            background: rgba(255, 60, 172, 0.08);
+            color: var(--pink);
+            font-size: 16px;
+            display: grid;
+            place-items: center;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .btn-remove-member:hover {
+            background: var(--pink);
+            color: #fff;
+        }
+
+        .btn-add-member {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: 1px dashed rgba(202, 255, 25, 0.5);
+            background: rgba(202, 255, 25, 0.05);
+            color: var(--green);
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .btn-add-member:hover {
+            background: rgba(202, 255, 25, 0.14);
+            border-color: var(--green);
+        }
+
+        /* Contenedor de vista previa */
+        .preview-box {
+            margin-top: 18px;
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px dashed rgba(202, 255, 25, 0.4);
+            background: rgba(9, 8, 14, 0.8);
+        }
+
+        .preview-kicker {
+            font-family: "DM Mono", monospace;
+            font-size: 11px;
+            color: var(--green);
+            text-transform: uppercase;
+            margin: 0 0 10px;
+        }
+
+        /* Mensajes de validación */
+        .form-error-msg {
+            color: #ff6b8b;
+            font-size: 12px;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .has-error .form-error-msg {
+            display: block;
+        }
+
+        .has-error .form-input,
+        .has-error .form-select,
+        .has-error .form-textarea {
+            border-color: #ff6b8b;
+        }
+
+        /* Toast de confirmación */
+        .toast-notify {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 9999;
+            padding: 14px 20px;
+            border-radius: 12px;
+            background: #141122;
+            border: 1px solid var(--green);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 18px var(--teams-green-glow);
+            color: var(--off-white);
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateY(120%);
+            opacity: 0;
+            transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .toast-notify.is-visible {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .toast-icon {
+            color: var(--green);
+            font-size: 18px;
+        }
+
+        /* Responsive rules */
+        @media (max-width: 900px) {
+            .teams-hero {
+                grid-template-columns: 1fr;
+                gap: 28px;
+            }
+
+            .showcase-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 680px) {
+            .teams-title {
+                font-size: 2.3rem;
+            }
+
+            .teams-tabs-wrapper {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .teams-tabs {
+                width: 100%;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .teams-tab {
+                justify-content: center;
+                padding: 0 10px;
+                font-size: 13px;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-stepper {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .modality-options-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .roster-member-row {
+                grid-template-columns: 1fr;
+                gap: 6px;
+            }
+
+            .teams-stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .teams-float-icon {
+                top: -15px;
+                right: 12px;
+                width: 65px;
+                opacity: 0.65;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .team-card,
+            .showcase-card,
+            .btn-action,
+            .teams-stats-pulse,
+            .teams-float-icon {
+                animation: none;
+                transition: none;
+                translate: none;
+            }
+        }
+    </style>
+</head>
+
+<body class="guide-page teams-page">
+
+    <!-- ================= HEADER ================= -->
+    <header class="guide-header">
+        <a href="index.html" class="logo" aria-label="Fem Respawn, volver al inicio">
+            <span class="logo-main">Fem</span>
+            <span class="logo-sub">Respawn</span>
+        </a>
+        <a class="guide-back" href="index.html#competi">← VOLVER A COMPETÍ</a>
+    </header>
+
+    <!-- ================= CONTENIDO PRINCIPAL ================= -->
+    <main class="guide-main">
+
+        <!-- A. Encabezado principal -->
+        <section class="teams-hero" aria-labelledby="teams-page-title">
+            <!-- Icono flotante 123.png en el fondo -->
+            <div class="teams-bg-decor" aria-hidden="true">
+                <img class="areas-space-float teams-float-icon" src="123.png" alt="" aria-hidden="true">
+            </div>
+
+            <div class="teams-hero-copy">
+                <div class="teams-eyebrow">
+                    <span>//</span> 03 · EQUIPOS
+                </div>
+
+                <h1 class="teams-title" id="teams-page-title">
+                    Encontrá tu próximo <span>equipo.</span>
+                </h1>
+
+                <p class="teams-lede">
+                    Encontrá tu equipo o sumá compañeras para jugar. Desde partidas casuales para pasar el rato hasta equipos competitivos para torneos.
+                </p>
+
+                <div class="teams-hero-actions">
+                    <button type="button" class="btn-action btn-action--primary" id="btn-hero-publish">
+                        <span class="btn-icon">＋</span> Publicar búsqueda
+                    </button>
+                    <button type="button" class="btn-action btn-action--secondary" id="btn-hero-register">
+                        <span class="btn-icon">＋</span> Registrar mi equipo
+                    </button>
+                </div>
+
+                <!-- Mensaje breve de convivencia -->
+                <div class="teams-convivencia-banner" role="note" aria-label="Pautas de respeto en comunidad">
+                    <div class="teams-convivencia-shield" aria-hidden="true">🛡️</div>
+                    <div class="teams-convivencia-text">
+                        <strong>Comunidad segura:</strong> Competir o jugar en equipo no debería significar aguantar malos tratos. Conectamos jugadoras desde el respeto, la empatía y las ganas de jugar. Para publicar o registrar tu equipo es obligatorio leer y confirmar las pautas de convivencia.
+                        <button type="button" class="btn-link-guidelines" id="btn-open-convivencia">Ver pautas de convivencia ↗</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Columna lateral: estadísticas de comunidad y tip seguro -->
+            <div class="teams-hero-side">
+                <div class="teams-stats-card">
+                    <div class="teams-stats-header">
+                        <span class="teams-stats-badge">
+                            <span class="teams-stats-pulse" aria-hidden="true"></span>
+                            Tablón en vivo
+                        </span>
+                        <span style="font-family:'DM Mono', monospace; font-size: 11px; color: var(--gray);">ACTUALIZADO 2026</span>
+                    </div>
+
+                    <div class="teams-stats-grid">
+                        <div class="teams-stat-box">
+                            <div class="teams-stat-number" id="stat-lft-count">1</div>
+                            <div class="teams-stat-label">Jugadora LFT (Demo)</div>
+                        </div>
+                        <div class="teams-stat-box">
+                            <div class="teams-stat-number" id="stat-lfp-count">1</div>
+                            <div class="teams-stat-label">Equipo LFP (Demo)</div>
+                        </div>
+                        <div class="teams-stat-box">
+                            <div class="teams-stat-number" id="stat-squads-count">5</div>
+                            <div class="teams-stat-label">Squads Destacadas</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="teams-safety-tip">
+                    <span class="tip-icon" aria-hidden="true">💡</span>
+                    <div>
+                        <strong>Tip de seguridad:</strong> Coordiná tus primeras partidas en salas de Discord públicas y nunca compartas contraseñas ni datos bancarios.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- B. Buscador de jugadoras y equipos -->
+        <section class="teams-module" aria-label="Buscador interactivo de jugadoras y equipos">
+
+            <!-- Pestañas LFT / LFP -->
+            <div class="teams-tabs-wrapper">
+                <div class="teams-tabs" role="tablist" aria-label="Modalidad de búsqueda">
+                    <button type="button" class="teams-tab" role="tab" id="tab-lft" aria-selected="true" data-tab="lft">
+                        BUSCO EQUIPO (LFT)
+                        <span class="teams-tab-tag" id="tab-count-lft">1</span>
+                    </button>
+                    <button type="button" class="teams-tab" role="tab" id="tab-lfp" aria-selected="false" data-tab="lfp">
+                        BUSCO JUGADORAS (LFP)
+                        <span class="teams-tab-tag" id="tab-count-lfp">1</span>
+                    </button>
+                </div>
+
+                <div style="font-family:'DM Mono', monospace; font-size: 12px; color: var(--gray);">
+                    Filtrá según tus horarios, juego y nivel de competencia
+                </div>
+            </div>
+
+            <!-- Panel de filtros combinables -->
+            <div class="teams-filter-panel">
+                <!-- Búsqueda textual -->
+                <div class="teams-search-bar">
+                    <input type="text" id="filter-search" class="teams-search-input" placeholder="Buscar por nickname, equipo, juego, rol o palabras clave..." aria-label="Buscar anuncios por texto">
+                    <span class="search-icon" aria-hidden="true">🔍</span>
+                </div>
+
+                <!-- Desplegables de filtros combinables -->
+                <div class="teams-filters-grid">
+                    <!-- Juego -->
+                    <div class="teams-filter-item">
+                        <label for="filter-game" class="teams-filter-label">Juego</label>
+                        <div class="teams-select-wrap">
+                            <select id="filter-game" class="teams-select">
+                                <option value="all">Todos los juegos</option>
+                                <option value="VALORANT">VALORANT</option>
+                                <option value="League of Legends">League of Legends</option>
+                                <option value="Counter-Strike 2">Counter-Strike 2</option>
+                                <option value="Dead by Daylight">Dead by Daylight</option>
+                                <option value="EA Sports FC">EA Sports FC</option>
+                                <option value="Rocket League">Rocket League</option>
+                                <option value="Overwatch 2">Overwatch 2</option>
+                                <option value="Otros">Otros juegos</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Modalidad -->
+                    <div class="teams-filter-item">
+                        <label for="filter-modality" class="teams-filter-label">Modalidad</label>
+                        <div class="teams-select-wrap">
+                            <select id="filter-modality" class="teams-select">
+                                <option value="all">Todas las modalidades</option>
+                                <option value="Chill">Chill</option>
+                                <option value="Aprendizaje">Aprendizaje</option>
+                                <option value="Competitivo">Competitivo</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Plataforma -->
+                    <div class="teams-filter-item">
+                        <label for="filter-platform" class="teams-filter-label">Plataforma</label>
+                        <div class="teams-select-wrap">
+                            <select id="filter-platform" class="teams-select">
+                                <option value="all">Todas las plataformas</option>
+                                <option value="PC">PC</option>
+                                <option value="PlayStation">PlayStation</option>
+                                <option value="Xbox">Xbox</option>
+                                <option value="Nintendo Switch">Nintendo Switch</option>
+                                <option value="Mobile">Mobile</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Rol -->
+                    <div class="teams-filter-item">
+                        <label for="filter-role" class="teams-filter-label">Rol</label>
+                        <div class="teams-select-wrap">
+                            <select id="filter-role" class="teams-select">
+                                <option value="all">Todos los roles</option>
+                                <option value="Support">Support</option>
+                                <option value="Duelista/Entry">Duelista / Entry</option>
+                                <option value="IGL/Capitanía">IGL / Capitana</option>
+                                <option value="Flex">Flex</option>
+                                <option value="Iniciadora">Iniciadora</option>
+                                <option value="Ancla / Defensa">Ancla / Defensa</option>
+                                <option value="Francotiradora (AWPer)">Francotiradora (AWPer)</option>
+                                <option value="Lurker">Lurker</option>
+                                <option value="Entry Fragger">Entry Fragger</option>
+                                <option value="Sentinel">Sentinel</option>
+                                <option value="Coach">Coach</option>
+                                <option value="Otros">Otros</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Disponibilidad -->
+                    <div class="teams-filter-item">
+                        <label for="filter-availability" class="teams-filter-label">Disponibilidad</label>
+                        <div class="teams-select-wrap">
+                            <select id="filter-availability" class="teams-select">
+                                <option value="all">Cualquier horario</option>
+                                <option value="Tarde">Tarde</option>
+                                <option value="Noche">Noche</option>
+                                <option value="Trasnoche">Trasnoche</option>
+                                <option value="Fines de semana">Fines de semana</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Provincia Argentina -->
+                    <div class="teams-filter-item">
+                        <label for="filter-province" class="teams-filter-label">Provincia (Arg)</label>
+                        <div class="teams-select-wrap">
+                            <select id="filter-province" class="teams-select">
+                                <option value="all">Todas las ubicaciones</option>
+                                <option value="CABA">CABA</option>
+                                <option value="Buenos Aires">Buenos Aires</option>
+                                <option value="Córdoba">Córdoba</option>
+                                <option value="Santa Fe">Santa Fe</option>
+                                <option value="Mendoza">Mendoza</option>
+                                <option value="Tucumán">Tucumán</option>
+                                <option value="Entre Ríos">Entre Ríos</option>
+                                <option value="Salta">Salta</option>
+                                <option value="Otras / Online">Otras / Online</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fila de estado y limpiar filtros -->
+                <div class="filter-status-row">
+                    <div id="results-count" class="results-count" aria-live="polite">
+                        Cargando anuncios...
+                    </div>
+                    <button type="button" id="btn-clear-filters" class="btn-clear-filters">
+                        Limpiar filtros ↺
+                    </button>
+                </div>
+            </div>
+
+            <!-- Contenedor de Tarjetas (C. Tarjetas de búsqueda) -->
+            <div id="cards-grid" class="cards-grid" aria-live="polite">
+                <!-- Se renderiza dinámicamente mediante JavaScript -->
+            </div>
+
+            <!-- Estado Vacío (Empty State) -->
+            <div id="empty-state" class="empty-state" style="display: none;">
+                <span class="empty-state-icon" aria-hidden="true">👾</span>
+                <h3 class="empty-state-title">No encontramos anuncios con esos filtros</h3>
+                <p class="empty-state-copy">
+                    Probá seleccionando "Todos los juegos" o limpiando los filtros para ver más opciones. También podés publicar tu propia búsqueda para que las compañeras te encuentren a vos.
+                </p>
+                <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                    <button type="button" class="btn-action btn-action--secondary" id="btn-empty-clear">
+                        Restablecer filtros
+                    </button>
+                    <button type="button" class="btn-action btn-action--primary" id="btn-empty-publish">
+                        ＋ Publicar búsqueda
+                    </button>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- D. Equipos destacados: SQUADS DE LA COMUNIDAD -->
+        <section class="showcase-section" aria-labelledby="showcase-title">
+            <div class="showcase-header">
+                <div class="teams-eyebrow">
+                    <span>//</span> 03.1 · VITRINA DE ROSTERS
+                </div>
+                <h2 id="showcase-title">SQUADS DE LA <span>COMUNIDAD</span></h2>
+                <p>
+                    Galería de Squads y Proyectos autogestionados de mujeres y disidencias. Conocé su trayectoria, sus planteles y sus canales oficiales de contacto y reclutamiento.
+                </p>
+            </div>
+
+            <div class="showcase-grid" id="showcase-grid">
+                <!-- Se renderiza dinámicamente con JavaScript -->
+            </div>
+        </section>
+
+        <a class="guide-back guide-back-bottom" href="index.html#competi">← VOLVER A COMPETÍ</a>
+    </main>
+
+    <!-- ==================================================
+         MODALES Y DIÁLOGOS
+         ================================================== -->
+
+    <!-- Modal 1: Publicar búsqueda (LFT / LFP) -->
+    <dialog id="dialog-publish" class="teams-dialog" aria-labelledby="dialog-publish-title">
+        <div class="dialog-inner">
+            <div class="dialog-header">
+                <h2 class="dialog-title" id="dialog-publish-title">
+                    Publicar <span>anuncio</span>
+                </h2>
+                <button type="button" class="dialog-close" data-close-dialog="dialog-publish" aria-label="Cerrar modal">✕</button>
+            </div>
+
+            <div class="dialog-body">
+                <form id="form-publish" novalidate>
+                    <!-- Paso 1. Tipo de publicación -->
+                    <fieldset class="form-section">
+                        <legend class="form-section-title">Paso 1 · ¿Qué estás buscando?</legend>
+                        <div class="modality-options-grid">
+                            <label class="modality-opt-label">
+                                <input type="radio" name="publishType" value="lft" class="modality-opt-input" checked>
+                                <div class="modality-opt-card">
+                                    <strong>BUSCO EQUIPO (LFT)</strong>
+                                    <small>Soy jugadora individual y quiero sumarme a un roster</small>
+                                </div>
+                            </label>
+                            <label class="modality-opt-label">
+                                <input type="radio" name="publishType" value="lfp" class="modality-opt-input">
+                                <div class="modality-opt-card">
+                                    <strong>BUSCO JUGADORA(S) (LFP)</strong>
+                                    <small>Tenemos un Squad y necesitamos cubrir vacantes</small>
+                                </div>
+                            </label>
+                        </div>
+                    </fieldset>
+
+                    <!-- Paso 2. Datos principales -->
+                    <fieldset class="form-section">
+                        <legend class="form-section-title">Paso 2 · Datos principales</legend>
+                        <div class="form-row">
+                            <div class="form-field" id="field-name-wrap">
+                                <label for="pub-name" class="form-label" id="pub-name-label">Nickname <span class="req">*</span></label>
+                                <input type="text" id="pub-name" class="form-input" placeholder="Ej: Valkyria99 o Squad Neon" required>
+                                <span class="form-error-msg">Por favor ingresá un nombre o nickname.</span>
+                            </div>
+
+                            <div class="form-field">
+                                <label for="pub-game" class="form-label">Juego principal <span class="req">*</span></label>
+                                <select id="pub-game" class="form-select" required>
+                                    <option value="">Seleccionar juego...</option>
+                                    <option value="VALORANT">VALORANT</option>
+                                    <option value="League of Legends">League of Legends</option>
+                                    <option value="Counter-Strike 2">Counter-Strike 2</option>
+                                    <option value="Dead by Daylight">Dead by Daylight</option>
+                                    <option value="EA Sports FC">EA Sports FC</option>
+                                    <option value="Rocket League">Rocket League</option>
+                                    <option value="Overwatch 2">Overwatch 2</option>
+                                    <option value="Otros">Otros</option>
+                                </select>
+                                <span class="form-error-msg">Seleccioná un juego principal.</span>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="pub-platform" class="form-label">Plataforma <span class="req">*</span></label>
+                                <select id="pub-platform" class="form-select" required>
+                                    <option value="PC">PC</option>
+                                    <option value="PlayStation">PlayStation</option>
+                                    <option value="Xbox">Xbox</option>
+                                    <option value="Nintendo Switch">Nintendo Switch</option>
+                                    <option value="Mobile">Mobile</option>
+                                </select>
+                            </div>
+
+                            <div class="form-field">
+                                <label for="pub-rank" class="form-label">Rango o nivel <span class="req">*</span></label>
+                                <input type="text" id="pub-rank" class="form-input" placeholder="Ej: Platino 2, Oro, Nivel 7, o Casual" required>
+                                <span class="form-error-msg">Ingresá tu nivel o rango aproximado.</span>
+                            </div>
+
+                            <div class="form-field">
+                                <label for="pub-role" class="form-label">Rol preferido o vacante <span class="req">*</span></label>
+                                <select id="pub-role" class="form-select" required>
+                                <option value="all">Todos los roles</option>
+                                <option value="Support">Support</option>
+                                <option value="Duelista/Entry">Duelista / Entry</option>
+                                <option value="IGL/Capitanía">IGL / Capitana</option>
+                                <option value="Flex">Flex</option>
+                                <option value="Iniciadora">Iniciadora</option>
+                                <option value="Ancla / Defensa">Ancla / Defensa</option>
+                                <option value="Francotiradora (AWPer)">Francotiradora (AWPer)</option>
+                                <option value="Lurker">Lurker</option>
+                                <option value="Entry Fragger">Entry Fragger</option>
+                                <option value="Sentinel">Sentinel</option>
+                                <option value="Coach">Coach</option>
+                                <option value="Otros">Otros</option>
+                            </div>
+                        </div>
+
+                        <div class="form-field">
+                            <label for="pub-discord" class="form-label">Usuario o Servidor de Discord <span class="req">*</span></label>
+                            <input type="text" id="pub-discord" class="form-input" placeholder="Ej: valkyria#1234 o discord.gg/mi-squad" required>
+                            <span class="form-error-msg">Ingresá una vía de contacto para que puedan comunicarse.</span>
+                            <div class="form-hint privacy-note">
+                                🔒 <strong>Privacidad del contacto:</strong> Tu usuario no se envía a servidores externos sin tu consentimiento. Se utilizará para que compañeras interesadas puedan enviarte solicitud de amistad de forma segura.
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <!-- Paso 3. Cómo quiero jugar -->
+                    <fieldset class="form-section">
+                        <legend class="form-section-title">Paso 3 · Cómo quiero jugar</legend>
+                        <div class="modality-options-grid" style="margin-bottom: 14px;">
+                            <label class="modality-opt-label">
+                                <input type="radio" name="pubModality" value="Chill" class="modality-opt-input" checked>
+                                <div class="modality-opt-card">
+                                    <strong>Chill</strong>
+                                    <small>Jugar para divertirse, pasar el rato y compartir</small>
+                                </div>
+                            </label>
+                            <label class="modality-opt-label">
+                                <input type="radio" name="pubModality" value="Aprendizaje" class="modality-opt-input">
+                                <div class="modality-opt-card">
+                                    <strong>Aprendizaje</strong>
+                                    <small>Sumar experiencia, mejorar juntas sin presiones</small>
+                                </div>
+                            </label>
+                            <label class="modality-opt-label">
+                                <input type="radio" name="pubModality" value="Competitivo" class="modality-opt-input">
+                                <div class="modality-opt-card">
+                                    <strong>Competitivo</strong>
+                                    <small>Entrenar, scrims y participar en torneos</small>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="pub-availability" class="form-label">Disponibilidad horaria <span class="req">*</span></label>
+                                <select id="pub-availability" class="form-select" required>
+                                    <option value="Noche">Noche (20:00 a 00:00)</option>
+                                    <option value="Tarde">Tarde (14:00 a 19:00)</option>
+                                    <option value="Trasnoche">Trasnoche (00:00 en adelante)</option>
+                                    <option value="Fines de semana">Fines de semana</option>
+                                </select>
+                            </div>
+
+                            <div class="form-field">
+                                <label for="pub-province" class="form-label">Provincia (opcional para Argentina)</label>
+                                <select id="pub-province" class="form-select">
+                                    <option value="Online">Online / Prefiero no indicar</option>
+                                    <option value="CABA">CABA</option>
+                                    <option value="Buenos Aires">Buenos Aires</option>
+                                    <option value="Córdoba">Córdoba</option>
+                                    <option value="Santa Fe">Santa Fe</option>
+                                    <option value="Mendoza">Mendoza</option>
+                                    <option value="Tucumán">Tucumán</option>
+                                    <option value="Entre Ríos">Entre Ríos</option>
+                                    <option value="Salta">Salta</option>
+                                </select>
+                                <span class="form-hint">Opcional si buscás organizar quedadas presenciales o torneos provinciales.</span>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <!-- Paso 4. Presentación -->
+                    <fieldset class="form-section">
+                        <legend class="form-section-title">Paso 4 · Presentación y Pautas</legend>
+                        <div class="form-field" style="margin-bottom: 14px;">
+                            <label for="pub-desc" class="form-label">¿Qué estás buscando? <span class="req">*</span></label>
+                            <textarea id="pub-desc" class="form-textarea" rows="3" placeholder="Contanos tu estilo de juego, qué esperás del equipo y tus objetivos..." required></textarea>
+                            <span class="form-error-msg">Escribí una breve presentación para tu anuncio.</span>
+                        </div>
+
+                        <!-- Aceptación obligatoria -->
+                        <div class="form-field" id="wrap-check-rules">
+                            <label class="form-checkbox-label">
+                                <input type="checkbox" id="pub-rules" class="form-checkbox" required>
+                                <span>Acepto las <strong>pautas de convivencia</strong> de Fem Respawn: juego limpio, respeto mutuo y tolerancia cero al acoso o discriminación.</span>
+                            </label>
+                            <span class="form-error-msg">Debés aceptar las pautas para publicar.</span>
+                        </div>
+
+                        <div class="form-field" id="wrap-check-accurate">
+                            <label class="form-checkbox-label">
+                                <input type="checkbox" id="pub-accurate" class="form-checkbox" required>
+                                <span>Confirmo que la información ingresada es correcta y acepto conectar con compañeras desde la buena fe.</span>
+                            </label>
+                            <span class="form-error-msg">Por favor confirmá la veracidad de los datos.</span>
+                        </div>
+                    </fieldset>
+
+                    <!-- Contenedor dinámico de previsualización -->
+                    <div id="publish-preview-box" class="preview-box" style="display: none;">
+                        <div class="preview-kicker">✦ VISTA PREVIA DEL ANUNCIO</div>
+                        <div id="publish-preview-target"></div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="dialog-footer">
+                <button type="button" class="btn-card btn-card--secondary" data-close-dialog="dialog-publish">Cancelar</button>
+                <button type="button" class="btn-action btn-action--secondary" id="btn-publish-preview">Vista previa</button>
+                <button type="button" class="btn-action btn-action--primary" id="btn-publish-submit">Publicar anuncio</button>
+            </div>
+        </div>
+    </dialog>
+
+    <!-- Modal 2: Registrar mi equipo (Ficha de Roster) -->
+    <dialog id="dialog-register-team" class="teams-dialog" aria-labelledby="dialog-register-title">
+        <div class="dialog-inner">
+            <div class="dialog-header">
+                <h2 class="dialog-title" id="dialog-register-title">
+                    Registrar <span>mi equipo</span>
+                </h2>
+                <button type="button" class="dialog-close" data-close-dialog="dialog-register-team" aria-label="Cerrar modal">✕</button>
+            </div>
+
+            <div class="dialog-body">
+                <form id="form-team-register" novalidate>
+                    <fieldset class="form-section">
+                        <legend class="form-section-title">1. Identidad del equipo</legend>
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="team-name" class="form-label">Nombre del equipo <span class="req">*</span></label>
+                                <input type="text" id="team-name" class="form-input" placeholder="Ej: Valkyrias Esports" required>
+                                <span class="form-error-msg">Ingresá el nombre del equipo.</span>
+                            </div>
+                            <div class="form-field">
+                                <label for="team-tag" class="form-label">Tag <span class="req">*</span></label>
+                                <input type="text" id="team-tag" class="form-input" placeholder="Ej: VKG" maxlength="6" required>
+                                <span class="form-error-msg">Ingresá el tag del squad.</span>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="team-game" class="form-label">Juego principal <span class="req">*</span></label>
+                                <select id="team-game" class="form-select" required>
+                                    <option value="">Seleccionar juego...</option>
+                                    <option value="VALORANT">VALORANT</option>
+                                    <option value="League of Legends">League of Legends</option>
+                                    <option value="Counter-Strike 2">Counter-Strike 2</option>
+                                    <option value="Dead by Daylight">Dead by Daylight</option>
+                                    <option value="EA Sports FC">EA Sports FC</option>
+                                    <option value="Rocket League">Rocket League</option>
+                                    <option value="Overwatch 2">Overwatch 2</option>
+                                    <option value="Otros">Otros</option>
+                                </select>
+                                <span class="form-error-msg">Seleccioná un juego.</span>
+                            </div>
+                            <div class="form-field">
+                                <label for="team-category" class="form-label">Categoría o nivel <span class="req">*</span></label>
+                                <input type="text" id="team-category" class="form-input" placeholder="Ej: Competitivo Tier 3 / Liga Abierta" required>
+                            </div>
+                        </div>
+
+                        <div class="form-field">
+                            <label for="team-desc" class="form-label">Descripción y objetivos <span class="req">*</span></label>
+                            <textarea id="team-desc" class="form-textarea" rows="2" placeholder="Historia breve, torneos que disputan o aspiran a disputar y valores del equipo..." required></textarea>
+                            <span class="form-error-msg">Contanos sobre los objetivos del equipo.</span>
+                        </div>
+                    </fieldset>
+
+                    <!-- Integrantes dinámicos (Roster Builder) -->
+                    <fieldset class="form-section">
+                        <legend class="form-section-title">2. Integrantes del Roster</legend>
+                        <p class="form-hint" style="margin-top: 0; margin-bottom: 12px;">
+                            Agregá las jugadoras del equipo. Indicá quién es la Capitana / IGL para que sirva de punto de contacto.
+                        </p>
+
+                        <div id="roster-members-list" class="roster-builder-list">
+                            <!-- Filas dinámicas -->
+                        </div>
+
+                        <button type="button" class="btn-add-member" id="btn-add-roster-member">
+                            ＋ Agregar integrante
+                        </button>
+                    </fieldset>
+
+                    <!-- Estado de reclutamiento y vacantes -->
+                    <fieldset class="form-section">
+                        <legend class="form-section-title">3. Estado de reclutamiento</legend>
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="team-recruitment" class="form-label">Estado actual</label>
+                                <select id="team-recruitment" class="form-select">
+                                    <option value="open">Reclutamiento Abierto (Buscamos jugadoras)</option>
+                                    <option value="closed">Roster Completo (Solo exhibición)</option>
+                                </select>
+                            </div>
+
+                            <div class="form-field">
+                                <label for="team-needed-role" class="form-label">Roles que necesitan cubrir</label>
+                                <input type="text" id="team-needed-role" class="form-input" placeholder="Ej: Support / Initiator o Suplente Flex">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="team-availability" class="form-label">Disponibilidad habitual de entrenamientos</label>
+                                <input type="text" id="team-availability" class="form-input" placeholder="Ej: Martes y Jueves 20:00 a 22:30">
+                            </div>
+                            <div class="form-field">
+                                <label for="team-suplentes" class="form-label">Suplentes actuales (opcional)</label>
+                                <input type="text" id="team-suplentes" class="form-input" placeholder="Ej: 1 suplente registrada">
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <!-- Redes y contacto opcionales -->
+                    <fieldset class="form-section">
+                        <legend class="form-section-title">4. Enlaces oficiales y convivencia</legend>
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="team-discord" class="form-label">Discord del equipo</label>
+                                <input type="text" id="team-discord" class="form-input" placeholder="Ej: discord.gg/valkyrias">
+                            </div>
+                            <div class="form-field">
+                                <label for="team-instagram" class="form-label">Instagram</label>
+                                <input type="text" id="team-instagram" class="form-input" placeholder="@valkyrias_gg">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="team-twitch" class="form-label">Twitch</label>
+                                <input type="text" id="team-twitch" class="form-input" placeholder="twitch.tv/valkyrias">
+                            </div>
+                            <div class="form-field">
+                                <label for="team-youtube" class="form-label">YouTube</label>
+                                <input type="text" id="team-youtube" class="form-input" placeholder="youtube.com/@valkyrias">
+                            </div>
+                        </div>
+
+                        <div class="form-field" style="margin-top: 14px;">
+                            <label class="form-checkbox-label">
+                                <input type="checkbox" id="team-rules" class="form-checkbox" required>
+                                <span>El squad se compromete a respetar las <strong>pautas de convivencia</strong> de Fem Respawn, promover un ambiente libre de violencia y velar por la seguridad de sus integrantes.</span>
+                            </label>
+                            <span class="form-error-msg">Debés aceptar el compromiso de convivencia del equipo.</span>
+                        </div>
+                    </fieldset>
+
+                    <div id="team-preview-box" class="preview-box" style="display: none;">
+                        <div class="preview-kicker">✦ VISTA PREVIA DE LA FICHA</div>
+                        <div id="team-preview-target"></div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="dialog-footer">
+                <button type="button" class="btn-card btn-card--secondary" data-close-dialog="dialog-register-team">Cancelar</button>
+                <button type="button" class="btn-action btn-action--secondary" id="btn-team-preview">Vista previa</button>
+                <button type="button" class="btn-action btn-action--primary" id="btn-team-submit">Registrar escuadra</button>
+            </div>
+        </div>
+    </dialog>
+
+    <!-- Modal 3: Ver Perfil / Ver Ficha Completa -->
+    <dialog id="dialog-detail" class="teams-dialog" aria-labelledby="dialog-detail-title">
+        <div class="dialog-inner">
+            <div class="dialog-header">
+                <h2 class="dialog-title" id="dialog-detail-title">
+                    Detalle <span>completo</span>
+                </h2>
+                <button type="button" class="dialog-close" data-close-dialog="dialog-detail" aria-label="Cerrar modal">✕</button>
+            </div>
+
+            <div class="dialog-body" id="dialog-detail-body">
+                <!-- Se llena dinámicamente con JS -->
+            </div>
+
+            <div class="dialog-footer" id="dialog-detail-footer">
+                <button type="button" class="btn-card btn-card--secondary" data-close-dialog="dialog-detail">Cerrar</button>
+                <button type="button" class="btn-action btn-action--primary" id="btn-detail-action">Contactar de forma segura</button>
+            </div>
+        </div>
+    </dialog>
+
+    <!-- Modal 4: Contacto Seguro / Postulación -->
+    <dialog id="dialog-contact" class="teams-dialog" aria-labelledby="dialog-contact-title">
+        <div class="dialog-inner">
+            <div class="dialog-header">
+                <h2 class="dialog-title" id="dialog-contact-title">
+                    Contacto <span>seguro</span>
+                </h2>
+                <button type="button" class="dialog-close" data-close-dialog="dialog-contact" aria-label="Cerrar modal">✕</button>
+            </div>
+
+            <div class="dialog-body">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <div style="font-size: 36px; margin-bottom: 8px;">🎮</div>
+                    <h3 style="margin: 0 0 6px; font-size: 20px;" id="contact-target-name">Valkyria99</h3>
+                    <p style="margin: 0; color: var(--gray); font-size: 13px;" id="contact-target-type">Búsqueda de equipo en VALORANT</p>
+                </div>
+
+                <div style="padding: 16px; border-radius: 12px; background: rgba(9, 8, 14, 0.9); border: 1px solid rgba(152, 120, 255, 0.3); margin-bottom: 18px;">
+                    <div style="font-family: 'DM Mono', monospace; font-size: 11px; color: var(--green); text-transform: uppercase; margin-bottom: 6px;">
+                        Usuario / Enlace de contacto
+                    </div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+                        <span id="contact-handle-text" style="font-family: 'DM Mono', monospace; font-size: 15px; color: var(--off-white); font-weight: 500;">
+                            valkyria#1234
+                        </span>
+                        <button type="button" class="btn-clear-filters" id="btn-copy-contact" style="color: var(--green); border-color: rgba(202, 255, 25, 0.3);">
+                            Copiar 📋
+                        </button>
+                    </div>
+                </div>
+
+                <div style="display: grid; gap: 10px; font-size: 13px; line-height: 1.45; color: #d0cdd8;">
+                    <div style="display: flex; gap: 10px; align-items: flex-start;">
+                        <span style="color: var(--green);">✦</span>
+                        <span><strong>Cómo conectar:</strong> Agregá a la jugadora o sumate al Discord del equipo indicando que viste su publicación en Fem Respawn.</span>
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: flex-start;">
+                        <span style="color: var(--pink);">✦</span>
+                        <span><strong>Cuidá tu privacidad:</strong> No compartas contraseñas, documentos de identidad ni información bancaria en ninguna instancia.</span>
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: flex-start;">
+                        <span style="color: #9edcf0;">✦</span>
+                        <span><strong>Partidas de prueba:</strong> Sugerimos jugar unas primeras partidas casuales para evaluar la química y el ambiente de comunicación.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialog-footer">
+                <button type="button" class="btn-action btn-action--primary" data-close-dialog="dialog-contact">Entendido</button>
+            </div>
+        </div>
+    </dialog>
+
+    <!-- Modal 5: Pautas de convivencia -->
+    <dialog id="dialog-guidelines" class="teams-dialog" aria-labelledby="dialog-guidelines-title">
+        <div class="dialog-inner">
+            <div class="dialog-header">
+                <h2 class="dialog-title" id="dialog-guidelines-title">
+                    Pautas de <span>convivencia</span>
+                </h2>
+                <button type="button" class="dialog-close" data-close-dialog="dialog-guidelines" aria-label="Cerrar modal">✕</button>
+            </div>
+
+            <div class="dialog-body" style="font-size: 14px; line-height: 1.6; color: #dedbe6;">
+                <p style="margin-top: 0;">
+                    Fem Respawn es un espacio pensado para que mujeres y disidencias puedan jugar, aprender y competir sin sufrir las violencias frecuentes del ecosistema gamer tradicional.
+                </p>
+
+                <div style="display: grid; gap: 16px; margin: 20px 0;">
+                    <div style="padding: 12px 14px; border-radius: 10px; background: rgba(255, 255, 255, 0.03); border-left: 3px solid var(--green);">
+                        <strong style="color: var(--green); display: block; margin-bottom: 3px;">1. Respeto innegociable a la identidad</strong>
+                        Respetamos los pronombres, identidades de género y trayectorias personales de todas las jugadoras. No se toleran actitudes transfóbicas, lesbofóbicas, machistas ni discriminatorias.
+                    </div>
+
+                    <div style="padding: 12px 14px; border-radius: 10px; background: rgba(255, 255, 255, 0.03); border-left: 3px solid var(--pink);">
+                        <strong style="color: var(--pink); display: block; margin-bottom: 3px;">2. Tolerancia cero a la toxicidad y el acoso</strong>
+                        Tanto en partidas ganadas como perdidas, la frustración no justifica insultos, gritos, descalificaciones ni acoso hacia compañeras o rivales.
+                    </div>
+
+                    <div style="padding: 12px 14px; border-radius: 10px; background: rgba(255, 255, 255, 0.03); border-left: 3px solid var(--purple-light);">
+                        <strong style="color: var(--purple-light); display: block; margin-bottom: 3px;">3. Comunicación constructiva</strong>
+                        Fomentamos dar feedback desde el compañerismo y las ganas de mejorar juntas, sin imponer presiones destructivas en partidas casuales o de aprendizaje.
+                    </div>
+
+                    <div style="padding: 12px 14px; border-radius: 10px; background: rgba(255, 255, 255, 0.03); border-left: 3px solid #9edcf0;">
+                        <strong style="color: #9edcf0; display: block; margin-bottom: 3px;">4. Transparencia y compromisos realistas</strong>
+                        Si te sumás a un squad competitivo, sé honesta con tus tiempos y disponibilidad horaria para cuidar el tiempo de tus compañeras.
+                    </div>
+
+                    <div style="padding: 12px 14px; border-radius: 10px; background: rgba(255, 255, 255, 0.03); border-left: 3px solid #ffba59;">
+                        <strong style="color: #ffba59; display: block; margin-bottom: 3px;">5. Moderación comunitaria</strong>
+                        Cualquier incumplimiento puede denunciarse a través de la opción "Reportar" en cada tarjeta. La comunidad se cuida entre todas.
+                    </div>
+                </div>
+
+                <!-- Checkbox de confirmación expresa en las pautas -->
+                <div style="margin-top: 18px; padding: 14px; border-radius: 12px; background: rgba(202, 255, 25, 0.08); border: 1px solid rgba(202, 255, 25, 0.35);">
+                    <label class="form-checkbox-label" style="margin-bottom: 0;">
+                        <input type="checkbox" id="check-confirm-guidelines" class="form-checkbox">
+                        <span style="font-size: 13.5px; color: var(--off-white);">
+                            <strong>He leído, comprendo y acepto las pautas de convivencia.</strong> Me comprometo a respetarlas tanto en mis publicaciones como en el trato con otras jugadoras.
+                        </span>
+                    </label>
+                    <span id="guidelines-error-msg" class="form-error-msg" style="margin-top: 8px;">Debés tildar la casilla de confirmación para poder continuar.</span>
+                </div>
+            </div>
+
+            <div class="dialog-footer">
+                <button type="button" class="btn-card btn-card--secondary" data-close-dialog="dialog-guidelines">Cerrar</button>
+                <button type="button" class="btn-action btn-action--primary" id="btn-confirm-guidelines">Confirmar y continuar ➔</button>
+            </div>
+        </div>
+    </dialog>
+
+    <!-- Modal 6: Denunciar / Reportar publicación -->
+    <dialog id="dialog-report" class="teams-dialog" aria-labelledby="dialog-report-title">
+        <div class="dialog-inner">
+            <div class="dialog-header">
+                <h2 class="dialog-title" id="dialog-report-title">
+                    Reportar <span>publicación</span>
+                </h2>
+                <button type="button" class="dialog-close" data-close-dialog="dialog-report" aria-label="Cerrar modal">✕</button>
+            </div>
+
+            <div class="dialog-body">
+                <p style="margin-top: 0; font-size: 13.5px; color: var(--gray);">
+                    Tu reporte ayuda a mantener la comunidad segura y libre de malas prácticas. Revisaremos el caso con discreción.
+                </p>
+
+                <form id="form-report">
+                    <input type="hidden" id="report-target-id">
+                    <div class="form-field" style="margin-bottom: 14px;">
+                        <label for="report-reason" class="form-label">Motivo del reporte <span class="req">*</span></label>
+                        <select id="report-reason" class="form-select" required>
+                            <option value="">Seleccionar motivo...</option>
+                            <option value="Conducta inapropiada o toxicidad">Conducta inapropiada o toxicidad</option>
+                            <option value="Acoso o discriminación">Acoso o discriminación</option>
+                            <option value="Datos falsos o suplantación">Datos falsos o suplantación</option>
+                            <option value="Spam o publicidad comercial">Spam o publicidad comercial</option>
+                            <option value="Violación de pautas de convivencia">Violación de pautas de convivencia</option>
+                            <option value="Otro">Otro motivo</option>
+                        </select>
+                    </div>
+
+                    <div class="form-field" style="margin-bottom: 14px;">
+                        <label for="report-details" class="form-label">Detalles adicionales (opcional)</label>
+                        <textarea id="report-details" class="form-textarea" rows="3" placeholder="Explicá brevemente lo ocurrido..."></textarea>
+                    </div>
+                </form>
+            </div>
+
+            <div class="dialog-footer">
+                <button type="button" class="btn-card btn-card--secondary" data-close-dialog="dialog-report">Cancelar</button>
+                <button type="button" class="btn-action btn-action--primary" id="btn-submit-report">Enviar reporte</button>
+            </div>
+        </div>
+    </dialog>
+
+    <!-- Notificación flotante Toast -->
+    <div id="toast-notify" class="toast-notify" role="status" aria-live="polite">
+        <span class="toast-icon" aria-hidden="true">✔</span>
+        <span id="toast-text">Acción completada con éxito</span>
+    </div>
+
+    <!-- ================= JAVASCRIPT ================= -->
+    <script>
+        /* ==================================================
+           DATOS INICIALES MOCK REPRESENTATIVOS
+           (LFT: Jugadoras | LFP: Equipos | SQUADS: Vitrina)
+           ================================================== */
+        const initialLFT = [
+            {
+                id: 'lft-1',
+                type: 'lft',
+                name: 'Kira_Valo',
+                game: 'VALORANT',
+                platform: 'PC',
+                rank: 'Ascendente 2',
+                role: 'Duelista/Entry',
+                modality: 'Competitivo',
+                availability: 'Noche',
+                province: 'CABA',
+                discord: 'kira_valo#9211',
+                verified: true,
+                verificationNote: 'Participante verificada en Circuito Universitario 2026',
+                avatarBg: 'linear-gradient(135deg, #7040ff, #ff3cac)',
+                avatarInitials: 'KV',
+                desc: 'Perfil de ejemplo: Main Jett y Raze. Compitiendo desde hace 2 años en torneos amateur. Busco squad comprometida para entrenar 3 noches por semana con comunicación constructiva.',
+                preferredAgents: 'Jett, Raze, Neon',
+                experience: '2 años en torneos universitarios y regionales'
+            }
+        ];
+
+        const initialLFP = [
+            {
+                id: 'lfp-1',
+                type: 'lfp',
+                name: 'Ejemplo Flower',
+                tag: 'Flower',
+                game: 'VALORANT',
+                platform: 'PC',
+                rank: 'Inmortal / Radiante',
+                role: 'Support',
+                rosterCount: '4/5',
+                targetRole: 'Iniciadora / Reconocimiento (Sova, Fade)',
+                modality: 'Competitivo',
+                availability: 'Noche',
+                province: 'Buenos Aires',
+                discord: 'discord.gg/kruesports',
+                status: 'open',
+                objective: 'Circuito VCT Game Changers LATAM 2026',
+                avatarBg: 'linear-gradient(135deg, #ff1493, #7000ff)',
+                avatarInitials: 'FLR',
+                desc: 'Anuncio de ejemplo: Proyecto formativo y competitivo vinculado al ecosistema de KRÜ Blaze. Entrenamientos tácticos diarios, revisión de demos y preparación para el circuito oficial Game Changers.',
+                membersList: ['Conir', 'micaela', 'romi', 'dodo', 'Vacante (Iniciadora)']
+            }
+        ];
+
+        const initialSquads = [
+            {
+                id: 'squad-1',
+                name: 'KRÜ Blaze',
+                tag: 'KRÜ',
+                game: 'VALORANT',
+                category: 'Campeonas VCT Game Changers LATAM Sur',
+                rosterInfo: '5 titulares · 2 staff técnico',
+                status: 'closed',
+                desc: 'El squad femenino más ganador e influyente de la historia del VALORANT en América Latina. Múltiples participaciones y top mundial en el VCT Game Changers Championship.',
+                history: 'Fundado por Sergio "Kun" Agüero en KRÜ Esports, KRÜ Blaze marcó un antes y un después en el profesionalismo de los esports femeninos sudamericanos con rachas históricas invictas y clasificación al mundial de Riot Games en Berlín y São Paulo.',
+                captain: 'Constanza "Conir" Reyes (IGL / Capitana)',
+                members: [
+                    { nick: 'Conir', role: 'IGL / Iniciadora (Capitana)' },
+                    { nick: 'micaela', role: 'Duelista Principal' },
+                    { nick: 'romi', role: 'Controladora / Smokes' },
+                    { nick: 'dodo', role: 'Centinela' },
+                    { nick: 'biazik', role: 'Flex / Duelista secundaria' }
+                ],
+                tournaments: [
+                    'Pentacampeonas VCT Game Changers LATAM Sur',
+                    'Top 6 en VCT Game Changers Championship (Mundial Riot Games)',
+                    'Bicampeonas Regionales LATAM Finals'
+                ],
+                social: {
+                    discord: 'discord.gg/kruesports',
+                    instagram: '@kruesports',
+                    twitch: 'krutv',
+                    youtube: '@kruesports'
+                }
+            },
+            {
+                id: 'squad-2',
+                name: '9z Globant Female',
+                tag: '9z',
+                game: 'Counter-Strike 2',
+                category: 'Competitivo Profesional · ESL Impact League',
+                rosterInfo: '5 titulares · 1 coach',
+                status: 'open',
+                desc: 'El equipo pionero del CS femenino argentino de 9z Team. Protagonistas de las mejores finales sudamericanas y clasificadas a torneos internacionales de Valve.',
+                history: 'Con una base de jugadoras argentinas, chilenas y uruguayas, 9z Female consolidó la estructura profesional de Counter-Strike para mujeres en el Cono Sur, compitiendo en ESL Impact y las finales presenciales de FiReLEAGUE.',
+                captain: 'Evelyn "chjna" Acuña (Capitana)',
+                members: [
+                    { nick: 'chjna', role: 'Capitana / Rifler' },
+                    { nick: 'nani', role: 'Entry Fragger' },
+                    { nick: 'khizha', role: 'AWP Principal' },
+                    { nick: 'pan', role: 'Lurker / Support' },
+                    { nick: 'Vacante', role: 'Anchor Sitio B (Reclutamiento activo)' }
+                ],
+                tournaments: [
+                    'Campeonas FiReLEAGUE Femenina Argentina',
+                    'Subcampeonas ESL Impact South America',
+                    'Clasificadas a la ESL Impact Valencia'
+                ],
+                social: {
+                    discord: 'discord.gg/9z-globant-discord-oficial-774473011956809751',
+                    instagram: '@9zteam',
+                    twitch: '9zteam',
+                    youtube: '@9zTeam'
+                }
+            },
+            {
+                id: 'squad-4',
+                name: 'Isurus Gaming (Femenino)',
+                tag: 'ISG',
+                game: 'Counter-Strike 2',
+                category: 'Historia del Esport Nacional · Tiburón',
+                rosterInfo: '5 titulares · Estructura profesional',
+                status: 'closed',
+                desc: 'Isurus Gaming contó con una escuadra femenina de Counter-Strike: Global Offensive que compitió en torneos nacionales e internacionales y formó parte del crecimiento de la escena femenina de esports en Argentina.',
+                history: 'En enero de 2020, las jugadoras dejaron de representar a Isurus y parte del plantel pasó a competir bajo la organización 9z Team.',
+                members: [
+                    { nick: 'Plantel histórico · 2019', role: '' },
+                    { nick: 'Khizha', role: 'Capitana' },
+                    { nick: 'Chjna', role: '' },
+                    { nick: 'Flossie', role: '' },
+                    { nick: 'Lady', role: '' },
+                    { nick: 'Solxiz', role: '' },
+                    { nick: 'Lokomotion', role: 'Director Técnico' }
+                ],
+                tournaments: [
+                    'Pioneras en torneos sudamericanos femeninos de CS',
+                ],
+                social: {
+                    sitio: 'https://teamisurus.com/tag/isurus-fem/',
+                    instagram: '@teamisurus',
+                    twitch: 'teamisurus',
+                }
+            },
+            {
+                id: 'squad-5',
+                name: 'Furious Gaming Fem',
+                tag: 'FG',
+                game: 'League of Legends',
+                category: 'Circuito Femenino Riot Games & Ligas Comunitarias',
+                rosterInfo: '5 titulares · 1 suplente',
+                status: 'closed',
+                desc: 'Furious Gaming fue una organización argentina de esports con presencia en League of Legends y otras disciplinas competitivas. Su trayectoria forma parte del desarrollo de la escena profesional de videojuegos en Latinoamérica.',
+                history: 'La organización compitió en torneos regionales de League of Legends, entre ellos la Liga Latinoamérica (LLA) y la Liga Regional Sur.',
+            }
+        ];
+
+        /* ==================================================
+           ESTADO DE LA APLICACIÓN
+           ================================================== */
+        let state = {
+            currentTab: 'lft', // 'lft' | 'lfp'
+            itemsLFT: [...initialLFT],
+            itemsLFP: [...initialLFP],
+            squads: [...initialSquads],
+            filters: {
+                search: '',
+                game: 'all',
+                modality: 'all',
+                platform: 'all',
+                role: 'all',
+                availability: 'all',
+                province: 'all'
+            },
+            currentDetailItem: null
+        };
+
+        // Carga opcional de datos en sesión/local si el usuario creó alguno
+        try {
+            const savedLFT = localStorage.getItem('fem_respawn_user_lft');
+            const savedLFP = localStorage.getItem('fem_respawn_user_lfp');
+            const savedSquads = localStorage.getItem('fem_respawn_user_squads');
+            if (savedLFT) state.itemsLFT = [...JSON.parse(savedLFT), ...initialLFT];
+            if (savedLFP) state.itemsLFP = [...JSON.parse(savedLFP), ...initialLFP];
+            if (savedSquads) state.squads = [...JSON.parse(savedSquads), ...initialSquads];
+        } catch (e) {
+            console.warn('Storage no disponible o bloqueado, usando datos en memoria.');
+        }
+
+        /* ==================================================
+           ELEMENTOS DOM
+           ================================================== */
+        const tabLFT = document.getElementById('tab-lft');
+        const tabLFP = document.getElementById('tab-lfp');
+        const tabCountLFT = document.getElementById('tab-count-lft');
+        const tabCountLFP = document.getElementById('tab-count-lfp');
+        const cardsGrid = document.getElementById('cards-grid');
+        const emptyState = document.getElementById('empty-state');
+        const resultsCountEl = document.getElementById('results-count');
+        const showcaseGrid = document.getElementById('showcase-grid');
+
+        // Filtros
+        const filterSearch = document.getElementById('filter-search');
+        const filterGame = document.getElementById('filter-game');
+        const filterModality = document.getElementById('filter-modality');
+        const filterPlatform = document.getElementById('filter-platform');
+        const filterRole = document.getElementById('filter-role');
+        const filterAvailability = document.getElementById('filter-availability');
+        const filterProvince = document.getElementById('filter-province');
+        const btnClearFilters = document.getElementById('btn-clear-filters');
+
+        // Stats en cabecera
+        const statLFT = document.getElementById('stat-lft-count');
+        const statLFP = document.getElementById('stat-lfp-count');
+        const statSquads = document.getElementById('stat-squads-count');
+
+        // Toast
+        const toast = document.getElementById('toast-notify');
+        const toastText = document.getElementById('toast-text');
+
+        function showToast(message) {
+            toastText.textContent = message;
+            toast.classList.add('is-visible');
+            setTimeout(() => toast.classList.remove('is-visible'), 4000);
+        }
+
+        function updateStats() {
+            statLFT.textContent = state.itemsLFT.length;
+            statLFP.textContent = state.itemsLFP.length;
+            statSquads.textContent = state.squads.length;
+            tabCountLFT.textContent = state.itemsLFT.length;
+            tabCountLFP.textContent = state.itemsLFP.length;
+        }
+
+        /* ==================================================
+           RENDERIZADO DE TARJETAS LFT / LFP
+           ================================================== */
+        function getFilteredItems() {
+            const list = state.currentTab === 'lft' ? state.itemsLFT : state.itemsLFP;
+            const q = state.filters.search.toLowerCase().trim();
+
+            return list.filter(item => {
+                // Filtro de texto
+                if (q) {
+                    const matchText = (
+                        (item.name || '') + ' ' +
+                        (item.tag || '') + ' ' +
+                        (item.game || '') + ' ' +
+                        (item.role || '') + ' ' +
+                        (item.desc || '') + ' ' +
+                        (item.rank || '')
+                    ).toLowerCase();
+                    if (!matchText.includes(q)) return false;
+                }
+
+                // Filtro Juego
+                if (state.filters.game !== 'all' && item.game !== state.filters.game) {
+                    return false;
+                }
+
+                // Filtro Modalidad
+                if (state.filters.modality !== 'all' && item.modality !== state.filters.modality) {
+                    return false;
+                }
+
+                // Filtro Plataforma
+                if (state.filters.platform !== 'all' && item.platform !== state.filters.platform) {
+                    return false;
+                }
+
+                // Filtro Rol
+                if (state.filters.role !== 'all') {
+                    if (state.filters.role === 'Support' && !item.role.includes('Support')) return false;
+                    if (state.filters.role === 'Duelista/Entry' && !item.role.includes('Duelista') && !item.role.includes('Entry')) return false;
+                    if (state.filters.role === 'IGL/Capitanía' && !item.role.includes('IGL') && !item.role.includes('Capitanía')) return false;
+                    if (state.filters.role === 'Flex' && !item.role.includes('Flex')) return false;
+                    if (state.filters.role === 'Otros' && (item.role.includes('Support') || item.role.includes('Duelista') || item.role.includes('IGL') || item.role.includes('Flex'))) return false;
+                }
+
+                // Filtro Disponibilidad
+                if (state.filters.availability !== 'all' && item.availability !== state.filters.availability) {
+                    return false;
+                }
+
+                // Filtro Provincia
+                if (state.filters.province !== 'all') {
+                    if (!item.province || !item.province.toLowerCase().includes(state.filters.province.toLowerCase())) {
+                        return false;
+                    }
+                }
+
+                return true;
+            });
+        }
+
+        function getModalityClass(modality) {
+            if (modality === 'Chill') return 'modality-chill';
+            if (modality === 'Aprendizaje') return 'modality-learning';
+            return 'modality-competi';
+        }
+
+        function renderCards() {
+            const items = getFilteredItems();
+
+            resultsCountEl.innerHTML = `Mostrando <strong>${items.length}</strong> anuncio${items.length === 1 ? '' : 's'} (${state.currentTab === 'lft' ? 'Jugadoras LFT' : 'Equipos LFP'})`;
+
+            if (items.length === 0) {
+                cardsGrid.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+
+            if (state.currentTab === 'lft') {
+                // Tarjetas de jugadora (LFT)
+                cardsGrid.innerHTML = items.map(item => `
+                    <article class="team-card team-card--lft" data-id="${item.id}">
+                        <div class="card-header">
+                            <div class="card-avatar" style="background: ${item.avatarBg || 'linear-gradient(135deg, #7040ff, #ff3cac)'}">
+                                ${item.avatarInitials || item.name.substring(0, 2).toUpperCase()}
+                            </div>
+                            <div class="card-title-area">
+                                <div class="card-name-row">
+                                    <h3 class="card-name">${escapeHtml(item.name)}</h3>
+                                    <span class="modality-badge ${getModalityClass(item.modality)}">${item.modality}</span>
+                                </div>
+                                <div class="card-sub">
+                                    <span>🎮 ${escapeHtml(item.game)}</span>
+                                    ${item.province && item.province !== 'Online' ? `<span>· 📍 ${escapeHtml(item.province)}</span>` : ''}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Estado de verificación honesto -->
+                        <div style="margin-bottom: 10px;">
+                            ${item.verified ? `
+                                <span class="badge-verified" title="${escapeHtml(item.verificationNote || 'Acreditación verificada')}">
+                                    ✦ ${escapeHtml(item.verificationNote || 'Perfil verificado en torneo')}
+                                </span>
+                            ` : `
+                                <span class="badge-unverified" title="Publicación directa de la comunidad">
+                                    Comunidad · Sin verificación
+                                </span>
+                            `}
+                        </div>
+
+                        <!-- Metadatos de búsqueda rápida -->
+                        <div class="card-facts">
+                            <div class="card-fact-item">
+                                <div class="card-fact-label">Rol preferido</div>
+                                <div class="card-fact-value">${escapeHtml(item.role)}</div>
+                            </div>
+                            <div class="card-fact-item">
+                                <div class="card-fact-label">Rango / Nivel</div>
+                                <div class="card-fact-value"><strong>${escapeHtml(item.rank)}</strong></div>
+                            </div>
+                            <div class="card-fact-item">
+                                <div class="card-fact-label">Plataforma</div>
+                                <div class="card-fact-value">${escapeHtml(item.platform)}</div>
+                            </div>
+                            <div class="card-fact-item">
+                                <div class="card-fact-label">Horario habitual</div>
+                                <div class="card-fact-value">${escapeHtml(item.availability)}</div>
+                            </div>
+                        </div>
+
+                        <p class="card-desc">${escapeHtml(item.desc)}</p>
+
+                        <div class="card-actions">
+                            <button type="button" class="btn-card btn-card--secondary" onclick="openDetailModal('${item.id}', 'lft')">
+                                Ver perfil
+                            </button>
+                            <button type="button" class="btn-card btn-card--primary" onclick="openContactModal('${item.id}', 'lft')">
+                                Contactar
+                            </button>
+                            <button type="button" class="btn-card btn-card--report" title="Reportar publicación" onclick="openReportModal('${item.id}')" aria-label="Reportar publicación de ${escapeHtml(item.name)}">
+                                ⚑
+                            </button>
+                        </div>
+                    </article>
+                `).join('');
+            } else {
+                // Tarjetas de equipo (LFP)
+                cardsGrid.innerHTML = items.map(item => `
+                    <article class="team-card team-card--lfp" data-id="${item.id}">
+                        <div class="card-header">
+                            <div class="card-avatar card-avatar--lfp" style="background: ${item.avatarBg || 'linear-gradient(135deg, #1b382b, #1d6e49)'}">
+                                ${item.tag || item.avatarInitials || 'SQ'}
+                            </div>
+                            <div class="card-title-area">
+                                <div class="card-name-row">
+                                    <h3 class="card-name">${escapeHtml(item.name)}</h3>
+                                    <span class="card-tag">[${escapeHtml(item.tag || 'TEAM')}]</span>
+                                </div>
+                                <div class="card-sub">
+                                    <span>🎮 ${escapeHtml(item.game)}</span>
+                                    <span>· 👥 Roster: ${escapeHtml(item.rosterCount || '4/5')}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Estado de reclutamiento -->
+                        <div style="margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                            ${item.status === 'open' ? `
+                                <span class="badge-status badge-status--open">● RECLUTAMIENTO ABIERTO</span>
+                            ` : `
+                                <span class="badge-status badge-status--closed">○ ROSTER COMPLETO</span>
+                            `}
+                            <span class="modality-badge ${getModalityClass(item.modality)}">${item.modality}</span>
+                        </div>
+
+                        <div class="card-facts">
+                            <div class="card-fact-item" style="grid-column: span 2;">
+                                <div class="card-fact-label">Rol vacante necesario</div>
+                                <div class="card-fact-value" style="color: var(--green); font-weight: 700;">
+                                    ${escapeHtml(item.targetRole || item.role)}
+                                </div>
+                            </div>
+                            <div class="card-fact-item">
+                                <div class="card-fact-label">Nivel buscado</div>
+                                <div class="card-fact-value">${escapeHtml(item.rank)}</div>
+                            </div>
+                            <div class="card-fact-item">
+                                <div class="card-fact-label">Horario</div>
+                                <div class="card-fact-value">${escapeHtml(item.availability)}</div>
+                            </div>
+                            <div class="card-fact-item" style="grid-column: span 2;">
+                                <div class="card-fact-label">Próximo objetivo</div>
+                                <div class="card-fact-value">🏆 ${escapeHtml(item.objective || 'Entrenamientos y torneos comunitarios')}</div>
+                            </div>
+                        </div>
+
+                        <p class="card-desc">${escapeHtml(item.desc)}</p>
+
+                        <div class="card-actions">
+                            <button type="button" class="btn-card btn-card--secondary" onclick="openDetailModal('${item.id}', 'lfp')">
+                                Ver equipo
+                            </button>
+                            <button type="button" class="btn-card btn-card--primary" onclick="openContactModal('${item.id}', 'lfp')">
+                                Postularme
+                            </button>
+                            <button type="button" class="btn-card btn-card--report" title="Reportar publicación" onclick="openReportModal('${item.id}')" aria-label="Reportar publicación del equipo ${escapeHtml(item.name)}">
+                                ⚑
+                            </button>
+                        </div>
+                    </article>
+                `).join('');
+            }
+        }
+
+        /* ==================================================
+           RENDERIZADO DE SQUADS DE LA COMUNIDAD (D)
+           ================================================== */
+        function renderShowcase() {
+            showcaseGrid.innerHTML = state.squads.map(squad => `
+                <article class="showcase-card" data-squad-id="${squad.id}">
+                    <div class="showcase-banner">
+                        <span class="showcase-badge-game">🎮 ${escapeHtml(squad.game)}</span>
+                    </div>
+                    <div class="showcase-body">
+                        <div class="showcase-crest-wrap">
+                            <div class="showcase-crest">
+                                ${squad.tag || 'SQ'}
+                            </div>
+                            <span class="badge-status ${squad.status === 'open' ? 'badge-status--open' : 'badge-status--closed'}">
+                                ${squad.status === 'open' ? '● RECLUTAMIENTO ABIERTO' : '○ ROSTER COMPLETO'}
+                            </span>
+                        </div>
+
+                        <div class="showcase-name-row">
+                            <h3 class="showcase-name">${escapeHtml(squad.name)}</h3>
+                            <span class="showcase-tag">[${escapeHtml(squad.tag)}]</span>
+                        </div>
+
+                        <div class="showcase-meta">
+                            <span class="showcase-pill">⚡ ${escapeHtml(squad.category)}</span>
+                            <span class="showcase-pill">👥 ${escapeHtml(squad.rosterInfo)}</span>
+                        </div>
+
+                        <p class="showcase-desc">${escapeHtml(squad.desc)}</p>
+
+                        <!-- Enlaces sociales si existen -->
+                        <div class="showcase-social-links" aria-label="Canales oficiales de ${escapeHtml(squad.name)}">
+                            ${squad.social?.discord ? `<a href="https://${squad.social.discord}" target="_blank" rel="noopener noreferrer" class="social-chip">Discord ↗</a>` : ''}
+                            ${squad.social?.instagram ? `<a href="https://instagram.com/${squad.social.instagram.replace('@','')}" target="_blank" rel="noopener noreferrer" class="social-chip">Instagram ↗</a>` : ''}
+                            ${squad.social?.twitch ? `<a href="https://twitch.tv/${squad.social.twitch}" target="_blank" rel="noopener noreferrer" class="social-chip">Twitch ↗</a>` : ''}
+                            ${squad.social?.youtube ? `<a href="https://youtube.com/${squad.social.youtube}" target="_blank" rel="noopener noreferrer" class="social-chip">YouTube ↗</a>` : ''}
+                        </div>
+
+                        <button type="button" class="btn-showcase-view" onclick="openSquadDetailModal('${squad.id}')">
+                            Ver ficha completa ↗
+                        </button>
+                    </div>
+                </article>
+            `).join('');
+        }
+
+        /* ==================================================
+           CONTROL DE PESTAÑAS (LFT vs LFP)
+           ================================================== */
+        function switchTab(targetTab) {
+            state.currentTab = targetTab;
+            if (targetTab === 'lft') {
+                tabLFT.setAttribute('aria-selected', 'true');
+                tabLFP.setAttribute('aria-selected', 'false');
+            } else {
+                tabLFT.setAttribute('aria-selected', 'false');
+                tabLFP.setAttribute('aria-selected', 'true');
+            }
+            renderCards();
+        }
+
+        tabLFT.addEventListener('click', () => switchTab('lft'));
+        tabLFP.addEventListener('click', () => switchTab('lfp'));
+
+        /* ==================================================
+           CONTROL DE FILTROS COMBINABLES
+           ================================================== */
+        function handleFilterChange() {
+            state.filters.search = filterSearch.value;
+            state.filters.game = filterGame.value;
+            state.filters.modality = filterModality.value;
+            state.filters.platform = filterPlatform.value;
+            state.filters.role = filterRole.value;
+            state.filters.availability = filterAvailability.value;
+            state.filters.province = filterProvince.value;
+            renderCards();
+        }
+
+        filterSearch.addEventListener('input', handleFilterChange);
+        filterGame.addEventListener('change', handleFilterChange);
+        filterModality.addEventListener('change', handleFilterChange);
+        filterPlatform.addEventListener('change', handleFilterChange);
+        filterRole.addEventListener('change', handleFilterChange);
+        filterAvailability.addEventListener('change', handleFilterChange);
+        filterProvince.addEventListener('change', handleFilterChange);
+
+        function resetFilters() {
+            filterSearch.value = '';
+            filterGame.value = 'all';
+            filterModality.value = 'all';
+            filterPlatform.value = 'all';
+            filterRole.value = 'all';
+            filterAvailability.value = 'all';
+            filterProvince.value = 'all';
+            handleFilterChange();
+        }
+
+        btnClearFilters.addEventListener('click', resetFilters);
+        document.getElementById('btn-empty-clear').addEventListener('click', resetFilters);
+
+        /* ==================================================
+           GESTIÓN DE DIÁLOGOS Y MODALES NATIVOS
+           ================================================== */
+        function openDialog(dialogId) {
+            const dlg = document.getElementById(dialogId);
+            if (dlg && !dlg.open) {
+                dlg.showModal();
+            }
+        }
+
+        function closeDialog(dialogId) {
+            const dlg = document.getElementById(dialogId);
+            if (dlg && dlg.open) {
+                dlg.close();
+            }
+        }
+
+        document.querySelectorAll('[data-close-dialog]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                closeDialog(btn.getAttribute('data-close-dialog'));
+            });
+        });
+
+        // Cierre con tecla Escape y clic en backdrop
+        document.querySelectorAll('dialog.teams-dialog').forEach(dlg => {
+            dlg.addEventListener('click', (e) => {
+                if (e.target === dlg) {
+                    dlg.close();
+                }
+            });
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('dialog.teams-dialog[open]').forEach(dlg => dlg.close());
+            }
+        });
+
+        /* ==================================================
+           INTERACCIÓN OBJETO FLOTANTE (123.png) ESTILO AREAS.HTML
+           ================================================== */
+        const canRepelSpaceObjects = !window.matchMedia('(prefers-reduced-motion: reduce)').matches &&
+                                     window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+        if (canRepelSpaceObjects) {
+            const heroScene = document.querySelector('.teams-hero');
+            const floatIcon = document.querySelector('.teams-float-icon');
+
+            if (heroScene && floatIcon) {
+                let pointerX = 0;
+                let pointerY = 0;
+                let pointerFrame = 0;
+
+                heroScene.addEventListener('pointermove', (event) => {
+                    if (event.pointerType !== 'mouse') return;
+                    pointerX = event.clientX;
+                    pointerY = event.clientY;
+                    if (pointerFrame) return;
+
+                    pointerFrame = requestAnimationFrame(() => {
+                        pointerFrame = 0;
+                        const rect = floatIcon.getBoundingClientRect();
+                        const deltaX = (rect.left + rect.width / 2) - pointerX;
+                        const deltaY = (rect.top + rect.height / 2) - pointerY;
+                        const distance = Math.hypot(deltaX, deltaY);
+                        const radius = 180;
+                        const strength = Math.max(0, 1 - distance / radius);
+                        const amount = distance ? (strength * 34) / distance : 0;
+
+                        floatIcon.style.setProperty('--pointer-shift-x', `${deltaX * amount}px`);
+                        floatIcon.style.setProperty('--pointer-shift-y', `${deltaY * amount}px`);
+                    });
+                });
+
+                heroScene.addEventListener('pointerleave', () => {
+                    if (pointerFrame) cancelAnimationFrame(pointerFrame);
+                    pointerFrame = 0;
+                    floatIcon.style.setProperty('--pointer-shift-x', '0px');
+                    floatIcon.style.setProperty('--pointer-shift-y', '0px');
+                });
+            }
+        }
+
+        /* ==================================================
+           COMPUERTA OBLIGATORIA: PAUTAS DE CONVIVENCIA
+           ================================================== */
+        let hasAcceptedGuidelines = false;
+        try {
+            hasAcceptedGuidelines = localStorage.getItem('fem_respawn_guidelines_accepted') === 'true';
+        } catch (e) {}
+
+        let pendingActionAfterGuidelines = null; // 'publish' | 'register' | null
+
+        const checkConfirmGuidelines = document.getElementById('check-confirm-guidelines');
+        const guidelinesErrorMsg = document.getElementById('guidelines-error-msg');
+        const btnConfirmGuidelines = document.getElementById('btn-confirm-guidelines');
+
+        if (hasAcceptedGuidelines && checkConfirmGuidelines) {
+            checkConfirmGuidelines.checked = true;
+        }
+
+        function requireGuidelines(targetAction) {
+            if (hasAcceptedGuidelines) {
+                if (targetAction === 'publish') openDialog('dialog-publish');
+                else if (targetAction === 'register') openDialog('dialog-register-team');
+            } else {
+                pendingActionAfterGuidelines = targetAction;
+                if (guidelinesErrorMsg) guidelinesErrorMsg.style.display = 'none';
+                showToast('🛡️ Es necesario confirmar las pautas de convivencia antes de continuar.');
+                openDialog('dialog-guidelines');
+            }
+        }
+
+        btnConfirmGuidelines.addEventListener('click', () => {
+            if (!checkConfirmGuidelines.checked) {
+                guidelinesErrorMsg.style.display = 'block';
+                return;
+            }
+            guidelinesErrorMsg.style.display = 'none';
+            hasAcceptedGuidelines = true;
+            try {
+                localStorage.setItem('fem_respawn_guidelines_accepted', 'true');
+            } catch (e) {}
+
+            closeDialog('dialog-guidelines');
+            showToast('✔ Pautas de convivencia confirmadas');
+
+            if (pendingActionAfterGuidelines === 'publish') {
+                pendingActionAfterGuidelines = null;
+                setTimeout(() => openDialog('dialog-publish'), 200);
+            } else if (pendingActionAfterGuidelines === 'register') {
+                pendingActionAfterGuidelines = null;
+                setTimeout(() => openDialog('dialog-register-team'), 200);
+            }
+        });
+
+        // Botones de acción protegidos por la confirmación obligatoria de pautas
+        document.getElementById('btn-hero-publish').addEventListener('click', () => requireGuidelines('publish'));
+        document.getElementById('btn-hero-register').addEventListener('click', () => requireGuidelines('register'));
+        document.getElementById('btn-empty-publish').addEventListener('click', () => requireGuidelines('publish'));
+        document.getElementById('btn-open-convivencia').addEventListener('click', () => {
+            pendingActionAfterGuidelines = null;
+            if (guidelinesErrorMsg) guidelinesErrorMsg.style.display = 'none';
+            openDialog('dialog-guidelines');
+        });
+
+        /* ==================================================
+           MODAL DE DETALLE (JUGADORA / EQUIPO / SQUAD)
+           ================================================== */
+        window.openDetailModal = function(id, type) {
+            const list = type === 'lft' ? state.itemsLFT : state.itemsLFP;
+            const item = list.find(x => x.id === id);
+            if (!item) return;
+
+            state.currentDetailItem = { item, type };
+            const body = document.getElementById('dialog-detail-body');
+            const title = document.getElementById('dialog-detail-title');
+            const actionBtn = document.getElementById('btn-detail-action');
+
+            if (type === 'lft') {
+                title.innerHTML = `Perfil de <span>${escapeHtml(item.name)}</span>`;
+                actionBtn.textContent = 'Contactar a la jugadora';
+                actionBtn.onclick = () => {
+                    closeDialog('dialog-detail');
+                    openContactModal(item.id, 'lft');
+                };
+
+                body.innerHTML = `
+                    <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 20px;">
+                        <div class="card-avatar" style="width: 64px; height: 64px; font-size: 24px; background: ${item.avatarBg || 'linear-gradient(135deg, #7040ff, #ff3cac)'}">
+                            ${item.avatarInitials || item.name.substring(0, 2).toUpperCase()}
+                        </div>
+                        <div>
+                            <h3 style="margin: 0; font-size: 22px;">${escapeHtml(item.name)}</h3>
+                            <div style="font-family: 'DM Mono', monospace; font-size: 13px; color: var(--green); margin-top: 4px;">
+                                🎮 ${escapeHtml(item.game)} · ${escapeHtml(item.platform)}
+                            </div>
+                            <div style="margin-top: 6px;">
+                                ${item.verified ? `
+                                    <span class="badge-verified">✦ ${escapeHtml(item.verificationNote || 'Acreditación verificada')}</span>
+                                ` : `
+                                    <span class="badge-unverified">Comunidad · Sin verificar</span>
+                                `}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-facts" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 18px;">
+                        <div class="card-fact-item">
+                            <div class="card-fact-label">Rol principal</div>
+                            <div class="card-fact-value">${escapeHtml(item.role)}</div>
+                        </div>
+                        <div class="card-fact-item">
+                            <div class="card-fact-label">Rango / Nivel</div>
+                            <div class="card-fact-value" style="color: var(--green);"><strong>${escapeHtml(item.rank)}</strong></div>
+                        </div>
+                        <div class="card-fact-item">
+                            <div class="card-fact-label">Modalidad</div>
+                            <div class="card-fact-value">${escapeHtml(item.modality)}</div>
+                        </div>
+                        <div class="card-fact-item">
+                            <div class="card-fact-label">Disponibilidad</div>
+                            <div class="card-fact-value">${escapeHtml(item.availability)}</div>
+                        </div>
+                        <div class="card-fact-item">
+                            <div class="card-fact-label">Ubicación</div>
+                            <div class="card-fact-value">${escapeHtml(item.province || 'Online')}</div>
+                        </div>
+                        <div class="card-fact-item">
+                            <div class="card-fact-label">Experiencia</div>
+                            <div class="card-fact-value">${escapeHtml(item.experience || 'Comunitaria')}</div>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 18px;">
+                        <h4 style="font-family: 'DM Mono', monospace; font-size: 12px; color: var(--gray); text-transform: uppercase; margin: 0 0 6px;">
+                            Presentación
+                        </h4>
+                        <p style="margin: 0; font-size: 14px; line-height: 1.6; color: #dedbe6;">
+                            ${escapeHtml(item.desc)}
+                        </p>
+                    </div>
+
+                    ${item.preferredAgents ? `
+                        <div style="margin-bottom: 18px;">
+                            <h4 style="font-family: 'DM Mono', monospace; font-size: 12px; color: var(--gray); text-transform: uppercase; margin: 0 0 6px;">
+                                Personajes / Agentes frecuentes
+                            </h4>
+                            <p style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 14px; color: var(--green);">
+                                ${escapeHtml(item.preferredAgents)}
+                            </p>
+                        </div>
+                    ` : ''}
+
+                    <div style="padding: 12px 14px; border-radius: 10px; background: rgba(152, 120, 255, 0.08); border: 1px solid rgba(152, 120, 255, 0.25); font-size: 12.5px; color: #d0cdd8;">
+                        🛡️ <strong>Aviso de convivencia:</strong> Todas las conversaciones deben regirse bajo el respeto mutuo. Podés reportar cualquier actitud inadecuada.
+                    </div>
+                `;
+            } else {
+                title.innerHTML = `Ficha de <span>${escapeHtml(item.name)}</span> [${escapeHtml(item.tag || 'TEAM')}]`;
+                actionBtn.textContent = 'Postularme al equipo';
+                actionBtn.onclick = () => {
+                    closeDialog('dialog-detail');
+                    openContactModal(item.id, 'lfp');
+                };
+
+                body.innerHTML = `
+                    <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 20px;">
+                        <div class="card-avatar card-avatar--lfp" style="width: 64px; height: 64px; font-size: 24px; background: ${item.avatarBg || 'linear-gradient(135deg, #1b382b, #1d6e49)'}">
+                            ${item.tag || 'SQ'}
+                        </div>
+                        <div>
+                            <h3 style="margin: 0; font-size: 22px;">${escapeHtml(item.name)} <span style="color: var(--green);">[${escapeHtml(item.tag || '')}]</span></h3>
+                            <div style="font-family: 'DM Mono', monospace; font-size: 13px; color: var(--gray); margin-top: 4px;">
+                                🎮 ${escapeHtml(item.game)} · Roster actual: ${escapeHtml(item.rosterCount || '4/5')}
+                            </div>
+                            <div style="margin-top: 6px;">
+                                <span class="badge-status ${item.status === 'open' ? 'badge-status--open' : 'badge-status--closed'}">
+                                    ${item.status === 'open' ? '● RECLUTAMIENTO ABIERTO' : '○ ROSTER COMPLETO'}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-facts" style="grid-template-columns: repeat(2, 1fr); margin-bottom: 18px;">
+                        <div class="card-fact-item" style="grid-column: span 2;">
+                            <div class="card-fact-label">Rol requerido</div>
+                            <div class="card-fact-value" style="color: var(--green); font-weight: 700;">
+                                ${escapeHtml(item.targetRole || item.role)}
+                            </div>
+                        </div>
+                        <div class="card-fact-item">
+                            <div class="card-fact-label">Nivel competitivo</div>
+                            <div class="card-fact-value">${escapeHtml(item.rank)}</div>
+                        </div>
+                        <div class="card-fact-item">
+                            <div class="card-fact-label">Modalidad</div>
+                            <div class="card-fact-value">${escapeHtml(item.modality)}</div>
+                        </div>
+                        <div class="card-fact-item">
+                            <div class="card-fact-label">Horario de prácticas</div>
+                            <div class="card-fact-value">${escapeHtml(item.availability)}</div>
+                        </div>
+                        <div class="card-fact-item">
+                            <div class="card-fact-label">Próximo objetivo</div>
+                            <div class="card-fact-value">🏆 ${escapeHtml(item.objective || 'Competencias locales')}</div>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 18px;">
+                        <h4 style="font-family: 'DM Mono', monospace; font-size: 12px; color: var(--gray); text-transform: uppercase; margin: 0 0 6px;">
+                            Acerca del equipo y propuesta
+                        </h4>
+                        <p style="margin: 0; font-size: 14px; line-height: 1.6; color: #dedbe6;">
+                            ${escapeHtml(item.desc)}
+                        </p>
+                    </div>
+
+                    ${item.membersList ? `
+                        <div style="margin-bottom: 18px;">
+                            <h4 style="font-family: 'DM Mono', monospace; font-size: 12px; color: var(--gray); text-transform: uppercase; margin: 0 0 8px;">
+                                Integrantes actuales
+                            </h4>
+                            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                ${item.membersList.map(m => `<span class="showcase-pill" style="border-color: rgba(152,120,255,0.3);">${escapeHtml(m)}</span>`).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                `;
+            }
+
+            openDialog('dialog-detail');
+        };
+
+        window.openSquadDetailModal = function(squadId) {
+            const squad = state.squads.find(s => s.id === squadId);
+            if (!squad) return;
+
+            const body = document.getElementById('dialog-detail-body');
+            const title = document.getElementById('dialog-detail-title');
+            const actionBtn = document.getElementById('btn-detail-action');
+
+            title.innerHTML = `Squad: <span>${escapeHtml(squad.name)}</span>`;
+            actionBtn.textContent = 'Contactar a la capitana / staff';
+            actionBtn.onclick = () => {
+                closeDialog('dialog-detail');
+                openContactModal(squad.id, 'squad');
+            };
+
+            body.innerHTML = `
+                <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 20px;">
+                    <div class="showcase-crest" style="width: 64px; height: 64px; font-size: 24px;">
+                        ${squad.tag}
+                    </div>
+                    <div>
+                        <h3 style="margin: 0; font-size: 22px;">${escapeHtml(squad.name)} <span style="color: var(--pink);">[${escapeHtml(squad.tag)}]</span></h3>
+                        <div style="font-family: 'DM Mono', monospace; font-size: 13px; color: var(--gray); margin-top: 4px;">
+                            🎮 ${escapeHtml(squad.game)} · ${escapeHtml(squad.category)}
+                        </div>
+                        <div style="margin-top: 6px;">
+                            <span class="badge-status ${squad.status === 'open' ? 'badge-status--open' : 'badge-status--closed'}">
+                                ${squad.status === 'open' ? '● RECLUTAMIENTO ABIERTO' : '○ ROSTER COMPLETO'}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 18px;">
+                    <h4 style="font-family: 'DM Mono', monospace; font-size: 12px; color: var(--gray); text-transform: uppercase; margin: 0 0 6px;">
+                        Historia y trayectoria
+                    </h4>
+                    <p style="margin: 0; font-size: 14px; line-height: 1.6; color: #dedbe6;">
+                        ${escapeHtml(squad.history || squad.desc)}
+                    </p>
+                </div>
+
+                <div style="margin-bottom: 18px;">
+                    <h4 style="font-family: 'DM Mono', monospace; font-size: 12px; color: var(--gray); text-transform: uppercase; margin: 0 0 8px;">
+                        Plantel e integrantes (Capitana: <span style="color: var(--green);">${escapeHtml(squad.captain || 'Staff')}</span>)
+                    </h4>
+                    <div style="display: grid; gap: 8px;">
+                        ${(squad.members || []).map(m => `
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);">
+                                <strong style="font-family: 'Space Grotesk', sans-serif; font-size: 13.5px; color: var(--off-white);">${escapeHtml(m.nick)}</strong>
+                                <span style="font-family: 'DM Mono', monospace; font-size: 12px; color: var(--green);">${escapeHtml(m.role)}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                ${squad.tournaments && squad.tournaments.length ? `
+                    <div style="margin-bottom: 18px;">
+                        <h4 style="font-family: 'DM Mono', monospace; font-size: 12px; color: var(--gray); text-transform: uppercase; margin: 0 0 8px;">
+                            Participación en torneos
+                        </h4>
+                        <ul style="margin: 0; padding-left: 20px; font-size: 13.5px; color: #c4c1ce; line-height: 1.6;">
+                            ${squad.tournaments.map(t => `<li>${escapeHtml(t)}</li>`).join('')}
+                        </ul>
+                    </div>
+                ` : ''}
+
+                <div style="margin-bottom: 14px;">
+                    <h4 style="font-family: 'DM Mono', monospace; font-size: 12px; color: var(--gray); text-transform: uppercase; margin: 0 0 8px;">
+                        Canales oficiales
+                    </h4>
+                    <div class="showcase-social-links">
+                        ${squad.social?.discord ? `<a href="https://${squad.social.discord}" target="_blank" rel="noopener noreferrer" class="social-chip">Discord oficial ↗</a>` : ''}
+                        ${squad.social?.instagram ? `<a href="https://instagram.com/${squad.social.instagram.replace('@','')}" target="_blank" rel="noopener noreferrer" class="social-chip">Instagram ↗</a>` : ''}
+                        ${squad.social?.twitch ? `<a href="https://twitch.tv/${squad.social.twitch}" target="_blank" rel="noopener noreferrer" class="social-chip">Twitch ↗</a>` : ''}
+                        ${squad.social?.youtube ? `<a href="https://youtube.com/${squad.social.youtube}" target="_blank" rel="noopener noreferrer" class="social-chip">YouTube ↗</a>` : ''}
+                    </div>
+                </div>
+            `;
+
+            openDialog('dialog-detail');
+        };
+
+        /* ==================================================
+           MODAL DE CONTACTO SEGURO
+           ================================================== */
+        window.openContactModal = function(id, type) {
+            let target;
+            if (type === 'lft') target = state.itemsLFT.find(x => x.id === id);
+            else if (type === 'lfp') target = state.itemsLFP.find(x => x.id === id);
+            else target = state.squads.find(x => x.id === id);
+
+            if (!target) return;
+
+            document.getElementById('contact-target-name').textContent = target.name;
+            document.getElementById('contact-target-type').textContent = type === 'lft' 
+                ? `Jugadora buscando equipo en ${target.game}`
+                : `Equipo en ${target.game} (${target.status === 'open' ? 'Reclutando' : 'Roster completo'})`;
+
+            const handleText = target.discord || target.social?.discord || 'Contacto vía servidor comunitario Fem Respawn';
+            document.getElementById('contact-handle-text').textContent = handleText;
+
+            const copyBtn = document.getElementById('btn-copy-contact');
+            copyBtn.textContent = 'Copiar 📋';
+            copyBtn.onclick = () => {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(handleText);
+                    copyBtn.textContent = '¡Copiado! ✓';
+                    showToast('Contacto copiado al portapapeles');
+                } else {
+                    showToast('Contacto: ' + handleText);
+                }
+            };
+
+            openDialog('dialog-contact');
+        };
+
+        /* ==================================================
+           MODAL DE DENUNCIA / REPORTE
+           ================================================== */
+        window.openReportModal = function(targetId) {
+            document.getElementById('report-target-id').value = targetId;
+            document.getElementById('report-reason').value = '';
+            document.getElementById('report-details').value = '';
+            openDialog('dialog-report');
+        };
+
+        document.getElementById('btn-submit-report').addEventListener('click', () => {
+            const reason = document.getElementById('report-reason').value;
+            if (!reason) {
+                alert('Por favor seleccioná un motivo para tu reporte.');
+                return;
+            }
+            closeDialog('dialog-report');
+            showToast('Reporte recibido. El equipo de moderación revisará la publicación.');
+        });
+
+        /* ==================================================
+           FORMULARIO 1: PUBLICAR BÚSQUEDA (LFT / LFP)
+           ================================================== */
+        const formPublish = document.getElementById('form-publish');
+        const pubNameLabel = document.getElementById('pub-name-label');
+        const pubPreviewBox = document.getElementById('publish-preview-box');
+        const pubPreviewTarget = document.getElementById('publish-preview-target');
+
+        document.querySelectorAll('input[name="publishType"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                if (e.target.value === 'lfp') {
+                    pubNameLabel.innerHTML = 'Nombre del equipo <span class="req">*</span>';
+                    document.getElementById('pub-name').placeholder = 'Ej: Valkyrias Squad o Nova Team';
+                } else {
+                    pubNameLabel.innerHTML = 'Nickname <span class="req">*</span>';
+                    document.getElementById('pub-name').placeholder = 'Ej: Valkyria99 o GamerGirl';
+                }
+            });
+        });
+
+        function validatePublishForm() {
+            let valid = true;
+            const name = document.getElementById('pub-name');
+            const game = document.getElementById('pub-game');
+            const rank = document.getElementById('pub-rank');
+            const discord = document.getElementById('pub-discord');
+            const desc = document.getElementById('pub-desc');
+            const rules = document.getElementById('pub-rules');
+            const accurate = document.getElementById('pub-accurate');
+
+            [name, game, rank, discord, desc].forEach(field => {
+                const wrap = field.closest('.form-field');
+                if (!field.value.trim()) {
+                    wrap.classList.add('has-error');
+                    valid = false;
+                } else {
+                    wrap.classList.remove('has-error');
+                }
+            });
+
+            const wrapRules = document.getElementById('wrap-check-rules');
+            if (!rules.checked) {
+                wrapRules.classList.add('has-error');
+                valid = false;
+            } else {
+                wrapRules.classList.remove('has-error');
+            }
+
+            const wrapAccurate = document.getElementById('wrap-check-accurate');
+            if (!accurate.checked) {
+                wrapAccurate.classList.add('has-error');
+                valid = false;
+            } else {
+                wrapAccurate.classList.remove('has-error');
+            }
+
+            return valid;
+        }
+
+        function generatePublishPreview() {
+            const type = document.querySelector('input[name="publishType"]:checked').value;
+            const name = document.getElementById('pub-name').value || 'Mi Nickname';
+            const game = document.getElementById('pub-game').value || 'VALORANT';
+            const platform = document.getElementById('pub-platform').value || 'PC';
+            const rank = document.getElementById('pub-rank').value || 'Platino';
+            const role = document.getElementById('pub-role').value || 'Support';
+            const modality = document.querySelector('input[name="pubModality"]:checked').value || 'Chill';
+            const availability = document.getElementById('pub-availability').value || 'Noche';
+            const province = document.getElementById('pub-province').value || 'Online';
+            const desc = document.getElementById('pub-desc').value || 'Sin descripción aún...';
+
+            pubPreviewTarget.innerHTML = `
+                <div class="team-card ${type === 'lft' ? 'team-card--lft' : 'team-card--lfp'}" style="margin: 0;">
+                    <div class="card-header">
+                        <div class="card-avatar ${type === 'lfp' ? 'card-avatar--lfp' : ''}">
+                            ${name.substring(0, 2).toUpperCase()}
+                        </div>
+                        <div class="card-title-area">
+                            <div class="card-name-row">
+                                <h3 class="card-name">${escapeHtml(name)}</h3>
+                                <span class="modality-badge ${getModalityClass(modality)}">${modality}</span>
+                            </div>
+                            <div class="card-sub">
+                                <span>🎮 ${escapeHtml(game)}</span>
+                                <span>· 💻 ${escapeHtml(platform)}</span>
+                                ${province && province !== 'Online' ? `<span>· 📍 ${escapeHtml(province)}</span>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <span class="badge-unverified">Comunidad · Sin verificación previa</span>
+                    </div>
+                    <div class="card-facts">
+                        <div class="card-fact-item"><div class="card-fact-label">Rol</div><div class="card-fact-value">${escapeHtml(role)}</div></div>
+                        <div class="card-fact-item"><div class="card-fact-label">Nivel</div><div class="card-fact-value"><strong>${escapeHtml(rank)}</strong></div></div>
+                        <div class="card-fact-item"><div class="card-fact-label">Horario</div><div class="card-fact-value">${escapeHtml(availability)}</div></div>
+                        <div class="card-fact-item"><div class="card-fact-label">Ubicación</div><div class="card-fact-value">${escapeHtml(province)}</div></div>
+                    </div>
+                    <p class="card-desc">${escapeHtml(desc)}</p>
+                </div>
+            `;
+            pubPreviewBox.style.display = 'block';
+        }
+
+        document.getElementById('btn-publish-preview').addEventListener('click', generatePublishPreview);
+
+        document.getElementById('btn-publish-submit').addEventListener('click', () => {
+            if (!validatePublishForm()) {
+                generatePublishPreview();
+                showToast('Por favor completá los campos obligatorios indicados.');
+                return;
+            }
+
+            const type = document.querySelector('input[name="publishType"]:checked').value;
+            const newId = 'pub-' + Date.now();
+            const newItem = {
+                id: newId,
+                type: type,
+                name: document.getElementById('pub-name').value.trim(),
+                game: document.getElementById('pub-game').value,
+                platform: document.getElementById('pub-platform').value,
+                rank: document.getElementById('pub-rank').value.trim(),
+                role: document.getElementById('pub-role').value,
+                modality: document.querySelector('input[name="pubModality"]:checked').value,
+                availability: document.getElementById('pub-availability').value,
+                province: document.getElementById('pub-province').value,
+                discord: document.getElementById('pub-discord').value.trim(),
+                desc: document.getElementById('pub-desc').value.trim(),
+                verified: false,
+                verificationNote: 'Publicación directa de la comunidad',
+                avatarBg: 'linear-gradient(135deg, #7040ff, #caff19)',
+                avatarInitials: document.getElementById('pub-name').value.trim().substring(0, 2).toUpperCase()
+            };
+
+            if (type === 'lft') {
+                state.itemsLFT.unshift(newItem);
+                try { localStorage.setItem('fem_respawn_user_lft', JSON.stringify([newItem])); } catch (e) {}
+                switchTab('lft');
+            } else {
+                newItem.tag = 'TEAM';
+                newItem.rosterCount = '1/5';
+                newItem.status = 'open';
+                newItem.targetRole = newItem.role;
+                newItem.objective = 'Armado de roster';
+                state.itemsLFP.unshift(newItem);
+                try { localStorage.setItem('fem_respawn_user_lfp', JSON.stringify([newItem])); } catch (e) {}
+                switchTab('lfp');
+            }
+
+            updateStats();
+            formPublish.reset();
+            pubPreviewBox.style.display = 'none';
+            closeDialog('dialog-publish');
+            showToast('¡Tu anuncio se publicó correctamente en el tablón!');
+        });
+
+        /* ==================================================
+           FORMULARIO 2: REGISTRAR EQUIPO (ROSTER BUILDER)
+           ================================================== */
+        const rosterMembersList = document.getElementById('roster-members-list');
+        const btnAddRosterMember = document.getElementById('btn-add-roster-member');
+        const teamPreviewBox = document.getElementById('team-preview-box');
+        const teamPreviewTarget = document.getElementById('team-preview-target');
+
+        function addRosterMemberRow(nick = '', role = 'Flex', isCaptain = false) {
+            const row = document.createElement('div');
+            row.className = 'roster-member-row';
+            row.innerHTML = `
+                <input type="text" class="form-input member-nick" placeholder="Nickname" value="${escapeHtml(nick)}" required>
+                <select class="form-select member-role">
+                    <option value="Duelista / Entry" ${role.includes('Duelista') ? 'selected' : ''}>Duelista / Entry</option>
+                    <option value="Support" ${role.includes('Support') ? 'selected' : ''}>Support</option>
+                    <option value="IGL / Capitana" ${role.includes('IGL') ? 'selected' : ''}>IGL / Capitana</option>
+                    <option value="Iniciadora" ${role.includes('Iniciadora') ? 'selected' : ''}>Iniciadora</option>
+                    <option value="Centinela / Tank" ${role.includes('Centinela') || role.includes('Tank') ? 'selected' : ''}>Centinela / Tank</option>
+                    <option value="Flex" ${role.includes('Flex') ? 'selected' : ''}>Flex</option>
+                    <option value="Suplente" ${role.includes('Suplente') ? 'selected' : ''}>Suplente</option>
+                </select>
+                <label style="font-size: 11px; display: flex; align-items: center; gap: 4px; color: var(--green); cursor: pointer;">
+                    <input type="radio" name="rosterCaptainRadio" class="member-is-captain" ${isCaptain ? 'checked' : ''}> IGL
+                </label>
+                <button type="button" class="btn-remove-member" title="Quitar integrante" aria-label="Quitar integrante">✕</button>
+            `;
+
+            row.querySelector('.btn-remove-member').addEventListener('click', () => {
+                if (rosterMembersList.children.length > 1) {
+                    row.remove();
+                } else {
+                    showToast('El equipo debe tener al menos una integrante registrada.');
+                }
+            });
+
+            rosterMembersList.appendChild(row);
+        }
+
+        // 3 filas iniciales de ejemplo en el Roster Builder
+        addRosterMemberRow('CapitanaGamer', 'IGL / Capitana', true);
+        addRosterMemberRow('EntryQueen', 'Duelista / Entry', false);
+        addRosterMemberRow('SupportHealer', 'Support', false);
+
+        btnAddRosterMember.addEventListener('click', () => addRosterMemberRow('', 'Flex', false));
+
+        function generateTeamPreview() {
+            const name = document.getElementById('team-name').value.trim() || 'Mi Equipo';
+            const tag = document.getElementById('team-tag').value.trim() || 'TAG';
+            const game = document.getElementById('team-game').value || 'VALORANT';
+            const category = document.getElementById('team-category').value.trim() || 'Competitivo amateur';
+            const desc = document.getElementById('team-desc').value.trim() || 'Sin descripción aún';
+            const status = document.getElementById('team-recruitment').value;
+            const rows = rosterMembersList.querySelectorAll('.roster-member-row');
+            const count = rows.length;
+
+            teamPreviewTarget.innerHTML = `
+                <div class="showcase-card" style="margin: 0;">
+                    <div class="showcase-banner">
+                        <span class="showcase-badge-game">🎮 ${escapeHtml(game)}</span>
+                    </div>
+                    <div class="showcase-body">
+                        <div class="showcase-crest-wrap">
+                            <div class="showcase-crest">${escapeHtml(tag)}</div>
+                            <span class="badge-status ${status === 'open' ? 'badge-status--open' : 'badge-status--closed'}">
+                                ${status === 'open' ? '● RECLUTAMIENTO ABIERTO' : '○ ROSTER COMPLETO'}
+                            </span>
+                        </div>
+                        <div class="showcase-name-row">
+                            <h3 class="showcase-name">${escapeHtml(name)}</h3>
+                            <span class="showcase-tag">[${escapeHtml(tag)}]</span>
+                        </div>
+                        <div class="showcase-meta">
+                            <span class="showcase-pill">⚡ ${escapeHtml(category)}</span>
+                            <span class="showcase-pill">👥 ${count} integrantes</span>
+                        </div>
+                        <p class="showcase-desc">${escapeHtml(desc)}</p>
+                    </div>
+                </div>
+            `;
+            teamPreviewBox.style.display = 'block';
+        }
+
+        document.getElementById('btn-team-preview').addEventListener('click', generateTeamPreview);
+
+        document.getElementById('btn-team-submit').addEventListener('click', () => {
+            const name = document.getElementById('team-name');
+            const tag = document.getElementById('team-tag');
+            const game = document.getElementById('team-game');
+            const desc = document.getElementById('team-desc');
+            const rules = document.getElementById('team-rules');
+
+            let valid = true;
+            [name, tag, game, desc].forEach(field => {
+                const wrap = field.closest('.form-field');
+                if (!field.value.trim()) {
+                    wrap.classList.add('has-error');
+                    valid = false;
+                } else {
+                    wrap.classList.remove('has-error');
+                }
+            });
+
+            if (!rules.checked) {
+                rules.closest('.form-field').classList.add('has-error');
+                valid = false;
+            } else {
+                rules.closest('.form-field').classList.remove('has-error');
+            }
+
+            if (!valid) {
+                generateTeamPreview();
+                showToast('Por favor completá todos los campos requeridos del equipo.');
+                return;
+            }
+
+            // Recolectar integrantes
+            const memberRows = rosterMembersList.querySelectorAll('.roster-member-row');
+            const members = [];
+            let captainNick = '';
+
+            memberRows.forEach(row => {
+                const nick = row.querySelector('.member-nick').value.trim() || 'Jugadora';
+                const role = row.querySelector('.member-role').value;
+                const isCap = row.querySelector('.member-is-captain').checked;
+                members.push({ nick, role });
+                if (isCap) captainNick = nick;
+            });
+
+            if (!captainNick && members.length > 0) {
+                captainNick = members[0].nick;
+            }
+
+            const newSquad = {
+                id: 'squad-' + Date.now(),
+                name: name.value.trim(),
+                tag: tag.value.trim().toUpperCase(),
+                game: game.value,
+                category: document.getElementById('team-category').value.trim() || 'Competitivo amateur',
+                rosterInfo: `${members.length} integrantes`,
+                status: document.getElementById('team-recruitment').value,
+                desc: desc.value.trim(),
+                history: desc.value.trim(),
+                captain: `${captainNick} (Capitana / IGL)`,
+                members: members,
+                tournaments: ['Equipo recién registrado en la comunidad'],
+                social: {
+                    discord: document.getElementById('team-discord').value.trim(),
+                    instagram: document.getElementById('team-instagram').value.trim(),
+                    twitch: document.getElementById('team-twitch').value.trim(),
+                    youtube: document.getElementById('team-youtube').value.trim()
+                }
+            };
+
+            state.squads.unshift(newSquad);
+            try {
+                localStorage.setItem('fem_respawn_user_squads', JSON.stringify([newSquad]));
+            } catch (e) {}
+
+            updateStats();
+            renderShowcase();
+            document.getElementById('form-team-register').reset();
+            teamPreviewBox.style.display = 'none';
+            closeDialog('dialog-register-team');
+            showToast(`¡Squad ${newSquad.name} registrado con éxito en Squads de la Comunidad!`);
+
+            // Scroll suave hacia la sección de vitrina
+            document.querySelector('.showcase-section').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        /* ==================================================
+           UTILIDADES
+           ================================================== */
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        /* ==================================================
+           INICIALIZACIÓN
+           ================================================== */
+        updateStats();
+        renderCards();
+        renderShowcase();
+    </script>
+    <script src="sparkles.js"></script>
+</body>
+</html>

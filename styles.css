@@ -85,7 +85,9 @@ body.guide-page.guide-start-page,
 body.guide-page.glossary-page,
 body.guide-page.quiz-page,
 body.guide-page.industry-page,
-body.guide-page.tournament-page {
+body.guide-page.tournament-page,
+body.guide-page.teams-page,
+body.guide-page.circuitos-page {
     position: relative;
     isolation: isolate;
     background: var(--black);
@@ -95,7 +97,9 @@ body.guide-page.guide-start-page::before,
 body.guide-page.glossary-page::before,
 body.guide-page.quiz-page::before,
 body.guide-page.industry-page::before,
-body.guide-page.tournament-page::before {
+body.guide-page.tournament-page::before,
+body.guide-page.teams-page::before,
+body.guide-page.circuitos-page::before {
     content: "";
     position: fixed;
     z-index: -1;
@@ -2726,7 +2730,9 @@ footer p {
 }
 
 
-.tournament-page .guide-back-bottom[href="index.html#competi"] {
+.tournament-page .guide-back-bottom[href="index.html#competi"],
+.teams-page .guide-back-bottom[href="index.html#competi"],
+.circuitos-page .guide-back-bottom[href="index.html#competi"] {
 
     border-top-color: rgba(152, 120, 255, .42);
 
