@@ -50,7 +50,7 @@
             z-index: 1;
         }
 
-        /* Objeto flotante de fondo con animación reactiva al mouse */
+        /* Objetos flotantes de fondo con animación reactiva al mouse */
         .teams-bg-decor {
             position: absolute;
             inset: 0;
@@ -59,15 +59,12 @@
             z-index: 0;
         }
 
-        .teams-float-icon {
+        .teams-float-object {
             position: absolute;
-            top: 20px;
-            right: 40px;
-            width: clamp(75px, 6.8vw, 115px);
             height: auto;
             object-fit: contain;
-            filter: drop-shadow(0 14px 24px rgba(112, 64, 255, 0.42));
-            opacity: 0.92;
+            filter: drop-shadow(0 14px 24px rgba(112, 64, 255, 0.18));
+            opacity: 0.42;
             pointer-events: auto;
             translate: var(--pointer-shift-x, 0px) var(--pointer-shift-y, 0px);
             transition: translate .42s cubic-bezier(.2, .75, .25, 1), filter .25s ease;
@@ -77,6 +74,22 @@
             --float-angle: 5deg;
             animation: areas-space-drift var(--float-duration, 8s) ease-in-out var(--float-delay, 0s) infinite alternate;
             cursor: pointer;
+        }
+
+        .teams-float-icon {
+            top: 20px;
+            right: 40px;
+            width: clamp(68px, 6vw, 100px);
+        }
+
+        .teams-float-star {
+            bottom: 14px;
+            left: 60%;
+            width: clamp(58px, 5vw, 82px);
+            --float-duration: 9.2s;
+            --float-delay: -3.1s;
+            --float-drift: -10px;
+            --float-angle: -9deg;
         }
 
         @keyframes areas-space-drift {
@@ -1751,8 +1764,16 @@
             .teams-float-icon {
                 top: -15px;
                 right: 12px;
-                width: 65px;
-                opacity: 0.65;
+                width: 56px;
+                opacity: 0.32;
+            }
+
+            .teams-float-star {
+                bottom: 10px;
+                left: auto;
+                right: 16%;
+                width: 48px;
+                opacity: 0.3;
             }
         }
 
@@ -1761,7 +1782,7 @@
             .showcase-card,
             .btn-action,
             .teams-stats-pulse,
-            .teams-float-icon {
+            .teams-float-object {
                 animation: none;
                 transition: none;
                 translate: none;
@@ -1786,9 +1807,10 @@
 
         <!-- A. Encabezado principal -->
         <section class="teams-hero" aria-labelledby="teams-page-title">
-            <!-- Icono flotante 123.png en el fondo -->
+            <!-- Decoraciones flotantes en el fondo -->
             <div class="teams-bg-decor" aria-hidden="true">
-                <img class="areas-space-float teams-float-icon" src="123.png" alt="" aria-hidden="true">
+                <img class="areas-space-float teams-float-object teams-float-icon" src="e8c7b2528979b3674e4452a00194c436-Photoroom.png" alt="" aria-hidden="true">
+                <img class="areas-space-float teams-float-object teams-float-star" src="45078206f5bb4103c50b33935e13ac55-Photoroom.png" alt="" aria-hidden="true">
             </div>
 
             <div class="teams-hero-copy">
@@ -1931,7 +1953,7 @@
                                 <option value="PlayStation">PlayStation</option>
                                 <option value="Xbox">Xbox</option>
                                 <option value="Nintendo Switch">Nintendo Switch</option>
-                                <option value="Mobile">Mobile</option>
+                                <option value="Mobile">Celular</option>
                             </select>
                         </div>
                     </div>
@@ -2013,7 +2035,7 @@
                 <span class="empty-state-icon" aria-hidden="true">👾</span>
                 <h3 class="empty-state-title">No encontramos anuncios con esos filtros</h3>
                 <p class="empty-state-copy">
-                    Probá seleccionando "Todos los juegos" o limpiando los filtros para ver más opciones. También podés publicar tu propia búsqueda para que las compañeras te encuentren a vos.
+                    Probá con "Todos los juegos" o limpiá los filtros para ver más opciones. También podés publicar tu propia búsqueda para que otras compañeras te encuentren.
                 </p>
                 <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
                     <button type="button" class="btn-action btn-action--secondary" id="btn-empty-clear">
@@ -2035,7 +2057,7 @@
                 </div>
                 <h2 id="showcase-title">SQUADS DE LA <span>COMUNIDAD</span></h2>
                 <p>
-                    Galería de Squads y Proyectos autogestionados de mujeres y disidencias. Conocé su trayectoria, sus planteles y sus canales oficiales de contacto y reclutamiento.
+                    Galería de squads y proyectos autogestionados por mujeres y disidencias. Conocé su trayectoria, sus planteles y sus canales oficiales de contacto y reclutamiento.
                 </p>
             </div>
 
@@ -2077,8 +2099,8 @@
                             <label class="modality-opt-label">
                                 <input type="radio" name="publishType" value="lfp" class="modality-opt-input">
                                 <div class="modality-opt-card">
-                                    <strong>BUSCO JUGADORA(S) (LFP)</strong>
-                                    <small>Tenemos un Squad y necesitamos cubrir vacantes</small>
+                                    <strong>BUSCO JUGADORAS (LFP)</strong>
+                                    <small>Tenemos un squad y necesitamos cubrir vacantes.</small>
                                 </div>
                             </label>
                         </div>
@@ -2119,7 +2141,7 @@
                                     <option value="PlayStation">PlayStation</option>
                                     <option value="Xbox">Xbox</option>
                                     <option value="Nintendo Switch">Nintendo Switch</option>
-                                    <option value="Mobile">Mobile</option>
+                                    <option value="Mobile">Celular</option>
                                 </select>
                             </div>
 
@@ -2197,7 +2219,7 @@
                             </div>
 
                             <div class="form-field">
-                                <label for="pub-province" class="form-label">Provincia (opcional para Argentina)</label>
+                                <label for="pub-province" class="form-label">Provincia (opcional si estás en Argentina)</label>
                                 <select id="pub-province" class="form-select">
                                     <option value="Online">Online / Prefiero no indicar</option>
                                     <option value="CABA">CABA</option>
@@ -2216,7 +2238,7 @@
 
                     <!-- Paso 4. Presentación -->
                     <fieldset class="form-section">
-                        <legend class="form-section-title">Paso 4 · Presentación y Pautas</legend>
+                        <legend class="form-section-title">Paso 4 · Presentación y pautas</legend>
                         <div class="form-field" style="margin-bottom: 14px;">
                             <label for="pub-desc" class="form-label">¿Qué estás buscando? <span class="req">*</span></label>
                             <textarea id="pub-desc" class="form-textarea" rows="3" placeholder="Contanos tu estilo de juego, qué esperás del equipo y tus objetivos..." required></textarea>
@@ -2463,7 +2485,7 @@
                 <div style="display: grid; gap: 10px; font-size: 13px; line-height: 1.45; color: #d0cdd8;">
                     <div style="display: flex; gap: 10px; align-items: flex-start;">
                         <span style="color: var(--green);">✦</span>
-                        <span><strong>Cómo conectar:</strong> Agregá a la jugadora o sumate al Discord del equipo indicando que viste su publicación en Fem Respawn.</span>
+                        <span><strong>Cómo conectar:</strong> Agregá a la jugadora como amiga o sumate al Discord del equipo. Contale que viste su publicación en Fem Respawn.</span>
                     </div>
                     <div style="display: flex; gap: 10px; align-items: flex-start;">
                         <span style="color: var(--pink);">✦</span>
@@ -2471,7 +2493,7 @@
                     </div>
                     <div style="display: flex; gap: 10px; align-items: flex-start;">
                         <span style="color: #9edcf0;">✦</span>
-                        <span><strong>Partidas de prueba:</strong> Sugerimos jugar unas primeras partidas casuales para evaluar la química y el ambiente de comunicación.</span>
+                        <span><strong>Partidas de prueba:</strong> Sugerimos jugar algunas partidas casuales para evaluar la química y el ambiente de comunicación.</span>
                     </div>
                 </div>
             </div>
@@ -2616,7 +2638,7 @@
                 verificationNote: 'Participante verificada en Circuito Universitario 2026',
                 avatarBg: 'linear-gradient(135deg, #7040ff, #ff3cac)',
                 avatarInitials: 'KV',
-                desc: 'Perfil de ejemplo: Main Jett y Raze. Compitiendo desde hace 2 años en torneos amateur. Busco squad comprometida para entrenar 3 noches por semana con comunicación constructiva.',
+                desc: 'Perfil de ejemplo: juego principalmente con Jett y Raze. Compito desde hace dos años en torneos amateur y busco un equipo comprometido para entrenar tres noches por semana con comunicación constructiva.',
                 preferredAgents: 'Jett, Raze, Neon',
                 experience: '2 años en torneos universitarios y regionales'
             }
@@ -2642,7 +2664,7 @@
                 objective: 'Circuito VCT Game Changers LATAM 2026',
                 avatarBg: 'linear-gradient(135deg, #ff1493, #7000ff)',
                 avatarInitials: 'FLR',
-                desc: 'Anuncio de ejemplo: Proyecto formativo y competitivo vinculado al ecosistema de KRÜ Blaze. Entrenamientos tácticos diarios, revisión de demos y preparación para el circuito oficial Game Changers.',
+                desc: 'Anuncio de ejemplo: este proyecto formativo y competitivo está vinculado al ecosistema de KRÜ Blaze. Incluye entrenamientos tácticos diarios, revisión de demos y preparación para el circuito oficial Game Changers.',
                 membersList: ['Conir', 'micaela', 'romi', 'dodo', 'Vacante (Iniciadora)']
             }
         ];
@@ -2654,9 +2676,9 @@
                 tag: 'KRÜ',
                 game: 'VALORANT',
                 category: 'Campeonas VCT Game Changers LATAM Sur',
-                rosterInfo: '5 titulares · 2 staff técnico',
+                rosterInfo: '5 titulares · 2 integrantes del staff técnico',
                 status: 'closed',
-                desc: 'El squad femenino más ganador e influyente de la historia del VALORANT en América Latina. Múltiples participaciones y top mundial en el VCT Game Changers Championship.',
+                desc: 'KRÜ Blaze es uno de los squads femeninos más ganadores e influyentes de la historia de VALORANT en América Latina. Cuenta con múltiples participaciones en el VCT Game Changers Championship y un puesto destacado a nivel mundial.',
                 history: 'Fundado por Sergio "Kun" Agüero en KRÜ Esports, KRÜ Blaze marcó un antes y un después en el profesionalismo de los esports femeninos sudamericanos con rachas históricas invictas y clasificación al mundial de Riot Games en Berlín y São Paulo.',
                 captain: 'Constanza "Conir" Reyes (IGL / Capitana)',
                 members: [
@@ -2686,7 +2708,7 @@
                 category: 'Competitivo Profesional · ESL Impact League',
                 rosterInfo: '5 titulares · 1 coach',
                 status: 'open',
-                desc: 'El equipo pionero del CS femenino argentino de 9z Team. Protagonistas de las mejores finales sudamericanas y clasificadas a torneos internacionales de Valve.',
+                desc: '9z Team fue pionero en la escena argentina de CS femenino. El equipo protagonizó destacadas finales sudamericanas y se clasificó a torneos internacionales de Valve.',
                 history: 'Con una base de jugadoras argentinas, chilenas y uruguayas, 9z Female consolidó la estructura profesional de Counter-Strike para mujeres en el Cono Sur, compitiendo en ESL Impact y las finales presenciales de FiReLEAGUE.',
                 captain: 'Evelyn "chjna" Acuña (Capitana)',
                 members: [
@@ -2713,7 +2735,7 @@
                 name: 'Isurus Gaming (Femenino)',
                 tag: 'ISG',
                 game: 'Counter-Strike 2',
-                category: 'Historia del Esport Nacional · Tiburón',
+                category: 'Historia de los esports nacionales · Tiburón',
                 rosterInfo: '5 titulares · Estructura profesional',
                 status: 'closed',
                 desc: 'Isurus Gaming contó con una escuadra femenina de Counter-Strike: Global Offensive que compitió en torneos nacionales e internacionales y formó parte del crecimiento de la escena femenina de esports en Argentina.',
@@ -3183,16 +3205,16 @@
         });
 
         /* ==================================================
-           INTERACCIÓN OBJETO FLOTANTE (123.png) ESTILO AREAS.HTML
+           INTERACCIÓN OBJETOS FLOTANTES ESTILO AREAS.HTML
            ================================================== */
         const canRepelSpaceObjects = !window.matchMedia('(prefers-reduced-motion: reduce)').matches &&
                                      window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
         if (canRepelSpaceObjects) {
             const heroScene = document.querySelector('.teams-hero');
-            const floatIcon = document.querySelector('.teams-float-icon');
+            const floatObjects = Array.from(document.querySelectorAll('.teams-float-object'));
 
-            if (heroScene && floatIcon) {
+            if (heroScene && floatObjects.length) {
                 let pointerX = 0;
                 let pointerY = 0;
                 let pointerFrame = 0;
@@ -3205,24 +3227,28 @@
 
                     pointerFrame = requestAnimationFrame(() => {
                         pointerFrame = 0;
-                        const rect = floatIcon.getBoundingClientRect();
-                        const deltaX = (rect.left + rect.width / 2) - pointerX;
-                        const deltaY = (rect.top + rect.height / 2) - pointerY;
-                        const distance = Math.hypot(deltaX, deltaY);
-                        const radius = 180;
-                        const strength = Math.max(0, 1 - distance / radius);
-                        const amount = distance ? (strength * 34) / distance : 0;
+                        floatObjects.forEach(floatObject => {
+                            const rect = floatObject.getBoundingClientRect();
+                            const deltaX = rect.left + rect.width / 2 - pointerX;
+                            const deltaY = rect.top + rect.height / 2 - pointerY;
+                            const distance = Math.hypot(deltaX, deltaY);
+                            const radius = 180;
+                            const strength = Math.max(0, 1 - distance / radius);
+                            const amount = distance ? (strength * 34) / distance : 0;
 
-                        floatIcon.style.setProperty('--pointer-shift-x', `${deltaX * amount}px`);
-                        floatIcon.style.setProperty('--pointer-shift-y', `${deltaY * amount}px`);
+                            floatObject.style.setProperty('--pointer-shift-x', `${deltaX * amount}px`);
+                            floatObject.style.setProperty('--pointer-shift-y', `${deltaY * amount}px`);
+                        });
                     });
                 });
 
                 heroScene.addEventListener('pointerleave', () => {
                     if (pointerFrame) cancelAnimationFrame(pointerFrame);
                     pointerFrame = 0;
-                    floatIcon.style.setProperty('--pointer-shift-x', '0px');
-                    floatIcon.style.setProperty('--pointer-shift-y', '0px');
+                    floatObjects.forEach(floatObject => {
+                        floatObject.style.setProperty('--pointer-shift-x', '0px');
+                        floatObject.style.setProperty('--pointer-shift-y', '0px');
+                    });
                 });
             }
         }
