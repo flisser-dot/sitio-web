@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#09090a">
-    <title>Equipos y Squads | Fem Respawn</title>
+    <title>Equipos y Squads | SUPERNOVA</title>
 
     <!-- Tipografías -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1795,9 +1795,8 @@
 
     <!-- ================= HEADER ================= -->
     <header class="guide-header">
-        <a href="index.html" class="logo" aria-label="Fem Respawn, volver al inicio">
-            <span class="logo-main">Fem</span>
-            <span class="logo-sub">Respawn</span>
+        <a href="index.html" class="logo" aria-label="SUPERNOVA, volver al inicio">
+            <span class="logo-main">SUPERNOVA</span>
         </a>
         <a class="guide-back" href="index.html#competi">← VOLVER A COMPETÍ</a>
     </header>
@@ -2249,7 +2248,7 @@
                         <div class="form-field" id="wrap-check-rules">
                             <label class="form-checkbox-label">
                                 <input type="checkbox" id="pub-rules" class="form-checkbox" required>
-                                <span>Acepto las <strong>pautas de convivencia</strong> de Fem Respawn: juego limpio, respeto mutuo y tolerancia cero al acoso o discriminación.</span>
+                                <span>Acepto las <strong>pautas de convivencia</strong> de SUPERNOVA: juego limpio, respeto mutuo y tolerancia cero al acoso o discriminación.</span>
                             </label>
                             <span class="form-error-msg">Debés aceptar las pautas para publicar.</span>
                         </div>
@@ -2409,7 +2408,7 @@
                         <div class="form-field" style="margin-top: 14px;">
                             <label class="form-checkbox-label">
                                 <input type="checkbox" id="team-rules" class="form-checkbox" required>
-                                <span>El squad se compromete a respetar las <strong>pautas de convivencia</strong> de Fem Respawn, promover un ambiente libre de violencia y velar por la seguridad de sus integrantes.</span>
+                                <span>El squad se compromete a respetar las <strong>pautas de convivencia</strong> de SUPERNOVA, promover un ambiente libre de violencia y velar por la seguridad de sus integrantes.</span>
                             </label>
                             <span class="form-error-msg">Debés aceptar el compromiso de convivencia del equipo.</span>
                         </div>
@@ -2485,7 +2484,7 @@
                 <div style="display: grid; gap: 10px; font-size: 13px; line-height: 1.45; color: #d0cdd8;">
                     <div style="display: flex; gap: 10px; align-items: flex-start;">
                         <span style="color: var(--green);">✦</span>
-                        <span><strong>Cómo conectar:</strong> Agregá a la jugadora como amiga o sumate al Discord del equipo. Contale que viste su publicación en Fem Respawn.</span>
+                        <span><strong>Cómo conectar:</strong> Agregá a la jugadora como amiga o sumate al Discord del equipo. Contale que viste su publicación en SUPERNOVA.</span>
                     </div>
                     <div style="display: flex; gap: 10px; align-items: flex-start;">
                         <span style="color: var(--pink);">✦</span>
@@ -2516,7 +2515,7 @@
 
             <div class="dialog-body" style="font-size: 14px; line-height: 1.6; color: #dedbe6;">
                 <p style="margin-top: 0;">
-                    Fem Respawn es un espacio pensado para que mujeres y disidencias puedan jugar, aprender y competir sin sufrir las violencias frecuentes del ecosistema gamer tradicional.
+                    SUPERNOVA es un espacio pensado para que mujeres y disidencias puedan jugar, aprender y competir sin sufrir las violencias frecuentes del ecosistema gamer tradicional.
                 </p>
 
                 <div style="display: grid; gap: 16px; margin: 20px 0;">
@@ -2793,9 +2792,9 @@
 
         // Carga opcional de datos en sesión/local si el usuario creó alguno
         try {
-            const savedLFT = localStorage.getItem('fem_respawn_user_lft');
-            const savedLFP = localStorage.getItem('fem_respawn_user_lfp');
-            const savedSquads = localStorage.getItem('fem_respawn_user_squads');
+            const savedLFT = localStorage.getItem('SUPERNOVA_user_lft');
+            const savedLFP = localStorage.getItem('SUPERNOVA_user_lfp');
+            const savedSquads = localStorage.getItem('SUPERNOVA_user_squads');
             if (savedLFT) state.itemsLFT = [...JSON.parse(savedLFT), ...initialLFT];
             if (savedLFP) state.itemsLFP = [...JSON.parse(savedLFP), ...initialLFP];
             if (savedSquads) state.squads = [...JSON.parse(savedSquads), ...initialSquads];
@@ -3258,7 +3257,7 @@
            ================================================== */
         let hasAcceptedGuidelines = false;
         try {
-            hasAcceptedGuidelines = localStorage.getItem('fem_respawn_guidelines_accepted') === 'true';
+            hasAcceptedGuidelines = localStorage.getItem('SUPERNOVA_guidelines_accepted') === 'true';
         } catch (e) {}
 
         let pendingActionAfterGuidelines = null; // 'publish' | 'register' | null
@@ -3291,7 +3290,7 @@
             guidelinesErrorMsg.style.display = 'none';
             hasAcceptedGuidelines = true;
             try {
-                localStorage.setItem('fem_respawn_guidelines_accepted', 'true');
+                localStorage.setItem('SUPERNOVA_guidelines_accepted', 'true');
             } catch (e) {}
 
             closeDialog('dialog-guidelines');
@@ -3583,7 +3582,7 @@
                 ? `Jugadora buscando equipo en ${target.game}`
                 : `Equipo en ${target.game} (${target.status === 'open' ? 'Reclutando' : 'Roster completo'})`;
 
-            const handleText = target.discord || target.social?.discord || 'Contacto vía servidor comunitario Fem Respawn';
+            const handleText = target.discord || target.social?.discord || 'Contacto vía servidor comunitario SUPERNOVA';
             document.getElementById('contact-handle-text').textContent = handleText;
 
             const copyBtn = document.getElementById('btn-copy-contact');
@@ -3757,7 +3756,7 @@
 
             if (type === 'lft') {
                 state.itemsLFT.unshift(newItem);
-                try { localStorage.setItem('fem_respawn_user_lft', JSON.stringify([newItem])); } catch (e) {}
+                try { localStorage.setItem('SUPERNOVA_user_lft', JSON.stringify([newItem])); } catch (e) {}
                 switchTab('lft');
             } else {
                 newItem.tag = 'TEAM';
@@ -3766,7 +3765,7 @@
                 newItem.targetRole = newItem.role;
                 newItem.objective = 'Armado de roster';
                 state.itemsLFP.unshift(newItem);
-                try { localStorage.setItem('fem_respawn_user_lfp', JSON.stringify([newItem])); } catch (e) {}
+                try { localStorage.setItem('SUPERNOVA_user_lfp', JSON.stringify([newItem])); } catch (e) {}
                 switchTab('lfp');
             }
 
@@ -3933,7 +3932,7 @@
 
             state.squads.unshift(newSquad);
             try {
-                localStorage.setItem('fem_respawn_user_squads', JSON.stringify([newSquad]));
+                localStorage.setItem('SUPERNOVA_user_squads', JSON.stringify([newSquad]));
             } catch (e) {}
 
             updateStats();

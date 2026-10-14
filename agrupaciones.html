@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Industria nacional | Fem Respawn</title>
+    <title>Agrupaciones | SUPERNOVA</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,9 +11,8 @@
     <link rel="stylesheet" href="styles.css">
 
     <style>
-        .ind-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, 360px); align-items: center; gap: clamp(18px, 4vw, 48px); padding: 0 0 22px; }
+        .ind-hero { display: grid; grid-template-columns: minmax(0, 1fr); align-items: center; gap: clamp(18px, 4vw, 48px); padding: 0 0 22px; }
         .ind-hero-copy { min-width: 0; }
-        .ind-argentina-float { display: block; width: min(100%, 160px); height: auto; max-height: 240px; object-fit: contain; justify-self: center; filter: drop-shadow(0 12px 18px rgba(0,0,0,.24)); translate: var(--pointer-shift-x, 0px) var(--pointer-shift-y, 0px); transition: translate .42s cubic-bezier(.2, .75, .25, 1); --float-duration: 8s; --float-delay: -1.5s; --float-drift: -8px; --float-angle: 4deg; animation: areas-space-drift var(--float-duration) ease-in-out var(--float-delay) infinite alternate; }
         .ind-hero h1 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2.4rem, 5.6vw, 4.75rem); line-height: 1; margin: 8px 0 14px; }
         .ind-hero h1 span { color: var(--green); }
         .ind-hero p { max-width: 620px; color: var(--gray); font-size: 1.1rem; }
@@ -67,8 +66,7 @@
         }
 
         @media (max-width: 560px) {
-            .ind-hero { grid-template-columns: 1fr; gap: 34px; }
-            .ind-argentina-float { width: min(100%, 160px); justify-self: center; }
+            .ind-hero { grid-template-columns: 1fr; }
         }
 
         @media (max-width: 480px) {
@@ -80,18 +78,14 @@
             .ind-arrow-next { right: 4px; }
         }
 
-        @media (prefers-reduced-motion: reduce) {
-            .ind-argentina-float { animation: none; translate: none; transition: none; }
-        }
     </style>
 </head>
 
 <body class="guide-page industry-page">
 
     <header class="guide-header">
-        <a href="index.html" class="logo" aria-label="Fem Respawn, volver al inicio">
-            <span class="logo-main">Fem</span>
-            <span class="logo-sub">Respawn</span>
+        <a href="index.html" class="logo" aria-label="SUPERNOVA, expandiendo los límites del juego..">
+            <span class="logo-main">SUPER NOVA</span>
         </a>
         <a class="guide-back" href="index.html#comunidad">← VOLVER A COMUNIDAD</a>
     </header>
@@ -104,7 +98,6 @@
                 <h1>Agrupaciones <span>y colectivos</span></h1>
                 <p>Explorá colectivos y grupos de mujeres y disidencias que impulsan el gaming en Argentina.</p>
             </div>
-            <img class="ind-argentina-float" src="msn.png" alt="" aria-hidden="true">
         </section>
 
         <!-- Reemplazá cada img/src, título, texto y link por los datos reales -->
@@ -137,8 +130,8 @@
         const items = [
             { img: 'wigar.jpg', tag: '// AGRUPACIÓN', name: 'Women in Games Argentina (WIGAr)', sub: 'Organización que promueve la inclusión de mujeres y disidencias en la industria de los videojuegos.', desc: 'Impulsa talleres, eventos y oportunidades de formación y conexión en el gaming.', links: [{ label: 'SITIO OFICIAL', url: 'https://www.womeningamesargentina.org/' }, { label: 'INSTAGRAM', url: 'https://www.instagram.com/womeningamesargentina/?hl=es' }] },
             { img: 'bichoraro.jpg', tag: '// COOPERATIVA', name: 'Bicho Raro Games', sub: 'Cooperativa argentina de desarrollo de videojuegos fundada por mujeres.', desc: 'Crea juegos educativos y experiencias con narrativas personales y sociales, y también ofrece servicios de desarrollo y capacitación. Ideal para quienes quieren conocer el lado profesional y creativo del gaming.', links: [{ label: 'ITCHI.IO', url: 'https://bicho-raro.itch.io/' }, { label: 'LINKEDIN', url: 'https://www.linkedin.com/company/bichorarocoop' }, { label: 'Instagram', url: 'https://www.instagram.com/bichoraro.games/' }  ] },
-            { img: 'cienciagamer.png', fit: 'contain', imageBackground: '#fff', tag: '// INVESTIGACIÓN', name: 'Ciencia Gamer Ok', sub: 'Proyecto de investigación dedeicado a la ciencia y videojuegos.', desc: 'Acerca los conocimientos científicos actuales sobre el uso de videojuegos, encargandose de "traducir" documentos académicos y artículos científicos. ', links: [{ label: 'SITIO OFICIAL', url: 'https://cienciagamer.com/index.html' }, { label: 'INSTAGRAM', url: 'https://www.instagram.com/cienciagamerok/' }, { label: 'LINKEDIN', url: 'https://www.linkedin.com/company/ciencia-gamer/' }] },
-            { img: 'sheroes.jpg',  fit: 'contain', imageBackground: '#fff', tag: '// INICIATIVA', name: 'Sheroes in games', sub: 'Iniciativa de programación de videojuegos para mujeres y niñas.', desc: 'Un proyecto educativo y comunitario que busca reducir la brecha de género en la industria de los videojuegos, fomentando la participación de mujeres y disidencias desde edades temprana.', links: [{ label: 'INSTAGRAM', url: 'https://www.instagram.com/sheroesingames/' }] },
+            { img: 'cienciagamer.png', fit: 'contain', imageBackground: '#fff', tag: '// INVESTIGACIÓN', name: 'Ciencia Gamer Ok', sub: 'Proyecto de investigación dedicado a la ciencia y los videojuegos.', desc: 'Difunde conocimientos científicos actuales sobre el uso de los videojuegos y se encarga de traducir documentos académicos y artículos científicos.', links: [{ label: 'SITIO OFICIAL', url: 'https://cienciagamer.com/index.html' }, { label: 'INSTAGRAM', url: 'https://www.instagram.com/cienciagamerok/' }, { label: 'LINKEDIN', url: 'https://www.linkedin.com/company/ciencia-gamer/' }] },
+            { img: 'sheroes.jpg',  fit: 'contain', imageBackground: '#fff', tag: '// INICIATIVA', name: 'Sheroes in games', sub: 'Iniciativa de programación de videojuegos para mujeres y niñas.', desc: 'Un proyecto educativo y comunitario que busca reducir la brecha de género en la industria de los videojuegos y fomentar la participación de mujeres y disidencias desde edades tempranas.', links: [{ label: 'INSTAGRAM', url: 'https://www.instagram.com/sheroesingames/' }] },
         ];
 
         const stage = document.getElementById('stage');
@@ -275,43 +268,8 @@
 
         go(Math.max(0, items.findIndex(it => it.img === 'storyteller.jpg')));
 
-        const argentinaScene = document.querySelector('.ind-hero');
-        const argentinaFloat = document.querySelector('.ind-argentina-float');
-        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        const canRepelArgentina = !reduceMotion && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-
-        if (canRepelArgentina) {
-            let pointerX = 0;
-            let pointerY = 0;
-            let pointerFrame = 0;
-
-            argentinaScene.addEventListener('pointermove', event => {
-                if (event.pointerType !== 'mouse') return;
-                pointerX = event.clientX;
-                pointerY = event.clientY;
-                if (pointerFrame) return;
-
-                pointerFrame = requestAnimationFrame(() => {
-                    pointerFrame = 0;
-                    const rect = argentinaFloat.getBoundingClientRect();
-                    const deltaX = rect.left + rect.width / 2 - pointerX;
-                    const deltaY = rect.top + rect.height / 2 - pointerY;
-                    const distance = Math.hypot(deltaX, deltaY);
-                    const strength = Math.max(0, 1 - distance / 120);
-                    const amount = distance ? (strength * 28) / distance : 0;
-                    argentinaFloat.style.setProperty('--pointer-shift-x', `${deltaX * amount}px`);
-                    argentinaFloat.style.setProperty('--pointer-shift-y', `${deltaY * amount}px`);
-                });
-            });
-
-            argentinaScene.addEventListener('pointerleave', () => {
-                if (pointerFrame) cancelAnimationFrame(pointerFrame);
-                pointerFrame = 0;
-                argentinaFloat.style.setProperty('--pointer-shift-x', '0px');
-                argentinaFloat.style.setProperty('--pointer-shift-y', '0px');
-            });
-        }
     </script>
 
+    <script src="sparkles.js"></script>
 </body>
 </html>
