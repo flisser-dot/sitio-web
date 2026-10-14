@@ -1777,6 +1777,47 @@
             }
         }
 
+          /* Responsive rules */
+        @media (max-width: 900px) {
+            .circ-mindset-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .circ-roles-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+       .guide-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 32px;
+            position: relative;
+            z-index: 10;
+            background: transparent;
+        }
+
+        .logo-main {
+            width: 260px;
+            height: 66px;
+            object-fit: cover;
+            object-position: center;
+            
+            /* Transparencia gradual en los bordes */
+            -webkit-mask-image:
+            linear-gradient(to right, transparent, #000 8%, #000 92%, transparent),
+            linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent);
+            
+            -webkit-mask-composite: source-in;
+            
+            mask-image:
+            linear-gradient(to right, transparent, #000 8%, #000 92%, transparent),
+            linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent);
+            
+            mask-composite: intersect;
+        }
+
         @media (prefers-reduced-motion: reduce) {
             .team-card,
             .showcase-card,
@@ -1796,7 +1837,7 @@
     <!-- ================= HEADER ================= -->
     <header class="guide-header">
         <a href="index.html" class="logo" aria-label="SUPERNOVA, volver al inicio">
-            <span class="logo-main">SUPERNOVA</span>
+            <img src="a ver.jpg" alt="SUPERNOVA" class="logo-main">
         </a>
         <a class="guide-back" href="index.html#competi">← VOLVER A COMPETÍ</a>
     </header>

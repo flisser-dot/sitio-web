@@ -24,6 +24,7 @@
 		}
 
 		.tournament-page .guide-main { padding: 54px 0 80px; }
+		.tournament-page .guide-header .logo img { width: 260px; height: 66px; object-fit: cover; object-position: center; -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent), linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent); -webkit-mask-composite: source-in; mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent), linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent); mask-composite: intersect; }
 		.tor-intro { display: flex; align-items: end; justify-content: space-between; gap: 32px; margin-bottom: 32px; }
 		.tor-intro-copy { max-width: 780px; }
 		.tor-eyebrow { color: var(--gray); font-family: "DM Mono", monospace; font-size: 12px; }
@@ -187,6 +188,8 @@
 
 		@media (max-width: 600px) {
 			.tournament-page .guide-main { padding-top: 36px; }
+			.tournament-page .guide-header { width: calc(100% - 32px); }
+			.tournament-page .guide-header .logo img { width: min(200px, calc(100vw - 230px)); height: 50px; }
 			.tor-title { max-width: 450px; font-size: 42px; }
 			.tor-lede { font-size: 14px; }
 			.tor-controls { gap: 10px; }
@@ -231,7 +234,7 @@
 <body class="guide-page tournament-page">
 	<header class="guide-header">
 		<a href="index.html" class="logo" aria-label="SUPERNOVA, volver al inicio">
-			<span class="logo-main">SUPERNOVA</span>
+			<img src="a ver.jpg" alt="SUPERNOVA">
 		</a>
 		<a class="guide-back" href="index.html#competi">← VOLVER A COMPETÍ</a>
 	</header>
