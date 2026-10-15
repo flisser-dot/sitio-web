@@ -23,7 +23,13 @@
 .tools-page .tools-cover-object { position: absolute; display: block; height: auto; max-width: none; object-fit: contain; translate: var(--pointer-shift-x, 0px) var(--pointer-shift-y, 0px); transition: translate .42s cubic-bezier(.2, .75, .25, 1); animation: tools-cover-drift 8s ease-in-out infinite alternate; }
 .tools-page .tools-cover-planet { top: 42%; right: 27%; width: clamp(90px, 10vw, 140px); opacity: .44; animation-delay: -2.2s; }
 .tools-page .tools-cover-sparkles { top: 50%; right: 1.5%; width: clamp(64px, 7vw, 92px); opacity: .36; animation-delay: -4.5s; }
-.tools-page .tools-cover-lock { top: 5%; right: 4%; width: clamp(84px, 9vw, 124px); opacity: .88; animation-delay: -1s; }
+.tools-page .tools-cover-lock {
+    top: 5%;
+    right: 4%;
+    width: clamp(84px, 9vw, 124px);
+    opacity: .36;
+    animation-delay: -1s;
+}
 @keyframes tools-cover-drift { from { transform: translateY(0) rotate(-4deg); } to { transform: translateY(-9px) rotate(4deg); } }
 .tools-page .guide-main h1 { font-size: 64px; line-height: 1.05; margin: 22px 0; }
 .tools-page .guide-main h1 span { margin-left: 16px; color: var(--off-white); }
@@ -157,7 +163,12 @@
     .tools-page .guide-main h1 span { display: block; margin-left: 0; }
     .tools-page .tools-cover-planet { top: 43%; right: 8%; width: 82px; opacity: .36; }
     .tools-page .tools-cover-sparkles { top: 53%; right: 2%; width: 54px; opacity: .28; }
-    .tools-page .tools-cover-lock { top: 4%; right: 3%; width: 62px; opacity: .78; }
+    .tools-page .tools-cover-lock {
+    top: 4%;
+    right: 3%;
+    width: 62px;
+    opacity: .28;
+}
     .tools-page .guide-section-heading h2 { font-size: 28px; }
     .tools-page .guide-step-number { padding: 8px 0; font-size: 16px; }
     .tools-page .guide-intro { font-size: 18px; }

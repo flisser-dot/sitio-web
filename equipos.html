@@ -1798,24 +1798,23 @@
             background: transparent;
         }
 
-        .logo-main {
-            width: 260px;
-            height: 66px;
-            object-fit: cover;
-            object-position: center;
-            
-            /* Transparencia gradual en los bordes */
-            -webkit-mask-image:
-            linear-gradient(to right, transparent, #000 8%, #000 92%, transparent),
-            linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent);
-            
-            -webkit-mask-composite: source-in;
-            
-            mask-image:
-            linear-gradient(to right, transparent, #000 8%, #000 92%, transparent),
-            linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent);
-            
-            mask-composite: intersect;
+         .logo-main {
+        width: 220px;
+        height: 100px;
+        object-fit: contain;
+        object-position: center;
+        /* Conservá tus reglas de máscara actuales */
+         -webkit-mask-image:
+        linear-gradient(to right, transparent, #000 8%, #000 92%, transparent),
+        linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent);
+        
+        -webkit-mask-composite: source-in;
+        
+        mask-image:
+        linear-gradient(to right, transparent, #000 8%, #000 92%, transparent),
+        linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent);
+        
+        mask-composite: intersect;
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -1837,7 +1836,7 @@
     <!-- ================= HEADER ================= -->
     <header class="guide-header">
         <a href="index.html" class="logo" aria-label="SUPERNOVA, volver al inicio">
-            <img src="a ver.jpg" alt="SUPERNOVA" class="logo-main">
+            <img src="logotipo supernova fem.png" alt="SUPERNOVA" class="logo-main">
         </a>
         <a class="guide-back" href="index.html#competi">← VOLVER A COMPETÍ</a>
     </header>
@@ -1849,7 +1848,7 @@
         <section class="teams-hero" aria-labelledby="teams-page-title">
             <!-- Decoraciones flotantes en el fondo -->
             <div class="teams-bg-decor" aria-hidden="true">
-                <img class="areas-space-float teams-float-object teams-float-icon" src="e8c7b2528979b3674e4452a00194c436-Photoroom.png" alt="" aria-hidden="true">
+                <img class="areas-space-float teams-float-object teams-float-icon" src="image (4) (1).png" alt="" aria-hidden="true">
                 <img class="areas-space-float teams-float-object teams-float-star" src="45078206f5bb4103c50b33935e13ac55-Photoroom.png" alt="" aria-hidden="true">
             </div>
 

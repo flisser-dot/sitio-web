@@ -24,7 +24,11 @@
 		}
 
 		.tournament-page .guide-main { padding: 54px 0 80px; }
-		.tournament-page .guide-header .logo img { width: 260px; height: 66px; object-fit: cover; object-position: center; -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent), linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent); -webkit-mask-composite: source-in; mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent), linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent); mask-composite: intersect; }
+		.tournament-page .guide-header .logo img {
+    width: 220px;
+    height: 100px;
+    object-fit: contain;
+}
 		.tor-intro { display: flex; align-items: end; justify-content: space-between; gap: 32px; margin-bottom: 32px; }
 		.tor-intro-copy { max-width: 780px; }
 		.tor-eyebrow { color: var(--gray); font-family: "DM Mono", monospace; font-size: 12px; }
@@ -228,13 +232,50 @@
 		@media (prefers-reduced-motion: reduce) {
 			.tor-view-button, .tor-arrow, .tor-event-card { transition: none; }
 		}
+
+		/* Responsive rules */
+        @media (max-width: 900px) {
+            .circ-mindset-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .circ-roles-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+       .guide-header img {
+		width: 220px;
+		height: auto;
+		max-width: none;
+		object-fit: contain;
+		}
+
+        .logo-main {
+        width: 220px;
+        height: 100px;
+        object-fit: contain;
+        object-position: center;
+        /* Conservá tus reglas de máscara actuales */
+         -webkit-mask-image:
+        linear-gradient(to right, transparent, #000 8%, #000 92%, transparent),
+        linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent);
+        
+        -webkit-mask-composite: source-in;
+        
+        mask-image:
+        linear-gradient(to right, transparent, #000 8%, #000 92%, transparent),
+        linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent);
+        
+        mask-composite: intersect;
+        }
 	</style>
 </head>
 
 <body class="guide-page tournament-page">
 	<header class="guide-header">
 		<a href="index.html" class="logo" aria-label="SUPERNOVA, volver al inicio">
-			<img src="a ver.jpg" alt="SUPERNOVA">
+			<img src="logotipo supernova fem.png" alt="SUPERNOVA" class="logo-main">
 		</a>
 		<a class="guide-back" href="index.html#competi">← VOLVER A COMPETÍ</a>
 	</header>

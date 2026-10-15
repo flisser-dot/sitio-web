@@ -1,5 +1,5 @@
 /* ==================================================
-    GREMIO FEM RESPAWN — ESTILOS
+    SUPERNOVA — ESTILOS
    ================================================== */
 
 
@@ -263,7 +263,7 @@ a {
     z-index: -1;
     background-image:
         linear-gradient(90deg, rgba(9, 9, 10, .76) 0%, rgba(9, 9, 10, .52) 38%, rgba(9, 9, 10, .08) 78%),
-        url("cute banner-Photoroom.png");
+        url("Portal Y2K con joystick y trofeo-Photoroom.png");
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -1774,7 +1774,7 @@ footer p {
 
         background-image:
             linear-gradient(180deg, rgba(9, 9, 10, 0.08), rgba(9, 9, 10, 0.18)),
-            url("cute banner-Photoroom.png");
+            url("Portal Y2K con joystick y trofeo-Photoroom.png");
 
         background-position: center, center bottom;
 
