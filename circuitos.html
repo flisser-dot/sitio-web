@@ -898,25 +898,24 @@
             background: transparent;
         }
 
-        .logo-main {
-            width: 260px;
-            height: 66px;
-            object-fit: cover;
-            object-position: center;
-            
-            /* Transparencia gradual en los bordes */
-            -webkit-mask-image:
-            linear-gradient(to right, transparent, #000 8%, #000 92%, transparent),
-            linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent);
-            
-            -webkit-mask-composite: source-in;
-            
-            mask-image:
-            linear-gradient(to right, transparent, #000 8%, #000 92%, transparent),
-            linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent);
-            
-            mask-composite: intersect;
-        }
+         .logo-main {
+        width: 220px;
+        height: 100px;
+        object-fit: contain;
+        object-position: center;
+        /* Conservá tus reglas de máscara actuales */
+         -webkit-mask-image:
+        linear-gradient(to right, transparent, #000 8%, #000 92%, transparent),
+        linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent);
+        
+        -webkit-mask-composite: source-in;
+        
+        mask-image:
+        linear-gradient(to right, transparent, #000 8%, #000 92%, transparent),
+        linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent);
+        
+        mask-composite: intersect;
+    }
 
         @media (max-width: 680px) {
             .circ-levels-grid {
@@ -964,7 +963,7 @@
     <!-- ================= HEADER ================= -->
     <header class="guide-header">
         <a href="index.html" class="logo" aria-label="SUPERNOVA, volver al inicio">
-            <img src="a ver.jpg" alt="SUPERNOVA" class="logo-main">
+            <img src="logo supernova finale.png" alt="SUPERNOVA" class="logo-main">
         </a>
         <a class="guide-back" href="index.html#competi">← VOLVER A COMPETÍ</a>
     </header>
@@ -1123,7 +1122,7 @@
                 <!-- Casting -->
                 <article class="circ-role-card">
                     <span class="circ-role-icon" aria-hidden="true">🎙️</span>
-                    <h3 class="circ-role-title">Casting</h3>
+                    <h3 class="circ-role-title">Caster / Analista</h3>
                     <span class="circ-role-sub">Relato y conducción.</span>
                     <p class="circ-role-desc">
                         Transmitir la emoción de cada jugada, narrar teamfights, conducir transmisiones en vivo y analizar el juego en las mesas de analistas.
@@ -1207,7 +1206,7 @@
                             <span class="circ-kit-name">Discord y coordinación</span>
                         </div>
                         <p class="circ-kit-desc">
-                            El canal oficial donde se anuncian cambios de horario, se asignan salas de voz y las capitanas se comunican directamente con los árbitros.
+                            Tu cuartel general. Donde se anuncian cambios de horario, se asignan salas de voz y las capitanas se comunican directamente con los árbitros.
                         </p>
                     </div>
                     <span class="circ-kit-pill">Canal oficial de soporte</span>
@@ -1314,7 +1313,7 @@
                         icon: '🔍',
                         title: '01. Encontrá un torneo comunitario',
                         sub: 'Juego, fechas y requisitos de la comunidad.',
-                        body: 'Revisá convocatorias vigentes en comunidades gamer aliadas (como WIGAr, Amazonas o el calendario de SUPERNOVA). Antes de anotarte, comprobá que el torneo coincida con tu juego, que las fechas no se superpongan con tus obligaciones y que cumplas los requisitos de participación (cupo mixto o exclusivo femenino).'
+                        body: 'Revisá convocatorias vigentes en comunidades aliadas (como WIGAr, Amazonas o el calendario de SUPERNOVA). Chequeá antes de anotarte si piden cupo mixto o exclusivo femenino y si te dan los horarios para jugarlo.'
                     },
                     {
                         icon: '👤',
@@ -1331,8 +1330,8 @@
                     {
                         icon: '🛡️',
                         title: '04. Jugá con confianza y respeto',
-                        sub: 'Pautas de convivencia y soporte.',
-                        body: 'El foco es divertirse y aprender en equipo. Si surge cualquier problema o conducta tóxica, los servidores cuentan con moderadoras y canales de reporte comunitarios donde podés solicitar asistencia inmediata.'
+                        sub: 'Pautas de convivencia y soporte: A jugar y pasarla bien.',
+                        body: 'El foco es soltarse, divertirse y aprender en equipo. Si surge cualquier problema o conducta tóxica, los servidores cuentan con moderadoras y canales de reporte comunitarios donde podés solicitar asistencia inmediata.'
                     }
                 ],
                 // Contenidos personalizados para Módulo 03 / ACOMPAÑAMIENTO
@@ -1367,10 +1366,10 @@
                 quote: '«La coordinación también se entrena. Cada partida te prepara para el próximo desafío.»',
                 description: 'Torneos abiertos, clasificatorios regionales y ligas organizadas por federaciones (como competencias auspiciadas por DEVA) o plataformas especializadas. Te permiten medirte contra escuadras con mayor rodaje y evaluar tu nivel táctico.',
                 learningPoints: [
-                    'Cumplir horarios formales de check-in y tiempos de pausa.',
-                    'Interpretar reglamentos oficiales y formatos competitivos estructurados.',
-                    'Coordinar estrategias de selección/bloqueo de mapas y roles.',
-                    'Resolver incidencias técnicas comunicándote con los árbitros.'
+                    'Cumplir los horarios de check-in.',
+                    'Aprender a banear y pickear mapas estratégicamente.',
+                    'Comunicarte con los admins en Discord si se cae el server o hay problemas técnicos.',
+                    'Mantener la cabeza fría.'
                 ],
                 requirements: 'Un equipo organizado, cuentas de juego verificadas cuando se requiera y conocimiento riguroso de las reglas de inscripción y juego limpio.',
                 actionLabel: 'Preparar a tu equipo en la sección Equipos ↗',
@@ -1406,27 +1405,27 @@
                     }
                 ],
                 // Contenidos personalizados para Módulo 03 / ACOMPAÑAMIENTO
-                mindsetTitle: 'La presión no tiene que <span>jugar por vos.</span>',
-                mindsetLede: 'Aprendé a gestionar los nervios, recuperar el foco después de un error y mantener una mentalidad competitiva sin descuidarte.',
-                mindsetFocus: 'Enfoque: presión, frustración, concentración y trabajo en equipo.',
+                mindsetTitle: 'Qué hacer cuando te <span>invaden los nervios.</span>',
+                mindsetLede: 'Es normal ponerte nerviosa en tus primeros clasificatorios importantes. Clave: respirar, aclarar la cabeza entre rondas.',
+                mindsetFocus: 'Enfoque: lidiar con el tilt, el clutch y bancar al equipo.',
                 mindsetCards: [
                     {
                         icon: '🎯',
-                        title: 'Gestión de nervios y foco',
-                        sub: 'La mente también se entrena.',
-                        desc: 'Tener pulsaciones altas en partidas decisivas es normal. Respirar hondo entre rondas, mantener la calma en los llamados de voz y confiar en las horas de entrenamiento permite recuperar la claridad táctica.'
+                        title: 'El clutch y la ansiedad',
+                        sub: 'Respirá antes de hablar.',
+                        desc: 'Tener las pulsaciones a mil cuando quedás sola en la ronda es normal. Confíá en tu aim, jugá con el tiempo y, sobre todo, no grites por el mic cuando le toque el clutch a una compañera.'
                     },
                     {
                         icon: '🔄',
-                        title: 'Afrontar la frustración',
-                        sub: 'Un mapa perdido no es una serie perdida.',
-                        desc: 'En formatos Bo3 o Bo5, quedarse anclada en una ronda fallida arruina el siguiente intento. La clave está en el "reset mental": hablar de lo que viene y no de lo que ya pasó.'
+                        title: 'Aprender a resetear',
+                        sub: 'Un mapa perdido no es el fin.',
+                        desc: 'Si te ganan una partida, ya está, ya pasó. Quedarse anclada quejándose de lo que salió mal arruina el siguiente intento. Hablen de lo que viene.'
                     },
                     {
                         icon: '⚡',
-                        title: 'Sinergia y apoyo mutuo',
-                        sub: 'El equipo se sostiene entre todas.',
-                        desc: 'El liderazgo positivo marca la diferencia entre una escuadra que se disuelve ante la adversidad y otra que logra remontar partidas imposibles. Fomentá el aliento constante ante los errores.'
+                        title: 'Bancar en las malas',
+                        sub: 'La buena onda suma.',
+                        desc: 'Un equipo se sostiene cuando las cosas salen mal. Fomentá el "buen intento" ante los errores. El liderazgo positivo es imbatible.'
                     }
                 ]
             },
@@ -1482,7 +1481,7 @@
                 mindsetCards: [
                     {
                         icon: '⚖️',
-                        title: 'Equilibrio y prevención del burnout',
+                        title: 'El famoso Burnout',
                         sub: 'El descanso también es entrenamiento.',
                         desc: 'El sobreentrenamiento y las jornadas interminables frente a la pantalla reducen los reflejos y disparan la irritabilidad. Dormir adecuadamente, alimentarse bien y despejar la mente optimizan la toma de decisiones.'
                     },
@@ -1566,7 +1565,7 @@
 
                 <div class="circ-detail-footer">
                     <div class="circ-detail-note">
-                        ✦ <strong>Nota orientativa:</strong> Los niveles representan una guía para comprender la escena, no una escalera obligatoria ni universal. Cada jugadora elige su propio objetivo.
+                    ✦ <strong>Un recordatorio:</strong> Esto no es una receta mágica. Podés arrancar jugando torneos for fun y mañana armar un mix para probarte en Game Changers. Hacé tu propio camino.
                     </div>
                     ${data.actionUrl ? `
                         <a href="${data.actionUrl}" class="btn-circ-action">${data.actionLabel}</a>
